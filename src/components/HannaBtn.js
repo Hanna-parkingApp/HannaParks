@@ -3,7 +3,7 @@ import { View, Button, StyleSheet, Pressable, Text } from "react-native";
 
 export const HannaBtn = ({ onPress, title, style }) => {
     return(
-    <Pressable onPress={onPress} style={[styles.btnText,styles.btn, styles[style]]}>
+    <Pressable onPress={onPress} style={[styles.btnText,styles.btn]}>
       <Text style={styles.btnText}>{title}</Text>
     </Pressable>
     );
@@ -11,7 +11,7 @@ export const HannaBtn = ({ onPress, title, style }) => {
 
 const styles = StyleSheet.create({
     btnText: {
-        color: "#FFFFFF",
+        color: "black",
         fontSize: 16,
     },
 
