@@ -11,7 +11,7 @@ export const HannaBtn = ({ onPress, title, style }) => {
 
 const styles = StyleSheet.create({
     btnText: {
-        color: "black",
+        color: "white",
         fontSize: 16,
     },
 

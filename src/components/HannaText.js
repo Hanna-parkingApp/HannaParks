@@ -8,16 +8,16 @@ const HannaText = () => {
 
   return (
       <Text style={styles.titleText} >
-        {titleText} 
-        <AntDesign name={"car"} size={15} color="#1e90ff" />
         {"\n"}
+        {titleText} 
+        <AntDesign name={"car"} size={20} color="#1e90ff" />
       </Text>
   );
 };
 
 const styles = StyleSheet.create({
   titleText: {
-    fontSize: 30,
+    fontSize: 50,
     fontWeight: "bold",
     color:"#1e90ff",
     fontFamily: "Cochin",
