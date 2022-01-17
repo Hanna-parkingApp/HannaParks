@@ -23,8 +23,8 @@ const LoginScreen = () => {
     return (
         <View>
             <View>
-                <HannaText></HannaText>
-                </View>
+                <HannaText />
+            </View>
                 <View>
                 <TouchableOpacity
                     style={styles.welcomeback}>
@@ -64,7 +64,7 @@ const LoginScreen = () => {
     )
 }
 
-export default LoginScreen
+export default LoginScreen;
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -85,9 +85,9 @@ const styles = StyleSheet.create({
         borderRadius: 3,
       },
     welcomeback: {
-        fontSize: 20,
+        fontSize: 100,
         fontWeight: "bold",
-        color:"#1e90ff",
+        color:"blue",
         fontFamily: "Cochin",
         alignSelf: 'center'
     }

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Text, StyleSheet } from "react-native";
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import * as Font from 'expo-font';
 
 const HannaText = () => {
   const [titleText, setTitleText] = useState("Hanna");
