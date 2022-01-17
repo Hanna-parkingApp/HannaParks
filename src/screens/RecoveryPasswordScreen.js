@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Button } from 'react-native'
+import StyleSheetValidation from 'react-native/Libraries/StyleSheet/StyleSheetValidation'
 import FormInput from '../components/FormInput'
-import { HannaBtn } from '../components/HannaBtn'
 import HannaText from '../components/HannaText'
 
 
@@ -16,12 +16,11 @@ const RecoveryPassword = () => {
     return (
         <View>
             <View>
-                <HannaText></HannaText>
+                <HannaText />
                 </View>
                 <View>
-                <TouchableOpacity
-                    style={styles.header}>
-                <Text>Password Recovery</Text>
+                <TouchableOpacity>
+                <Text style={styles.header}>Password Recovery</Text>
                 </TouchableOpacity> 
             </View>
             <View>
@@ -35,6 +34,7 @@ const RecoveryPassword = () => {
                     <Text>Send Code</Text>
                 </TouchableOpacity>     
             </View>
+            <Button style={styles.btn} title='change password' />
         </View>
     )
 }
@@ -65,5 +65,11 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color:"#1e90ff",
         fontFamily: "Cochin",
+    },
+    btn: {
+        marginHorizontal: 16,
+        justifyContent: 'center',
+        flex: 1
+        
     }
 })
