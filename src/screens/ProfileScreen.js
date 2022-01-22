@@ -61,7 +61,7 @@ const ProfileScreen = () => {
         />
       </View>
       <View>
-        <TouchableOpacity style={styles.buttonContainer} onPress={done}>
+        <TouchableOpacity style={styles.buttonDone} onPress={done}>
           <Text>Done</Text>
         </TouchableOpacity>
       </View>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     padding: 2,
     fontWeight: '600',
   },    
-  buttonContainer: {
+  buttonDone: {
     marginTop: 10,
     width: "100%",
     height: windowHeight / 15,
