@@ -9,7 +9,6 @@ const HannaText = () => {
 
   return (
       <Text style={styles.titleText} >
-        {"\n"}
         {titleText} 
         <AntDesign name={"car"} size={20} color="#1e90ff" />
       </Text>
