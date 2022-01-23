@@ -7,6 +7,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import CustomDrawer from "../components/CustomDrawer";
 import { Ionicons } from "@expo/vector-icons";
 import SpecificSharingScreen from "../screens/SpecificSharingScreen";
+import BottomSheetView from "../components/BottomSheetView";
 
 const Drawer = createDrawerNavigator();
 
