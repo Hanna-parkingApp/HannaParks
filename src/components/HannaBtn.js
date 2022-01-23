@@ -3,7 +3,7 @@ import { View, Button, StyleSheet, Pressable, Text } from "react-native";
 
 export const HannaBtn = ({ onPress, title, style }) => {
     return(
-    <Pressable onPress={onPress} style={[styles.btnText,styles.btn]}>
+    <Pressable onPress={onPress} style={[styles.btnText,styles.btn, styles[`${style}`]]}>
       <Text style={styles.btnText}>{title}</Text>
     </Pressable>
     );
