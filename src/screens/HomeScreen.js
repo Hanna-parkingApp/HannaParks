@@ -5,14 +5,15 @@ import Map from '../components/Map'
 
 const HomeScreen = ({navigation}) => {
     return (
-        <View>
-        <View>
-        <   HannaText></HannaText>
-        </View>
-        <SafeAreaView>
-            <Map />
-        </SafeAreaView>
-        </View>
+      <View>
+      <View>
+        <HannaText></HannaText>
+      </View>
+      <SafeAreaView>
+        <Map />
+      </SafeAreaView>
+      
+    </View>
     )
 }
 
