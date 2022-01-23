@@ -1,13 +1,13 @@
-import React from 'react'
-import { createDrawerNavigator } from '@react-navigation/drawer'
-import HomeScreen from '../screens/HomeScreen';
-import LoginScreen from '../screens/LoginScreen';
-import SignupScreen from '../screens/SignupScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-import NavigateScreen from '../screens/NavigateScreen';
-import CustomDrawer from '../components/CustomDrawer';
-import RoundIconButton from '../components/RoundIconButton'
-import { Ionicons } from '@expo/vector-icons';
+import React from "react";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import HomeScreen from "../screens/HomeScreen";
+import LoginScreen from "../screens/LoginScreen";
+import SignupScreen from "../screens/SignupScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+import CustomDrawer from "../components/CustomDrawer";
+import { Ionicons } from "@expo/vector-icons";
+import SpecificSharingScreen from "../screens/SpecificSharingScreen";
+import BottomSheetView from "../components/BottomSheetView";
 
 const Drawer = createDrawerNavigator();
 
