@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Button, StyleSheet, Pressable, Text } from "react-native";
 
-export const HannaBtn = ({ onPress, title }) => {
+export const HannaBtn = ({ onPress, title, style }) => {
     return(
     <Pressable onPress={onPress} style={[styles.btnText,styles.btn, styles[`${style}`]]}>
 
