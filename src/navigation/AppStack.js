@@ -12,31 +12,39 @@ import BottomSheetView from "../components/BottomSheetView";
 const Drawer = createDrawerNavigator();
 
 const AppStack = () => {
-  return (
-    <Drawer.Navigator
-      drawerContent={(props) => <CustomDrawer {...props} />}
-      screenOptions={{
-        drawerLabelStyle: { marginLeft: 15, fontSize: 15 },
-        drawerActiveBackgroundColor: "#1e90ff",
-        drawerActiveTintColor: "#fff",
-        drawerInactiveTintColor: "#333",
-      }}
-    >
-      <Drawer.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name="home-outline" size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen name="Login" component={LoginScreen} />
-      <Drawer.Screen name="Sign up" component={SignupScreen} />
-      <Drawer.Screen name="Edit Profile" component={ProfileScreen} />
-      <Drawer.Screen name="Specific Sharing" component={SpecificSharingScreen} />
-    </Drawer.Navigator>
-  );
-};
+    return (
+        <Drawer.Navigator 
+        drawerContent={props => <CustomDrawer {...props} />}
+        screenOptions={{
+            drawerLabelStyle: {marginLeft: 15, fontSize: 15},
+            drawerActiveBackgroundColor: '#1e90ff',
+            drawerActiveTintColor: '#fff',
+            drawerInactiveTintColor: '#333'
+            }}>
+            <Drawer.Screen 
+            name='Home' 
+            component={HomeScreen} 
+            options={{
+                drawerIcon: ({color}) => (
+                  <Ionicons name="home-outline" size={22} color={color} />
+                ),
+              }}
+            />
+            <Drawer.Screen 
+            name='Login' 
+            component={LoginScreen} />
+            <Drawer.Screen 
+            name='Sign up' 
+            component={SignupScreen} />
+            <Drawer.Screen 
+            name='Edit Profile' 
+            component={ProfileScreen} />
+            <Drawer.Screen 
+            name="Navigate"
+            component={NavigateScreen} />
+
+        </Drawer.Navigator>
+    )
+}
 
 export default AppStack;
