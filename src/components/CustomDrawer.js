@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity } from 'react-native'
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
 import { Ionicons } from '@expo/vector-icons';
+import * as Font from 'expo-font';
 
 const CustomDrawer = (props) => {
     return (
@@ -24,7 +25,7 @@ const CustomDrawer = (props) => {
             <Text
               style={{
                 fontSize: 15,
-                fontFamily: 'Roboto-Medium',
+                // fontFamily: 'Roboto-Medium',
                 marginLeft: 5,
               }}>
               Tell a Friend
@@ -37,7 +38,7 @@ const CustomDrawer = (props) => {
             <Text
               style={{
                 fontSize: 15,
-                fontFamily: 'Roboto-Medium',
+                // fontFamily: 'Roboto-Medium',
                 marginLeft: 5,
               }}>
               Sign Out

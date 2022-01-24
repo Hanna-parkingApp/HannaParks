@@ -3,7 +3,15 @@ import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-nati
 import FormInput from '../components/FormInput'
 import { HannaBtn } from '../components/HannaBtn'
 import HannaText from '../components/HannaText'
-
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeScreen from '../screens/HomeScreen';
+import LoginScreen from '../screens/LoginScreen';
+import SignupScreen from '../screens/SignupScreen';
+import RecoveryPasswordScreen from '../screens/RecoveryPasswordScreen';
+import SpecificSharingScreen from '../screens/SpecificSharingScreen';
+import AuthStack from './src/navigation/AuthStack';
+import AppStack from './src/navigation/AppStack'; 
 
 
 const LoginScreen = () => {
@@ -18,7 +26,8 @@ const LoginScreen = () => {
         console.log("recoveryPassword Pressed")
     }
     const signup = () => {
-        console.log("signup Pressed")
+        navigation.navigate('Register')
+        // console.log("signup Pressed")
     }
     return (
         <View>
@@ -45,7 +54,6 @@ const LoginScreen = () => {
             </View>
             <View>
             <TouchableOpacity
-                    style={styles.buttonContainer}
                     onPress= {recoveryPassword}
                 >
                     <Text>Forget your password?</Text>
@@ -54,10 +62,9 @@ const LoginScreen = () => {
 
             <View>
             <TouchableOpacity
-                    style={styles.buttonContainer}
-                    onPress= {signup}
-                >
+                    onPress= {signup}>
                     <Text>Dont have a user? Sign up</Text>
+                    
                 </TouchableOpacity>
             </View>
         </View>
@@ -83,12 +90,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 3,
+        
       },
     welcomeback: {
         fontSize: 100,
         fontWeight: "bold",
-        color:"blue",
         fontFamily: "Cochin",
-        alignSelf: 'center'
+        alignItems: 'center'
     }
 })
