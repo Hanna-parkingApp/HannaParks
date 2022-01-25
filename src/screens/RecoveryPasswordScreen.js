@@ -34,7 +34,7 @@ const RecoveryPassword = ({ navigation }) => {
                     <Text>Send Code</Text>
                 </TouchableOpacity>     
             </View>
-            <Button style={styles.btn} title='change password' />
+            {/* <Button style={styles.btn} title='change password' /> */}
         </View>
     )
 }
@@ -61,10 +61,10 @@ const styles = StyleSheet.create({
         color: "white"
       },
       header: {
-        fontSize: 20,
-        fontWeight: "bold",
+        fontSize: 15,
+        // fontWeight: "bold",
         color:"black",
-        fontFamily: "Cochin",
+        // fontFamily: "Cochin",
     },
     btn: {
         marginHorizontal: 16,

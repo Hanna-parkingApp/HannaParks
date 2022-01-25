@@ -15,7 +15,7 @@ const LoginScreen = ({ navigation }) => {
         console.log("Login Pressed")
     }
     const recoveryPassword = () => {
-        navigation.navigate('recovery Password')
+        navigation.navigate('Recovery Password')
         console.log("recoveryPassword Pressed")
     }
     const signup = () => {
@@ -28,8 +28,8 @@ const LoginScreen = ({ navigation }) => {
                 <HannaText />
             </View>
             <View>
-                <TouchableOpacity>
-                <Text style={styles.welcomeback}>Welcome Back!</Text>
+                <TouchableOpacity >
+                <Text style={styles.welcomeback} >Welcome Back!</Text>
                 </TouchableOpacity>
             </View>
             <View>
@@ -37,10 +37,9 @@ const LoginScreen = ({ navigation }) => {
                 <FormInput labelValue={password} placeholderText={"Enter your password"} iconType={"lock"} />
             </View>
             <View>
-                <TouchableOpacity
+                <TouchableOpacity 
                     style={styles.buttonContainer}
-                    onPress={login}
-                >
+                    onPress={login}>
                     <Text>Log in</Text>
                 </TouchableOpacity>
             </View>
@@ -79,15 +78,22 @@ const styles = StyleSheet.create({
         borderRadius: 3,
     },
     welcomeback: {
-        fontSize: 15,
-        color: "black",
-        margin:10,
+        fontSize: 18,
+        color: "#1e90ff",
+        // margin:10,
+        fontWeight: "bold",
+        fontFamily: "Cochin",
+        alignSelf: 'center'
 
     },
     loginFooter:{
         margin:10,
+        fontWeight: "bold",
+
+
     },
     loginFooterItem:{
-        marginTop:5
+        marginTop:5,
+
     }
 })

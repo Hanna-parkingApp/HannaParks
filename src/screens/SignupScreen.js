@@ -25,7 +25,7 @@ const SignupScreen = ({ navigation }) => {
                 </View>
                 <View>
                 <TouchableOpacity>
-                <Text style={styles.signup}>Sign Up</Text>
+                <Text style={styles.signup}></Text>
                 </TouchableOpacity> 
             </View>
             <View>
@@ -69,12 +69,12 @@ const styles = StyleSheet.create({
         color: "white"
       },
       signup: {
-        fontSize: 20,
-        fontWeight: "bold",
-        color:"black",
-        margin:10,
-        fontWeight: "bold",
-        fontFamily: "Cochin",
+        // fontSize: 15,
+        // // fontWeight: "bold",
+        // color:"black",
+        // margin:10,
+        // fontWeight: "bold",
+        // // fontFamily: "Cochin",
 
     }
 })
