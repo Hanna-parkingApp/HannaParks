@@ -4,11 +4,14 @@ import BottomSearchBar from 'react-native-bottom-search-bar'
 import MapView from 'react-native-maps'
 import FormInput from './FormInput'
 
-const Map = () => {
+
+const Map = (props) => {
+
+    const {width, height} = props;
     return (
-        <View>
+        <>
             <MapView
-                style = {styles.map}
+                style = {{width, height}}
                 loadingEnabled = {true}
                 region = {{
                 latitude: 31.80344,
@@ -16,35 +19,14 @@ const Map = () => {
                 latitudeDelta: 0.015,
                 longitudeDelta: 0.0121
                 }}
-            /> 
-            <View style={styles.searchContainer}>
-                <TextInput
-                style = {styles.search}
-                placeholder={'Search'}
-                placeholderTextColor={'#666'}
-                />
-            </View>    
-            <BottomSearchBar 
-                 height={100}
-                 iPhoneXHeigh={150}
-                 disableHomeButton
-                 buttonBackgroundColor="#050191"
-                 buttonText = "Navigate"
-                 buttonOnPress={() => {}}
-                 onChangeText={(text)=> {console.log(text)}}
-                 searchBoxText = "Where to go?"
-            />
-        </View> 
+            />          
+        </> 
     )
 }
 
 export default Map
 
 const styles = StyleSheet.create({
-    map: {
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
-     },
     searchContainer: {
         position: 'absolute',
         top: 10, 

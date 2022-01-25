@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native'
 import FormInput from '../components/FormInput'
 import HannaText from '../components/HannaText'
+import { useNavigation } from '@react-navigation/native';
 
+const LoginScreen = () => {
 
-
-const LoginScreen = ({ navigation }) => {
+    const navigation = useNavigation();
 
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
@@ -19,7 +20,7 @@ const LoginScreen = ({ navigation }) => {
         console.log("recoveryPassword Pressed")
     }
     const signup = () => {
-        navigation.navigate('Sign up')
+        navigation.navigate('Sign Up')
         console.log("signup Pressed")
     }
     return (

@@ -1,58 +1,32 @@
-import React from "react";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import HomeScreen from "../screens/HomeScreen";
-import LoginScreen from "../screens/LoginScreen";
-import SignupScreen from "../screens/SignupScreen";
-import ProfileScreen from "../screens/ProfileScreen";
-import NavigateScreen from "../screens/NavigateScreen";
-import CustomDrawer from "../components/CustomDrawer";
-import { Ionicons } from "@expo/vector-icons";
-import SpecificSharingScreen from "../screens/SpecificSharingScreen";
-import BottomSheetView from "../components/BottomSheetView";
+import React from 'react'
+import { createStackNavigator } from '@react-navigation/stack'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import HomeScreen from '../screens/HomeScreen';
+import LoginScreen from '../screens/LoginScreen';
+import SignupScreen from '../screens/SignupScreen';
 import RecoveryPasswordScreen from '../screens/RecoveryPasswordScreen';
+import SpecificSharingScreen from '../screens/SpecificSharingScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import Drawer from './Drawer';
 
-const Drawer = createDrawerNavigator();
+const Stack = createNativeStackNavigator();
 
-const AppStack = () => {
+const AuthStack = () => {
     return (
-        <Drawer.Navigator 
-        drawerContent={props => <CustomDrawer {...props} />}
-        screenOptions={{
-            drawerLabelStyle: {marginLeft: 15, fontSize: 15},
-            drawerActiveBackgroundColor: '#1e90ff',
-            drawerActiveTintColor: '#fff',
-            drawerInactiveTintColor: '#333'
-            }}>
-            <Drawer.Screen 
-            name='Home' 
-            component={HomeScreen} 
-            options={{
-                drawerIcon: ({color}) => (
-                  <Ionicons name="home-outline" size={22} color={color} />
-                ),
-              }}
-            />
-            <Drawer.Screen 
-            name='Login' 
-            component={LoginScreen} />
-            <Drawer.Screen 
-            name='Sign up' 
-            component={SignupScreen}/>
-             <Drawer.Screen 
-            name="Recovery Password"
-            component={RecoveryPasswordScreen} />
-            <Drawer.Screen 
-            name='Edit Profile' 
-            component={ProfileScreen} />
-            <Drawer.Screen 
-            name="Navigate"
-            component={NavigateScreen} />
-            <Drawer.Screen 
-            name="Share Parking"
-            component={SpecificSharingScreen} />
-          
-        </Drawer.Navigator>
+        <Stack.Navigator initialRouteName = "Drawer" screenOptions={{headerShown: false}}>
+            <Stack.Screen name ="Drawer" component = {Drawer} />
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Register" component={SignupScreen} />
+            <Stack.Screen name="Recovery Password" component={RecoveryPasswordScreen} />
+            <Stack.Screen name="Share Parking" component={SpecificSharingScreen} />
+            <Stack.Screen name="Sign Up" component={SignupScreen} />
+
+        </Stack.Navigator> 
+
     )
 }
 
-export default AppStack;
+export default AuthStack;
+
+
