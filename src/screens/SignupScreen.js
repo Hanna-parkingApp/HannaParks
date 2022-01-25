@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native'
 import FormInput from '../components/FormInput'
-import { HannaBtn } from '../components/HannaBtn'
 import HannaText from '../components/HannaText'
 
 
 
-const SignupScreen = () => {
+const SignupScreen = ({ navigation }) => {
 
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
@@ -16,6 +15,7 @@ const SignupScreen = () => {
 
 
     const register = () => {
+        navigation.navigate('Login')
         console.log("register Pressed")
     }
     return (
@@ -24,9 +24,8 @@ const SignupScreen = () => {
                 <HannaText></HannaText>
                 </View>
                 <View>
-                <TouchableOpacity
-                    style={styles.signup}>
-                <Text>sign up</Text>
+                <TouchableOpacity>
+                <Text style={styles.signup}></Text>
                 </TouchableOpacity> 
             </View>
             <View>
@@ -70,9 +69,12 @@ const styles = StyleSheet.create({
         color: "white"
       },
       signup: {
-        fontSize: 20,
-        fontWeight: "bold",
-        color:"#1e90ff",
-        fontFamily: "Cochin",
+        // fontSize: 15,
+        // // fontWeight: "bold",
+        // color:"black",
+        // margin:10,
+        // fontWeight: "bold",
+        // // fontFamily: "Cochin",
+
     }
 })

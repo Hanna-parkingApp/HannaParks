@@ -9,7 +9,7 @@ import {
 import FormDetail from "../components/FormDetail";
 import HannaText from "../components/HannaText";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [CarMake, setCarMake] = useState();
@@ -18,6 +18,7 @@ const ProfileScreen = () => {
   const [points, setPoints] = useState(0);
 
   const done = () => {
+    navigation.navigate('Home')
     console.log("save changes");
   };
 

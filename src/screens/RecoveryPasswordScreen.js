@@ -6,7 +6,7 @@ import HannaText from '../components/HannaText'
 
 
 
-const RecoveryPassword = () => {
+const RecoveryPassword = ({ navigation }) => {
 
     const [email, setEmail] = useState();
 
@@ -34,7 +34,7 @@ const RecoveryPassword = () => {
                     <Text>Send Code</Text>
                 </TouchableOpacity>     
             </View>
-            <Button style={styles.btn} title='change password' />
+            {/* <Button style={styles.btn} title='change password' /> */}
         </View>
     )
 }
@@ -61,10 +61,10 @@ const styles = StyleSheet.create({
         color: "white"
       },
       header: {
-        fontSize: 20,
-        fontWeight: "bold",
-        color:"#1e90ff",
-        fontFamily: "Cochin",
+        fontSize: 15,
+        // fontWeight: "bold",
+        color:"black",
+        // fontFamily: "Cochin",
     },
     btn: {
         marginHorizontal: 16,
