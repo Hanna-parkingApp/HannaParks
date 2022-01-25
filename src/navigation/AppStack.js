@@ -4,11 +4,11 @@ import HomeScreen from "../screens/HomeScreen";
 import LoginScreen from "../screens/LoginScreen";
 import SignupScreen from "../screens/SignupScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import NavigateScreen from "../screens/NavigateScreen";
 import CustomDrawer from "../components/CustomDrawer";
 import { Ionicons } from "@expo/vector-icons";
 import SpecificSharingScreen from "../screens/SpecificSharingScreen";
 import BottomSheetView from "../components/BottomSheetView";
-import NavigateScreen from '../screens/NavigateScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -37,14 +37,20 @@ const AppStack = () => {
             component={LoginScreen} />
             <Drawer.Screen 
             name='Sign up' 
-            component={SignupScreen} />
+            component={SignupScreen}/>
+             <Drawer.Screen 
+            name="Recovery Password"
+            component={RecoveryPasswordScreen} />
             <Drawer.Screen 
             name='Edit Profile' 
             component={ProfileScreen} />
             <Drawer.Screen 
             name="Navigate"
             component={NavigateScreen} />
-
+            <Drawer.Screen 
+            name="Share Parking"
+            component={SpecificSharingScreen} />
+          
         </Drawer.Navigator>
     )
 }
