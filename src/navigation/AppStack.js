@@ -9,7 +9,6 @@ import CustomDrawer from "../components/CustomDrawer";
 import { Ionicons } from "@expo/vector-icons";
 import SpecificSharingScreen from "../screens/SpecificSharingScreen";
 import BottomSheetView from "../components/BottomSheetView";
-import RecoveryPasswordScreen from '../screens/RecoveryPasswordScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -21,7 +20,8 @@ const AppStack = () => {
             drawerLabelStyle: {marginLeft: 15, fontSize: 15},
             drawerActiveBackgroundColor: '#1e90ff',
             drawerActiveTintColor: '#fff',
-            drawerInactiveTintColor: '#333'
+            drawerInactiveTintColor: '#333',
+            headerShown: false
             }}>
             <Drawer.Screen 
             name='Home' 

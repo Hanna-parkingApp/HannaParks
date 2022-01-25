@@ -4,6 +4,7 @@ import { SafeAreaView, StyleSheet, Text, TextInput, View, Dimensions } from 'rea
 import Map from '../components/Map'
 import { HannaBtn } from '../components/HannaBtn'
 import FormInput from '../components/FormInput'
+import ParkingMatch from '../components/ParkingMatch';
 
 const NavigateScreen = () => {
     const [from, setFrom] = useState();
