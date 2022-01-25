@@ -6,7 +6,7 @@ import HannaText from '../components/HannaText'
 
 
 
-const RecoveryPassword = () => {
+const RecoveryPassword = ({ navigation }) => {
 
     const [email, setEmail] = useState();
 
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
       header: {
         fontSize: 20,
         fontWeight: "bold",
-        color:"#1e90ff",
+        color:"black",
         fontFamily: "Cochin",
     },
     btn: {

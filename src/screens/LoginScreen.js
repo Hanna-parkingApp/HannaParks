@@ -1,23 +1,25 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native'
 import FormInput from '../components/FormInput'
-import { HannaBtn } from '../components/HannaBtn'
 import HannaText from '../components/HannaText'
 
 
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
 
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
 
     const login = () => {
+        navigation.navigate('Home')
         console.log("Login Pressed")
     }
     const recoveryPassword = () => {
+        navigation.navigate('recovery Password')
         console.log("recoveryPassword Pressed")
     }
     const signup = () => {
+        navigation.navigate('Sign up')
         console.log("signup Pressed")
     }
     return (
@@ -25,38 +27,30 @@ const LoginScreen = () => {
             <View>
                 <HannaText />
             </View>
-                <View>
-                <TouchableOpacity
-                    style={styles.welcomeback}>
-                <Text>Welcome Back!</Text>
-                </TouchableOpacity> 
+            <View>
+                <TouchableOpacity>
+                <Text style={styles.welcomeback}>Welcome Back!</Text>
+                </TouchableOpacity>
             </View>
             <View>
-                <FormInput labelValue={email} placeholderText={"Enter your email address"} iconType={"user"}/>
+                <FormInput labelValue={email} placeholderText={"Enter your email address"} iconType={"user"} />
                 <FormInput labelValue={password} placeholderText={"Enter your password"} iconType={"lock"} />
             </View>
             <View>
                 <TouchableOpacity
                     style={styles.buttonContainer}
-                    onPress= {login}
+                    onPress={login}
                 >
                     <Text>Log in</Text>
-                </TouchableOpacity>     
-            </View>
-            <View>
-            <TouchableOpacity
-                    // style={styles.buttonContainer}
-                    onPress= {recoveryPassword}
-                >
-                    <Text>Forget your password?</Text>
                 </TouchableOpacity>
             </View>
-
-            <View>
-            <TouchableOpacity
-                    // style={styles.buttonContainer}
-                    onPress= {signup}
-                >
+            <View style={styles.loginFooter}>
+                <TouchableOpacity
+                    onPress={recoveryPassword}>
+                    <Text>Forget your password?</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.loginFooterItem}
+                    onPress={signup}>
                     <Text>Dont have a user? Sign up</Text>
                 </TouchableOpacity>
             </View>
@@ -83,12 +77,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 3,
-      },
+    },
     welcomeback: {
-        fontSize: 100,
-        fontWeight: "bold",
-        color:"blue",
-        fontFamily: "Cochin",
-        alignSelf: 'center'
+        fontSize: 15,
+        color: "black",
+        margin:10,
+
+    },
+    loginFooter:{
+        margin:10,
+    },
+    loginFooterItem:{
+        marginTop:5
     }
 })
