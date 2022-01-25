@@ -17,12 +17,12 @@ const HannaText = () => {
 
 const styles = StyleSheet.create({
   titleText: {
-    fontSize: 50,
+    fontSize: 30,
     fontWeight: "bold",
     color:"#1e90ff",
     fontFamily: "Cochin",
-    alignSelf: 'center'
-
+    alignSelf: 'center',
+    letterSpacing: 3,
   }
 });
 
