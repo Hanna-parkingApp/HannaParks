@@ -5,6 +5,8 @@ import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import RecoveryPasswordScreen from '../screens/RecoveryPasswordScreen';
+import SpecificSharingScreen from '../screens/SpecificSharingScreen';
+import { NavigationContainer } from '@react-navigation/native';
 
 
 const Stack = createNativeStackNavigator();
@@ -16,7 +18,11 @@ const AuthStack = () => {
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={SignupScreen} />
             <Stack.Screen name="RecoveryPassword" component={RecoveryPasswordScreen} />
+            <Stack.Screen name="Share Parking" component={SpecificSharingScreen} />
+            <Stack.Screen name="Sign Up" component={SignupScreen} />
+
         </Stack.Navigator> 
+
     )
 }
 
