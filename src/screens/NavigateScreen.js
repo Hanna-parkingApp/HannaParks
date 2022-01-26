@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         width: '100%',
         backgroundColor: '#fff',
+        paddingVertical: 10
    },
    bottomLeft:{}
 });
