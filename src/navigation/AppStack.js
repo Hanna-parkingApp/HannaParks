@@ -6,8 +6,12 @@ import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import RecoveryPasswordScreen from '../screens/RecoveryPasswordScreen';
 import SpecificSharingScreen from '../screens/SpecificSharingScreen';
+import ProfileScreen from "../screens/ProfileScreen";
+import NavigateScreen from '../screens/NavigateScreen';
+import CustomDrawer from "../components/CustomDrawer";
 import { NavigationContainer } from '@react-navigation/native';
 import Drawer from './Drawer';
+
 
 const Stack = createNativeStackNavigator();
 
