@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Test = require('./schemas/testSchema');
 
 const MONGO_URI = process.env.MONGO_URI;
 
