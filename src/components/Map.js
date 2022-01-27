@@ -7,15 +7,15 @@ import FormInput from './FormInput'
 
 const Map = (props) => {
 
-    const {width, height} = props;
+    const {width, height, location} = props;
     return (
         <>
             <MapView
                 style = {{width, height}}
                 loadingEnabled = {true}
                 region = {{
-                latitude: 31.80344,
-                longitude: 34.7911206,
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
                 latitudeDelta: 0.015,
                 longitudeDelta: 0.0121
                 }}
