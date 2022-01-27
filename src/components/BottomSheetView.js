@@ -3,6 +3,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  TextInput,
   useWindowDimensions,
   View,
 } from 'react-native';
@@ -14,6 +15,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { PanGestureHandler } from 'react-native-gesture-handler';
+import FormInput from './FormInput';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function BottomSheet({ panY }) {
   const { height } = useWindowDimensions();
@@ -55,13 +58,21 @@ export default function BottomSheet({ panY }) {
       <Animated.View
         style={[
           styles.container,
-          { top: height * 0.9 },
+          { top: height * 0.8 },
           animatedStyle,
         ]}
       >
         <SafeAreaView style={styles.wrapper}>
           <View style={styles.content}>
-            <Text style={styles.title}>Maison Paul Bocuse</Text>
+            <View style={styles.contentContainer}>
+            <Ionicons name='search' size={25} color={'grey'} style = {styles.searchIcon}  />
+            <TextInput 
+              style = {styles.searchInput}
+              placeholder='Where are we going?'
+              placeholderTextColor={'grey'}
+            />
+            </View>
+            <Ionicons name='mic' size={50} color={'white'} style = {styles.mic} />
             <View style={styles.fakeContent} />
           </View>
         </SafeAreaView>
@@ -76,7 +87,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'white',
+    backgroundColor: '#D6EAF8',
     shadowColor: 'black',
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
@@ -93,13 +104,37 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
-  title: {
-    fontWeight: '400',
-    fontSize: 22,
+  contentContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 40,
+    marginHorizontal: 30,
+    height: 40,
+    width: 250,
   },
   fakeContent: {
     flex: 1,
     height: 1000,
+  },
+  searchIcon: {
+    left: 0,
+    alignSelf: 'flex-start'
+  },
+  searchInput: {
+    fontSize: 15,
+    fontWeight: 'normal',
+  },
+  mic: {
+    backgroundColor: 'red',
+    borderRadius: 40,
+    borderColor: 'red',
+    height: 50,
+    
+    
   },
 });
