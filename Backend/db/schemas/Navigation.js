@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const User = require('./User')
+//const User = require('./User')
 
 const NavigationSchema = mongoose.Schema({
     estimatedArrivalTime : {
@@ -26,4 +26,4 @@ const NavigationSchema = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('NavigationSchema', NavigationSchema)
+module.exports = mongoose.model('Navigation', NavigationSchema)

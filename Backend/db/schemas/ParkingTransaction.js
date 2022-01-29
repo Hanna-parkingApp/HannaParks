@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const User = require('./User');
+//const User = require('./User');
 const Car = require('./Car');
 
 const parkingTransactionSchema = mongoose.Schema({
