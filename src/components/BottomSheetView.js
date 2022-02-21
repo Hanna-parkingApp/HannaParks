@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -18,8 +18,9 @@ import { PanGestureHandler } from 'react-native-gesture-handler';
 import FormInput from './FormInput';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function BottomSheet({ panY }) {
+export default function BottomSheet({ panY, SetEndPoint }) {
   const { height } = useWindowDimensions();
+  const [dest, setDest] = useState();
 
   const gestureHandler = useAnimatedGestureHandler(
     {
@@ -31,7 +32,7 @@ export default function BottomSheet({ panY }) {
       },
       onEnd() {
         if (panY.value < -height * 0.4) {
-          panY.value = withTiming(-(height * 0.6));
+          panY.value = withTiming(-(height * 0.7));
         } else {
           panY.value = withTiming(0);
         }
@@ -39,6 +40,7 @@ export default function BottomSheet({ panY }) {
     },
     [height]
   );
+
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -70,9 +72,13 @@ export default function BottomSheet({ panY }) {
               style = {styles.searchInput}
               placeholder='Where are we going?'
               placeholderTextColor={'grey'}
+              value={dest}
+              onChangeText={setDest}
+              // onPressIn={gestureHandler.onEnd()}
             />
             </View>
             <Ionicons name='mic' size={50} color={'white'} style = {styles.mic} />
+            <Ionicons name='arrow-forward' size={50} style = {{marginRight: 10}} onPress={() => SetEndPoint(dest)} />
             <View style={styles.fakeContent} />
           </View>
         </SafeAreaView>
@@ -116,6 +122,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     height: 40,
     width: 250,
+    
   },
   fakeContent: {
     flex: 1,
@@ -134,7 +141,6 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     borderColor: 'red',
     height: 50,
-    
-    
+    marginRight: 20
   },
 });

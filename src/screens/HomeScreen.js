@@ -15,13 +15,23 @@ import GeoBar from '../components/GeoBar';
 import BottomSheet from '../components/BottomSheetView';
 import Header from '../components/Header';
 import * as Location from 'expo-location';
+import { OpenMapDirections } from 'react-native-navigation-directions';
 
 
-
-export default function App() {
+export default function HomeScreen() {
   const { width, height } = useWindowDimensions();
   const [ location, setLocation ] = useState(null);
   const [permissionStatus, setPermissionStatus] = useState('');
+  const [endPoint, setEndPoint] = useState('');
+  
+  const callShowDirections = () => {
+    const startPoint = {
+      longitude: location.coords.longitude,
+      latitude: location.coords.latitude
+    }
+    const endPoint = 
+  };
+  
 
   useEffect(() => {
     getLocation();
@@ -52,13 +62,13 @@ export default function App() {
       {location? (
         <Map width={width} height={height} location={location}/>
       ): (
-        <Text>Location not ready</Text>
+        <Text>Loading Page ...</Text>
       )}
       
 
       <GeoBar panY={y} />
 
-      <BottomSheet panY={y} />
+      <BottomSheet panY={y} SetEndPoint = {setEndPoint} />
 
       {/* <SafeAreaView
         style={StyleSheet.absoluteFill}
