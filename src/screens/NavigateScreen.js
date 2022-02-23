@@ -22,7 +22,7 @@ const NavigateScreen = () => {
                 <FormInput labelValue={from} placeholderText={"Where are you now?"} />
                 <FormInput labelValue={to} placeholderText={"Where are going?"} />
             </View>
-            <SafeAreaView style={styles.map}>
+            {/* <SafeAreaView style={styles.map}>
                 <Map />
             </SafeAreaView>
             <View style={styles.bottomSection}>
@@ -31,7 +31,7 @@ const NavigateScreen = () => {
                     <Text>Estimated leave time: {leaveTime}</Text>
                 </View>
                 <HannaBtn onPress={cancel} title="Cancel" style="redBtn"></HannaBtn>
-            </View>
+            </View> */}
         </View>
     );
 }

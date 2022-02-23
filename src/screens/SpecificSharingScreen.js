@@ -17,52 +17,55 @@ const SpecificSharingScreen = () => {
 
   return (
     <View>
-      <HannaText />
-      <View style={styles.SharingContainer}>
-        <SafeAreaView>
-          <Map />
-        </SafeAreaView>
-      </View>
-      <View style={styles.SharedParkingDetails}>
-        <Text>Parking Location</Text>
-        <FormDetail
-          style={styles.formDetailStyle}
-          labelValue={street}
-          placeholderText={"njnj"}
-          detailName={"Street"}
-        ></FormDetail>
-        <FormDetail
-          style={styles.formDetailStyle}
-          labelValue={city}
-          placeholderText={"mkkmk"}
-          detailName={"City"}
-        ></FormDetail>
-        <TouchableOpacity
-          style={styles.btnConfirmContainer}
-          onPress={console.log("confirm parking location")}
-        >
-          <Text style={styles.btnConfirmText}>Confirm</Text>
-        </TouchableOpacity>
-        <View style={styles.calculateTimeContainer}>
-          <View style={styles.deperatureTimeContainer}>
-            <Text>Expected Deprature Time: </Text>
-            <TextInput
-            style={styles.deperatureTimeInput}
-              value="7m"
-              numberOfLines={1}
-              placeholderTextColor="#666"
-            />
-          </View>
-          <Text>Expected Arrived Time : 10m</Text>
-        </View>
-        <TouchableOpacity
-          onPress={console.log("shared parking")}
-          style={styles.btnShareContainer}
-        >
-          <Text style={styles.btnShareText}>Share</Text>
-        </TouchableOpacity>
-      </View>
+      <Text>Specific Parking Screen</Text>
     </View>
+    // <View>
+    //   <HannaText />
+    //   <View style={styles.SharingContainer}>
+    //     <SafeAreaView>
+    //       <Map />
+    //     </SafeAreaView>
+    //   </View>
+    //   <View style={styles.SharedParkingDetails}>
+    //     <Text>Parking Location</Text>
+    //     <FormDetail
+    //       style={styles.formDetailStyle}
+    //       labelValue={street}
+    //       placeholderText={"njnj"}
+    //       detailName={"Street"}
+    //     ></FormDetail>
+    //     <FormDetail
+    //       style={styles.formDetailStyle}
+    //       labelValue={city}
+    //       placeholderText={"mkkmk"}
+    //       detailName={"City"}
+    //     ></FormDetail>
+    //     <TouchableOpacity
+    //       style={styles.btnConfirmContainer}
+    //       onPress={console.log("confirm parking location")}
+    //     >
+    //       <Text style={styles.btnConfirmText}>Confirm</Text>
+    //     </TouchableOpacity>
+    //     <View style={styles.calculateTimeContainer}>
+    //       <View style={styles.deperatureTimeContainer}>
+    //         <Text>Expected Deprature Time: </Text>
+    //         <TextInput
+    //         style={styles.deperatureTimeInput}
+    //           value="7m"
+    //           numberOfLines={1}
+    //           placeholderTextColor="#666"
+    //         />
+    //       </View>
+    //       <Text>Expected Arrived Time : 10m</Text>
+    //     </View>
+    //     <TouchableOpacity
+    //       onPress={console.log("shared parking")}
+    //       style={styles.btnShareContainer}
+    //     >
+    //       <Text style={styles.btnShareText}>Share</Text>
+    //     </TouchableOpacity>
+    //   </View>
+    // </View>
   );
 };
 

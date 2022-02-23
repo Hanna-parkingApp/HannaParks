@@ -29,7 +29,7 @@ export default function HomeScreen() {
       longitude: location.coords.longitude,
       latitude: location.coords.latitude
     }
-    const endPoint = 
+    
   };
   
 
