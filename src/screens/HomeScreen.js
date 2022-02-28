@@ -24,18 +24,17 @@ import { changeSrcState } from '../features/location/locationSlice';
 
 export default function HomeScreen() {
   const { width, height } = useWindowDimensions();
-  const [ location, setLocation ] = useState(null);
   const [permissionStatus, setPermissionStatus] = useState('');
   const [endPoint, setEndPoint] = useState('');
 
   const dispatch = useDispatch();
-  const loc = useSelector(selectLocation);
+  const userLocation = useSelector(selectLocation);
 
   
   const callShowDirections = () => {
     const startPoint = {
-      longitude: location.coords.longitude,
-      latitude: location.coords.latitude
+      // longitude: location.coords.longitude,
+      // latitude: location.coords.latitude
     }
   };
 
@@ -58,9 +57,9 @@ export default function HomeScreen() {
         //alert(permissionStatus);
     }
 
-    const userLocation = await Location.getCurrentPositionAsync({});
-    setLocation(userLocation);
-    dispatch(changeSrcState(userLocation));
+    const location = await Location.getCurrentPositionAsync({});
+    // setLocation(userLocation);
+    dispatch(changeSrcState(location));
 }
 
   const y = useSharedValue(0);
@@ -70,8 +69,8 @@ export default function HomeScreen() {
       <StatusBar barStyle="dark-content" />
       <Header />
 
-      {loc? (
-        <Map width={width} height={height} location={location}/>
+      {userLocation.src? (
+        <Map width={width} height={height} location={userLocation.src}/>
       ): (
         <Text>Loading Page ...</Text>
       )}

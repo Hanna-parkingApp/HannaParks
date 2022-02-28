@@ -4,12 +4,12 @@ const locationSlice = createSlice({
     name: 'location',
     initialState: {
         src: {
-            latitude: null,
-            longitude: null,
+            latitude: 0,
+            longitude: 0,
         },
         des: {
-            latitude: null,
-            longitude: null,
+            latitude: 0,
+            longitude: 0,
         }
     },
     reducers: {

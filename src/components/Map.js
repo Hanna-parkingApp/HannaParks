@@ -9,15 +9,17 @@ import FormInput from './FormInput'
 const Map = (props) => {
 
     const {width, height, location} = props;
+    console.log("line 12")
+    console.log(location)
 
     const coordinates = [
         {
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
+            latitude: location.latitude,
+            longitude: location.longitude,
         },
         {
-            latitude: location.coords.latitude + 1,
-            longitude: location.coords.longitude + 1,
+            latitude: location.latitude + 1,
+            longitude: location.longitude + 1,
         }
     ]
     
@@ -27,18 +29,15 @@ const Map = (props) => {
                 style = {{width, height}}
                 loadingEnabled = {true}
                 region = {{
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
+                latitude: location.latitude,
+                longitude: location.longitude,
                 latitudeDelta: 0.015,
                 longitudeDelta: 0.0121
                 }}
             >  
               <Marker 
                     title = "source"
-                    coordinate= {{
-                        latitude: coordinates[0].latitude,
-                        longitude: coordinates[0].longitude,
-                    }} 
+                    coordinate= {coordinates[0]} 
                     />    
             <Marker coordinate = {coordinates[1]} title = "des" />
                 
