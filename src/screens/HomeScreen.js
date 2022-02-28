@@ -16,6 +16,10 @@ import BottomSheet from '../components/BottomSheetView';
 import Header from '../components/Header';
 import * as Location from 'expo-location';
 import { OpenMapDirections } from 'react-native-navigation-directions';
+import { useSelector } from 'react-redux';
+import { selectLocation } from '../features/location/locationSlice';
+import { useDispatch } from 'react-redux';
+import { changeSrcState } from '../features/location/locationSlice';
 
 
 export default function HomeScreen() {
@@ -23,14 +27,22 @@ export default function HomeScreen() {
   const [ location, setLocation ] = useState(null);
   const [permissionStatus, setPermissionStatus] = useState('');
   const [endPoint, setEndPoint] = useState('');
+
+  const dispatch = useDispatch();
+  const loc = useSelector(selectLocation);
+
   
   const callShowDirections = () => {
     const startPoint = {
       longitude: location.coords.longitude,
       latitude: location.coords.latitude
     }
-    
   };
+
+  const handleSearch = (dest) => {
+    console.log(dest);
+    setEndPoint(dest);
+  }
   
 
   useEffect(() => {
@@ -39,7 +51,6 @@ export default function HomeScreen() {
 
 
   const getLocation = async () => {
-    console.log("location")
     const { status } = await Location.requestBackgroundPermissionsAsync();
     if (status !== 'granted') {
         console.log("status not granted")
@@ -48,8 +59,8 @@ export default function HomeScreen() {
     }
 
     const userLocation = await Location.getCurrentPositionAsync({});
-    console.log(userLocation);
     setLocation(userLocation);
+    dispatch(changeSrcState(userLocation));
 }
 
   const y = useSharedValue(0);
@@ -59,7 +70,7 @@ export default function HomeScreen() {
       <StatusBar barStyle="dark-content" />
       <Header />
 
-      {location? (
+      {loc? (
         <Map width={width} height={height} location={location}/>
       ): (
         <Text>Loading Page ...</Text>
@@ -68,7 +79,7 @@ export default function HomeScreen() {
 
       <GeoBar panY={y} />
 
-      <BottomSheet panY={y} SetEndPoint = {setEndPoint} />
+      <BottomSheet panY={y} handleSearch = {handleSearch} />
 
       {/* <SafeAreaView
         style={StyleSheet.absoluteFill}

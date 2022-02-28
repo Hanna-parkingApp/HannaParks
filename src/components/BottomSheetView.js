@@ -18,9 +18,13 @@ import { PanGestureHandler } from 'react-native-gesture-handler';
 import FormInput from './FormInput';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function BottomSheet({ panY, SetEndPoint }) {
+export default function BottomSheet({ panY, handleSearch }) {
   const { height } = useWindowDimensions();
   const [dest, setDest] = useState();
+
+ const clearSearchContent = () => {
+  setDest('');
+ };
 
   const gestureHandler = useAnimatedGestureHandler(
     {
@@ -74,11 +78,15 @@ export default function BottomSheet({ panY, SetEndPoint }) {
               placeholderTextColor={'grey'}
               value={dest}
               onChangeText={setDest}
+              
               // onPressIn={gestureHandler.onEnd()}
             />
             </View>
             <Ionicons name='mic' size={50} color={'white'} style = {styles.mic} />
-            <Ionicons name='arrow-forward' size={50} style = {{marginRight: 10}} onPress={() => SetEndPoint(dest)} />
+            <Ionicons name='arrow-forward' size={50} style = {{marginRight: 10}} onPress= {() =>{ 
+              handleSearch(dest);
+              clearSearchContent();
+              }} />
             <View style={styles.fakeContent} />
           </View>
         </SafeAreaView>
