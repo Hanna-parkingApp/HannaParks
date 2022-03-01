@@ -1,21 +1,32 @@
+import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { View, ScrollView, StyleSheet, FlatList } from "react-native";
+import { useDispatch } from "react-redux";
 import AddressPickup from "../components/AddressPickup";
+import { changeDesState } from "../features/location/locationSlice";
 
 const FindDestinationScreen = (props) => {
 
     const [desCoords, setDesCoords] = useState({});
+    const dispatch = useDispatch();
+    const navigation = useNavigation();
 
-    const fetchDestinationCoords = (lat, lng, zipCode, cityText) => {
-        console.log("zip code ==> ", zipCode);
-        console.log('city texts, ', cityText);
-        setDesCoords({
-            ...desCoords,
-            desCoords: {
-                latitude: lat,
-                longitude: lng
-            }
-        })
+    const fetchDestinationCoords = (lat, lng, city_name, st_name) => {
+        console.log("city ==> ", city_name);
+        console.log('street, ', st_name);
+        let desLocation = {
+            latitude: lat,
+            longitude: lng
+        }
+        dispatch(changeDesState(desLocation));
+        navigation.navigate('Home')
+        // setDesCoords({
+        //     ...desCoords,
+        //     desCoords: {
+        //         latitude: lat,
+        //         longitude: lng
+        //     }
+        // })
     }
 
     return (

@@ -23,7 +23,8 @@ const locationSlice = createSlice({
             console.log(state);
         },
         changeDesState: (state, action) => {
-            let coords = action.payload.coords;
+            console.log("%%%%%%%%%%%%%");
+            let coords = action.payload;
             state.des.latitude = coords.latitude;
             state.des.longitude = coords.longitude;
         }
