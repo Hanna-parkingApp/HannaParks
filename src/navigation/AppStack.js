@@ -11,6 +11,7 @@ import NavigateScreen from '../screens/NavigateScreen';
 import CustomDrawer from "../components/CustomDrawer";
 import { NavigationContainer } from '@react-navigation/native';
 import Drawer from './Drawer';
+import FindDestinationScreen from '../screens/FindDestinationScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -25,6 +26,7 @@ const AuthStack = () => {
             <Stack.Screen name="Recovery Password" component={RecoveryPasswordScreen} />
             <Stack.Screen name="Share Parking" component={SpecificSharingScreen} />
             <Stack.Screen name="Sign Up" component={SignupScreen} />
+            <Stack.Screen name="Find Destination" component={FindDestinationScreen} />
 
         </Stack.Navigator> 
 

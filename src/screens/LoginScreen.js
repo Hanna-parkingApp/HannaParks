@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         color: "#1e90ff",
         // margin:10,
         fontWeight: "bold",
-        fontFamily: "Cochin",
+        // fontFamily: "Cochin",
         alignSelf: 'center'
 
     },
