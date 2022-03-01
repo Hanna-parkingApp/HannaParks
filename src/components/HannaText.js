@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     color:"#1e90ff",
-    fontFamily: "Cochin",
+    // fontFamily: "Cochin",
     alignSelf: 'center',
     letterSpacing: 3,
   }

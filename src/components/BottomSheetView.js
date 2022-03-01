@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   useWindowDimensions,
   View,
 } from 'react-native';
@@ -17,10 +18,14 @@ import Animated, {
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import FormInput from './FormInput';
 import { Ionicons } from '@expo/vector-icons';
+import GooglePlacesInput from './GooglePlacesInput';
+import { useNavigation } from '@react-navigation/native';
 
 export default function BottomSheet({ panY, handleSearch }) {
   const { height } = useWindowDimensions();
   const [dest, setDest] = useState();
+  
+  const navigation = useNavigation();
 
  const clearSearchContent = () => {
   setDest('');
@@ -59,6 +64,10 @@ export default function BottomSheet({ panY, handleSearch }) {
     };
   });
 
+  const onPressLocation = () => {
+    navigation.navigate('Find Destination');
+  };
+
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
       <Animated.View
@@ -69,9 +78,17 @@ export default function BottomSheet({ panY, handleSearch }) {
         ]}
       >
         <SafeAreaView style={styles.wrapper}>
-          <View style={styles.content}>
-            <View style={styles.contentContainer}>
+          <View style={styles.bottomCard}>
+            <Text>Where are you going?</Text>
+            <TouchableOpacity
+            onPress={onPressLocation}
+            style={styles.inputStyle}
+            >
+            <Text>Choose your destination</Text>
+            </TouchableOpacity>
+            {/* <View style={styles.contentContainer}>
             <Ionicons name='search' size={25} color={'grey'} style = {styles.searchIcon}  />
+            <GooglePlacesInput />
             <TextInput 
               style = {styles.searchInput}
               placeholder='Where are we going?'
@@ -81,12 +98,11 @@ export default function BottomSheet({ panY, handleSearch }) {
               
               // onPressIn={gestureHandler.onEnd()}
             />
-            </View>
-            <Ionicons name='mic' size={50} color={'white'} style = {styles.mic} />
-            <Ionicons name='arrow-forward' size={50} style = {{marginRight: 10}} onPress= {() =>{ 
+            </View> */}
+            {/* <Ionicons name='arrow-forward' size={40} style = {{marginRight: 10}} onPress= {() =>{ 
               handleSearch(dest);
               clearSearchContent();
-              }} />
+              }} /> */}
             <View style={styles.fakeContent} />
           </View>
         </SafeAreaView>
@@ -112,6 +128,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
   },
+  bottomCard: {
+    backgroundColor: 'white',
+    width: '100%',
+    padding: 30,
+    borderTopEndRadius: 24,
+    borderTopStartRadius: 24,
+},
   wrapper: {
     flex: 1,
   },
@@ -144,11 +167,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'normal',
   },
-  mic: {
-    backgroundColor: 'red',
-    borderRadius: 40,
-    borderColor: 'red',
-    height: 50,
-    marginRight: 20
-  },
+  inputStyle: {
+    backgroundColor: 'white',
+    borderRadius: 4,
+    borderWidth: 1,
+    alignItems: 'center',
+    height: 48,
+    justifyContent: 'center',
+    marginTop: 10
+},
+
 });

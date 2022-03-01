@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#1e90ff",
-    fontFamily: "Cochin",
+    // fontFamily: "Cochin",
   },
   input: {
     padding: 10,
