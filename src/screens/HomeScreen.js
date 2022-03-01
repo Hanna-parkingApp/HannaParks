@@ -70,7 +70,7 @@ export default function HomeScreen() {
       <Header />
 
       {userLocation.src? (
-        <Map width={width} height={height} location={userLocation.src}/>
+        <Map width={width} height={height} myLocation={userLocation.src} desLocation = {userLocation.des}/>
       ): (
         <Text>Loading Page ...</Text>
       )}

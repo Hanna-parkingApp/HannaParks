@@ -8,18 +8,22 @@ import FormInput from './FormInput'
 
 const Map = (props) => {
 
-    const {width, height, location} = props;
+    const {width, height, myLocation, desLocation} = props;
     console.log("line 12")
-    console.log(location)
+    console.log(myLocation)
+    console.log("line 14")
+    console.log(desLocation);
+    
+    
 
     const coordinates = [
         {
-            latitude: location.latitude,
-            longitude: location.longitude,
+            latitude: myLocation.latitude,
+            longitude: myLocation.longitude,
         },
         {
-            latitude: location.latitude + 1,
-            longitude: location.longitude + 1,
+            latitude: myLocation.latitude + 1,
+            longitude: myLocation.longitude + 1,
         }
     ]
     
@@ -29,8 +33,8 @@ const Map = (props) => {
                 style = {{width, height}}
                 loadingEnabled = {true}
                 region = {{
-                latitude: location.latitude,
-                longitude: location.longitude,
+                latitude: myLocation.latitude,
+                longitude: myLocation.longitude,
                 latitudeDelta: 0.015,
                 longitudeDelta: 0.0121
                 }}
@@ -38,8 +42,13 @@ const Map = (props) => {
               <Marker 
                     title = "source"
                     coordinate= {coordinates[0]} 
-                    />    
-            <Marker coordinate = {coordinates[1]} title = "des" />
+                />
+            {desLocation ? (
+                <Marker coordinate = {desLocation} title = "des" />
+            ): (
+                null
+            )}    
+
                 
             </MapView>          
         </> 

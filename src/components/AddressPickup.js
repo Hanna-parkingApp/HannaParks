@@ -5,10 +5,28 @@ import { GoogleMapKey as GOOGLE_MAP_KEY } from '../constants/googleMapKey';
 
 const AddressPickup = ({ placeholderText, fetchAddress }) => {
 
-    console.log(GOOGLE_MAP_KEY);
-    const onPressAddress = (data, details = null) => {
-        console.log(data,details);
+    const onPressAddress = (data, details) => {
+        
+        console.log("************");
+        let address_components = details.address_components;
+
+        let city = address_components[1].short_name;
+        let street = address_components[0].short_name;
+
+        console.log("##############");
+        let geometry = details.geometry;
+        let lat = geometry.location.lat;
+        let lng = geometry.location.lng;
+
+        console.log(lat);
+        console.log(lng);
+
+        fetchAddress(lat,lng,city,street);
+
+        
+        //console.log(details);
     }
+    
 
     const onAutoCompleteFailure = () => {
         console.log("auto complete failure!");
