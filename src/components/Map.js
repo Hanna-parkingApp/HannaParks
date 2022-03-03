@@ -4,6 +4,8 @@ import BottomSearchBar from 'react-native-bottom-search-bar'
 import MapView from 'react-native-maps'
 import { Marker } from 'react-native-maps';
 import FormInput from './FormInput'
+import MapViewDirections from 'react-native-maps-directions';
+import { GoogleMapKey as GOOGLE_API_KEY } from '../constants/googleMapKey';
 
 
 const Map = (props) => {
@@ -13,6 +15,7 @@ const Map = (props) => {
     console.log(myLocation)
     console.log("line 14")
     console.log(desLocation);
+    console.log(GOOGLE_API_KEY)
     
     
 
@@ -45,11 +48,22 @@ const Map = (props) => {
                 />
             {desLocation ? (
                 <Marker coordinate = {desLocation} title = "des" />
+                
             ): (
                 null
-            )}    
-
+            )}
+            {desLocation ? (
+                <MapViewDirections 
+                origin={myLocation}
+                destination={desLocation}
+                apikey={GOOGLE_API_KEY}
+                strokeWidth = {3}
+                strokeColor = "hotpink"
+                />
                 
+            ): (
+                null
+            )}  
             </MapView>          
         </> 
     )

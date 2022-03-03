@@ -50,6 +50,7 @@ export default function HomeScreen() {
 
 
   const getLocation = async () => {
+    
     const { status } = await Location.requestBackgroundPermissionsAsync();
     if (status !== 'granted') {
         console.log("status not granted")
