@@ -20,13 +20,6 @@ const FindDestinationScreen = (props) => {
         }
         dispatch(changeDesState(desLocation));
         navigation.navigate('Home')
-        // setDesCoords({
-        //     ...desCoords,
-        //     desCoords: {
-        //         latitude: lat,
-        //         longitude: lng
-        //     }
-        // })
     }
 
     return (
