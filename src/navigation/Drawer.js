@@ -34,14 +34,8 @@ const DrawerNav = () => {
               }}
             />
             <Drawer.Screen 
-            name='Login' 
-            component={LoginScreen} />
-            <Drawer.Screen 
-            name='Edit Profile' 
+            name='Profile' 
             component={ProfileScreen} />
-            <Drawer.Screen 
-            name="Navigate"
-            component={NavigateScreen} />
             <Drawer.Screen 
             name="Share Parking"
             component={SpecificSharingScreen} />
