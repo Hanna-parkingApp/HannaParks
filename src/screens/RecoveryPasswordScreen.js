@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Button } from 'react-native'
+import { handleLogin, Image, StyleSheet, Text, View, TouchableOpacity, Dimensions,KeyboardAvoidingView,TextInput,ScrollView } from 'react-native'
 import StyleSheetValidation from 'react-native/Libraries/StyleSheet/StyleSheetValidation'
 import FormInput from '../components/FormInput'
 import HannaText from '../components/HannaText'
@@ -11,65 +11,79 @@ const RecoveryPassword = ({ navigation }) => {
     const [email, setEmail] = useState();
 
     const sendCode = () => {
+        navigation.navigate('Login')
         console.log("sendCode Pressed")
     }
     return (
-        <View>
-            <View>
-                <HannaText />
-                </View>
-                <View>
-                <TouchableOpacity>
-                <Text style={styles.header}>Password Recovery</Text>
-                </TouchableOpacity> 
-            </View>
-            <View>
-                <FormInput labelValue={email} placeholderText={"Enter your email address"} iconType={"user"}/>
-
-            </View>
-            <View>
+        <ScrollView contentContainerStyle={styles.container}>
+          <Image source = {require('../assets/hanna_icon.png')} style = {styles.logo} />    
+          <Text style={styles.text} >Password Recovery</Text>
+                <FormInput
+            labelValue={email}
+            placeholderText="Enter your email address"
+            iconType="user"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            />
                 <TouchableOpacity
-                    style={styles.buttonContainer}
-                    onPress= {sendCode}>
-                    <Text>Send Code</Text>
-                </TouchableOpacity>     
-            </View>
-            {/* <Button style={styles.btn} title='change password' /> */}
-        </View>
+                onPress={() => navigation.navigate('Login')}
+                style = {styles.buttonContainer}>
+            <Text style = {styles.buttonText}>Send Code</Text>
+          </TouchableOpacity>  
+          </ScrollView>
+
     )
 }
 
 export default RecoveryPassword
 
+
+
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
+ 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: 'center',
-        marginTop: '50%'
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 1,
+      paddingTop: 100
+    },
+    logo: {
+      height: 150,
+      width: 150,
+      resizeMode: 'cover',
+    },
+    text: {
+      fontSize: 24,
+      marginBottom: 10,
+      color: '#1e90ff',
+    },
+    navButton: {
+      marginTop: 15,
+    },
+    forgotButton: {
+      marginVertical: 35,
+    },
+    navButtonText: {
+      fontSize: 18,
+      fontWeight: '500',
+      color: '#1e90ff',
     },
     buttonContainer: {
-        marginTop: 10,
-        width: '100%',
-        height: windowHeight / 15,
-        backgroundColor: '#1e90ff',
-        padding: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 3,
-        color: "white"
-      },
-      header: {
-        fontSize: 15,
-        // fontWeight: "bold",
-        color:"black",
-        // fontFamily: "Cochin",
+      marginTop: 10,
+      width: '100%',
+      height: windowHeight / 15,
+      backgroundColor: '#1e90ff',
+      padding: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 3,
     },
-    btn: {
-        marginHorizontal: 16,
-        justifyContent: 'center',
-        flex: 1
-        
-    }
-})
+    buttonText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: '#ffffff',
+    },
+  });
