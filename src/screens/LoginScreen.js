@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native'
+import React, { useState,useEffect } from 'react'
+import {handleLogin, Image, StyleSheet, Text, View, TouchableOpacity, Dimensions,KeyboardAvoidingView,TextInput,ScrollView } from 'react-native'
 import FormInput from '../components/FormInput'
 import HannaText from '../components/HannaText'
 import { useNavigation } from '@react-navigation/native';
 
-const LoginScreen = () => {
 
+
+const LoginScreen = ({ onFinished }) => {
+    
     const navigation = useNavigation();
 
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
-
+    const [ email, setEmail ] = useState('');
+    const [ password, setPassword ] = useState('');
+    const [ currentUser, setCurrentUser ] = useState('');  
+    
     const login = () => {
         navigation.navigate('Home')
         console.log("Login Pressed")
@@ -22,53 +25,88 @@ const LoginScreen = () => {
     const signup = () => {
         navigation.navigate('Sign Up')
         console.log("signup Pressed")
-    }
+    }  
     return (
-        <View>
-            <View>
-                <HannaText />
-            </View>
-            <View>
-                <TouchableOpacity >
-                <Text style={styles.welcomeback} >Welcome Back!</Text>
-                </TouchableOpacity>
-            </View>
-            <View>
-                <FormInput labelValue={email} placeholderText={"Enter your email address"} iconType={"user"} />
-                <FormInput labelValue={password} placeholderText={"Enter your password"} iconType={"lock"} />
-            </View>
-            <View>
-                <TouchableOpacity 
-                    style={styles.buttonContainer}
-                    onPress={login}>
-                    <Text>Log in</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.loginFooter}>
-                <TouchableOpacity
-                    onPress={recoveryPassword}>
-                    <Text>Forget your password?</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.loginFooterItem}
-                    onPress={signup}>
-                    <Text>Dont have a user? Sign up</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    )
-}
+        <ScrollView contentContainerStyle={styles.container}>
+          <Image source = {require('../assets/hanna_icon.png')} style = {styles.logo} />          
+          <Text style={styles.text} >Welcome Back!</Text>
+          <FormInput
+            labelValue={email}
+            onChangeText={(userEmail) => setEmail(userEmail)}
+            placeholderText="Email"
+            iconType="user"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+    
+          <FormInput
+            labelValue={password}
+            onChangeText={(userPassword) => setPassword(userPassword)}
+            placeholderText="Password"
+            iconType="lock"
+            secureTextEntry={true}
+          />
 
-export default LoginScreen;
+          <TouchableOpacity
+        //   onPress = {handleLogin}
+        onPress={() => navigation.navigate('Home')}
+          style = {styles.buttonContainer}
+          >
+            <Text style = {styles.buttonText}>Sign In</Text>
+          </TouchableOpacity>
+          
+          
+          <TouchableOpacity style={styles.forgotButton}  onPress={recoveryPassword}>
+            <Text style={styles.navButtonText}>Forgot Password?</Text>
+          </TouchableOpacity>
+    
+    
+          <TouchableOpacity
+            style={styles.forgotButton}
+            onPress={() => navigation.navigate('Register')}>
+            <Text style={styles.navButtonText}>
+              Don't have an acount? Create here
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
+      );
+    };
+    
+    export default LoginScreen;
+    
+    const windowHeight = Dimensions.get('window').height;
+    const windowWidth = Dimensions.get('window').width;
 
-const windowHeight = Dimensions.get('window').height;
-const windowWidth = Dimensions.get('window').width;
-
-const styles = StyleSheet.create({
-    container: {
+    const styles = StyleSheet.create({
+      container: {
         justifyContent: 'center',
-        marginTop: '50%'
-    },
-    buttonContainer: {
+        alignItems: 'center',
+        padding: 1,
+        paddingTop: 100
+      },
+      logo: {
+        height: 150,
+        width: 150,
+        resizeMode: 'cover',
+      },
+      text: {
+        fontSize: 24,
+        marginBottom: 10,
+        color: '#1e90ff',
+      },
+      navButton: {
+        marginTop: 15,
+      },
+      forgotButton: {
+        marginVertical: 35,
+      },
+      navButtonText: {
+        fontSize: 18,
+        fontWeight: '500',
+        color: '#1e90ff',
+      },
+      buttonContainer: {
         marginTop: 10,
         width: '100%',
         height: windowHeight / 15,
@@ -77,24 +115,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 3,
-    },
-    welcomeback: {
+      },
+      buttonText: {
         fontSize: 18,
-        color: "#1e90ff",
-        // margin:10,
-        fontWeight: "bold",
-        // fontFamily: "Cochin",
-        alignSelf: 'center'
-
-    },
-    loginFooter:{
-        margin:10,
-        fontWeight: "bold",
-
-
-    },
-    loginFooterItem:{
-        marginTop:5,
-
-    }
-})
+        fontWeight: 'bold',
+        color: '#ffffff',
+      },
+    });
