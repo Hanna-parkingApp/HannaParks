@@ -1,22 +1,19 @@
-import React from 'react'
-import { StyleSheet, Text, View, Dimensions, TextInput } from 'react-native'
+import React, { useRef } from 'react'
+import { StyleSheet, Text, View, Dimensions, TextInput, Image } from 'react-native'
 import BottomSearchBar from 'react-native-bottom-search-bar'
 import MapView from 'react-native-maps'
 import { Marker } from 'react-native-maps';
 import FormInput from './FormInput'
 import MapViewDirections from 'react-native-maps-directions';
 import { GoogleMapKey as GOOGLE_API_KEY } from '../constants/googleMapKey';
+import imagePath from '../constants/imagePath';
 
 
 const Map = (props) => {
 
     const {width, height, myLocation, desLocation} = props;
-    console.log("line 12")
-    console.log(myLocation)
-    console.log("line 14")
-    console.log(desLocation);
-    console.log(GOOGLE_API_KEY)
     
+    const markerRef = useRef();
     
 
     const coordinates = [
@@ -42,17 +39,23 @@ const Map = (props) => {
                 longitudeDelta: 0.0121
                 }}
             >  
-              <Marker 
+              <Marker.Animated 
+                    ref={markerRef}
                     title = "source"
                     coordinate= {coordinates[0]} 
-                />
+                >
+                    <Image 
+                        source={imagePath.icCurLoc}
+                        style = {styles.icCar}
+                    />
+                </Marker.Animated>
             {desLocation ? (
                 <Marker coordinate = {desLocation} title = "des" />
                 
             ): (
                 null
             )}
-            {desLocation ? (
+            {desLocation.latitude !== 0 ? (
                 <MapViewDirections 
                 origin={myLocation}
                 destination={desLocation}
@@ -87,5 +90,9 @@ const styles = StyleSheet.create({
         height: 45,
         paddingHorizontal: 10,
         fontSize: 18,
+    }, 
+    icCar: {
+        width: 30,
+        height: 30,
     }
 })

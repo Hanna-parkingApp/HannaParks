@@ -42,11 +42,24 @@ export default function HomeScreen() {
     console.log(dest);
     setEndPoint(dest);
   }
-  
 
   useEffect(() => {
     getLocation();
-  }, [])  
+  },[])
+  
+  // useEffect(() => {
+  //   if (userLocation.des.latitude !== 0) {
+  //   const interval = setInterval(() => {
+  //     console.log(userLocation.des);
+  //     getLocation();
+  //   }, 6 * 1000);
+  //   return () => clearInterval(interval)
+  
+  // } else {
+  //   console.log("not interval")
+  //   getLocation();
+  // }
+  // }, [])
 
 
   const getLocation = async () => {
