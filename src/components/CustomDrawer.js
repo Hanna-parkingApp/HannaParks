@@ -3,8 +3,16 @@ import { StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity } from
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
 import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
+import { useNavigation } from '@react-navigation/native';
 
 const CustomDrawer = (props) => {
+
+  const navigation = useNavigation();
+  
+  const navLogin = () => {
+    navigation.navigate('Login');
+  }
+
     return (
         <View style={{flex: 1}}>
         <DrawerContentScrollView 
@@ -32,7 +40,7 @@ const CustomDrawer = (props) => {
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={{paddingVertical: 15}}>
+        <TouchableOpacity onPress={navLogin} style={{paddingVertical: 15}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Ionicons name="exit-outline" size={22} />
             <Text

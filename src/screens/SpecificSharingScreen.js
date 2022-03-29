@@ -6,66 +6,70 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  useWindowDimensions,
 } from "react-native";
 import HannaText from "../components/HannaText";
 import Map from "../components/Map";
 import FormDetail from "../components/FormDetail";
+import { useSelector } from "react-redux";
+import { selectLocation } from "../features/location/locationSlice";
 
 const SpecificSharingScreen = () => {
+  const { width, height } = useWindowDimensions();
   const [street, setStreet] = useState("Rambam 7");
   const [city, setCity] = useState("Tel Aviv");
 
+  const userLocation = useSelector(selectLocation);
+
   return (
     <View>
-      <Text>Specific Parking Screen</Text>
+      <HannaText />
+      <View style={styles.SharingContainer}>
+        <SafeAreaView>
+          <Map width={width} height={height / 2}  myLocation={userLocation.src} desLocation = {userLocation.des}  />
+        </SafeAreaView>
+      </View>
+
+      <View style={styles.SharedParkingDetails}>
+        <Text>Parking Location</Text>
+        <FormDetail
+          style={styles.formDetailStyle}
+          labelValue={street}
+          placeholderText={"njnj"}
+          detailName={"Street"}
+        ></FormDetail>
+        <FormDetail
+          style={styles.formDetailStyle}
+          labelValue={city}
+          placeholderText={"mkkmk"}
+          detailName={"City"}
+        ></FormDetail>
+        <TouchableOpacity
+          style={styles.btnConfirmContainer}
+          onPress={console.log("confirm parking location")}
+        >
+          <Text style={styles.btnConfirmText}>Confirm</Text>
+        </TouchableOpacity>
+        <View style={styles.calculateTimeContainer}>
+          <View style={styles.deperatureTimeContainer}>
+            <Text>Expected Deprature Time: </Text>
+            <TextInput
+            style={styles.deperatureTimeInput}
+              value="7m"
+              numberOfLines={1}
+              placeholderTextColor="#666"
+            />
+          </View>
+          <Text>Expected Arrived Time : 10m</Text>
+        </View>
+        <TouchableOpacity
+          onPress={console.log("shared parking")}
+          style={styles.btnShareContainer}
+        >
+          <Text style={styles.btnShareText}>Share</Text>
+        </TouchableOpacity>
+      </View>
     </View>
-    // <View>
-    //   <HannaText />
-    //   <View style={styles.SharingContainer}>
-    //     <SafeAreaView>
-    //       <Map />
-    //     </SafeAreaView>
-    //   </View>
-    //   <View style={styles.SharedParkingDetails}>
-    //     <Text>Parking Location</Text>
-    //     <FormDetail
-    //       style={styles.formDetailStyle}
-    //       labelValue={street}
-    //       placeholderText={"njnj"}
-    //       detailName={"Street"}
-    //     ></FormDetail>
-    //     <FormDetail
-    //       style={styles.formDetailStyle}
-    //       labelValue={city}
-    //       placeholderText={"mkkmk"}
-    //       detailName={"City"}
-    //     ></FormDetail>
-    //     <TouchableOpacity
-    //       style={styles.btnConfirmContainer}
-    //       onPress={console.log("confirm parking location")}
-    //     >
-    //       <Text style={styles.btnConfirmText}>Confirm</Text>
-    //     </TouchableOpacity>
-    //     <View style={styles.calculateTimeContainer}>
-    //       <View style={styles.deperatureTimeContainer}>
-    //         <Text>Expected Deprature Time: </Text>
-    //         <TextInput
-    //         style={styles.deperatureTimeInput}
-    //           value="7m"
-    //           numberOfLines={1}
-    //           placeholderTextColor="#666"
-    //         />
-    //       </View>
-    //       <Text>Expected Arrived Time : 10m</Text>
-    //     </View>
-    //     <TouchableOpacity
-    //       onPress={console.log("shared parking")}
-    //       style={styles.btnShareContainer}
-    //     >
-    //       <Text style={styles.btnShareText}>Share</Text>
-    //     </TouchableOpacity>
-    //   </View>
-    // </View>
   );
 };
 
@@ -73,19 +77,16 @@ export default SpecificSharingScreen;
 
 const styles = StyleSheet.create({
   SharingContainer: {
-    position: "relative",
+
   },
   SharedParkingDetails: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    position: "absolute",
     borderWidth: 1,
     borderColor: "#ffff",
     borderStyle: "solid",
     backgroundColor: "white",
-    bottom: 180,
-    padding: 20,
     width: "100%",
   },
   formDetailStyle: {
