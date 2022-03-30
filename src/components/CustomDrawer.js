@@ -4,6 +4,7 @@ import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawe
 import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
+import imagePath from '../constants/imagePath';
 
 const CustomDrawer = (props) => {
 
@@ -19,7 +20,7 @@ const CustomDrawer = (props) => {
         {...props}
         contentContainerStyle = {{backgroundColor: '#E5F4F9'}}>
             <ImageBackground style={{padding:20}}>
-                <Image source={require('../../assets/userprofile.jpg')} style={styles.profileImage} />
+                <Image source={imagePath.icProfile} style={styles.profileImage} />
                 <Text style={styles.username}>John Dong</Text>
             </ImageBackground>
             <View style = {styles.items}>
