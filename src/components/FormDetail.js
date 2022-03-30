@@ -32,15 +32,16 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 3,
     borderWidth: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: 'row-reverse',
+    alignItems: 'flex-end',
     backgroundColor: '#fff',
+    direction: 'ltr'
   },
   detailStyle: {
     padding: 10,
     height: '100%',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     borderRightColor: '#ccc',
     borderRightWidth: 1,
     width: 90,
@@ -48,9 +49,10 @@ const styles = StyleSheet.create({
   input: {
     padding: 10,
     flex: 1,
-    fontSize: 16,
+    fontSize: 15,
     color: '#333',
     justifyContent: 'center',
     alignItems: 'center',
+    textAlign: 'left'
   },
 });

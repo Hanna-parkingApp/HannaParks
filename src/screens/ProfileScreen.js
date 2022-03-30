@@ -7,19 +7,32 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  Pressable,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormDetail from "../components/FormDetail";
 import HannaText from "../components/HannaText";
 import imagePath from "../constants/imagePath";
 
+import PickImageModal from "../constants/alerts/PickImageModal";
+
 const ProfileScreen = ({ navigation }) => {
   const [email, setEmail] = useState();
+  const [userName, setUserName] = useState();
   const [password, setPassword] = useState();
-  const [CarMake, setCarMake] = useState();
+  const [carType, setcarType] = useState();
   const [CarModel, setCarModel] = useState();
   const [CarNumber, setCarNumber] = useState();
   const [points, setPoints] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const [imageUrl, setImageUrl] = useState(imagePath.defIcUrlImg);
+  const [isPicChanged, setIsPicChanged] = useState(false);
+
+  const imageModalPicker = () => {
+    console.log("add image pressed");
+    setModalVisible(true);
+  };
 
   const done = () => {
     navigation.navigate('Home')
@@ -30,21 +43,59 @@ const ProfileScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.titleBar}>
         <Ionicons name="ios-arrow-back" size={24} color="#52575D"></Ionicons>
-        <Ionicons name="md-more" size={24} color="#52575D"></Ionicons>
       </View>
-
       <View style={{ alignSelf: "center" }}>
-        <View style={styles.profileImage}>
-          <Image source={imagePath.icProfile} style={styles.image} resizeMode="center"></Image>
+        {!modalVisible ? (
+          <>
+          <View style={styles.profileImage}>
+            {!modalVisible && !isPicChanged && (
+              <Image source={imagePath.icProfile} style={styles.image} resizeMode="center" />
+            )}
+            {!modalVisible && isPicChanged && (
+              <Image source={{uri: imageUrl}} style={styles.image} resizeMode="center" />
+            )}
         </View>
-        <View style={styles.dm}>
-          <MaterialIcons name="chat" size={18} color="#DFD8C8"></MaterialIcons>
-        </View>
-        <View style={styles.active}></View>
           <View style={styles.add}>
-            <Ionicons name="ios-add" size={48} color="#DFD8C8" style={{ marginTop: 6, marginLeft: 2 }}></Ionicons>
+            <Pressable
+              onPress={imageModalPicker}
+            >
+              <Ionicons name="ios-add" size={48} color="#DFD8C8" style={{ marginTop: 6, marginLeft: 2 }}></Ionicons>
+            </Pressable>
           </View>
+        
+          </>
+        ) : (
+          <PickImageModal 
+          modalVisible={modalVisible} 
+          setModalVisible={setModalVisible} 
+          setImageUrl={setImageUrl}
+          setIsPicChanged={setIsPicChanged} />
+        )}
         </View>
+        <View style={styles.formContainer}>
+        <FormDetail
+          labelValue={userName}
+          placeholderText={"John Dong"}
+          detailName={"User Name"}
+        />
+        <FormDetail
+          labelValue={email}
+          placeholderText={"johndo@gmail.com"}
+          detailName={"Email"}
+        />
+        <FormDetail
+          labelValue={carType}
+          placeholderText={"Mercedes-Benz A-Class 2018"}
+          detailName={"Car Brand"}
+        />
+         <FormDetail
+          labelValue={CarNumber}
+          placeholderText={"98-294-63"}
+          detailName={"Car Num."}
+        />
+        </View>
+        <View style = {styles.emptyBottom} />
+        <View style = {styles.emptyBottom2} />
     </SafeAreaView>
     // <View>
     //   <View>
@@ -58,18 +109,14 @@ const ProfileScreen = ({ navigation }) => {
     //     <Text>profile</Text>
     //   </TouchableOpacity>
     //   <View>
+ 
+        // <FormDetail
+        //   labelValue={password}
+        //   placeholderText={"........"}
+        //   detailName={"Password"}
+        // />
     //     <FormDetail
-    //       labelValue={email}
-    //       placeholderText={"barshaya@gmail.com"}
-    //       detailName={"Email"}
-    //     />
-    //     <FormDetail
-    //       labelValue={password}
-    //       placeholderText={"........"}
-    //       detailName={"Password"}
-    //     />
-    //     <FormDetail
-    //       labelValue={CarMake}
+    //       labelValue={carType}
     //       placeholderText={"KIA"}
     //       detailName={"Car Make"}
     //     />
@@ -102,13 +149,13 @@ const styles = StyleSheet.create({
   
   container: {
     flex: 1,
-    backgroundColor: "#FFF"
+    backgroundColor: "#F2F3F4"
   },
   titleBar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: "row-reverse",
+    direction: 'ltr',
     marginTop: 24,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   image: {
     flex: 1,
@@ -120,7 +167,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     borderRadius: 100,
-    overflow: "hidden"
+    overflow: "hidden",
   },
   dm: {
     backgroundColor: "#41444B",
@@ -141,18 +188,34 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
     borderRadius: 10
-},
-add: {
-    backgroundColor: "#41444B",
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    alignItems: "center",
-    justifyContent: "center"
-},
+  },
+  add: {
+      backgroundColor: "#41444B",
+      position: "absolute",
+      bottom: 0,
+      right: 0,
+      width: 60,
+      height: 60,
+      borderRadius: 30,
+      alignItems: "center",
+      justifyContent: "center"
+  },
+  formContainer: {
+    direction: 'ltr',
+    marginHorizontal: 5,
+    marginTop: 50,
+    justifyContent: 'space-between',
+  },
+  emptyBottom: {
+    backgroundColor: '#A3D1FF',
+    flex: 1,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+  },
+  emptyBottom2: {
+    backgroundColor: '#F2F8FF',
+    flex: 1,
+  }
   // container: {
   //   justifyContent: "center",
   //   marginTop: "50%",
