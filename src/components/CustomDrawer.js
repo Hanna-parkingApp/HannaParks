@@ -1,17 +1,27 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity } from 'react-native'
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
 import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
 import imagePath from '../constants/imagePath';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../routes/Router';
+
 
 const CustomDrawer = (props) => {
 
   const navigation = useNavigation();
+  const { signOut } = useContext(AuthContext);
   
   const navLogin = () => {
-    navigation.navigate('Login');
+    signOut();
+    // try {
+    //   AsyncStorage.clear()
+    // } catch (e) {
+    //   console.log("error clear local storage", e);
+    // }
+    // navigation.navigate('Login');
   }
 
     return (

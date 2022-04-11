@@ -3,12 +3,14 @@ import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import HannaText from './HannaText';
 import { useNavigation } from '@react-navigation/native';
+import { DrawerActions } from '@react-navigation/native';
 
 const Header = () => {
 
     const navigation = useNavigation();
     const { height } = useWindowDimensions();
     const openMenu = () => {
+        // navigation.dispatch(DrawerActions.openDrawer());
         navigation.openDrawer();
     }
   return (

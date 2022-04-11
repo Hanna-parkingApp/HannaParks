@@ -2,7 +2,9 @@
 import React, {useContext, useState} from 'react';
 import {Image, View, Text, TouchableOpacity, Platform, StyleSheet, Dimensions} from 'react-native';
 import FormInput from '../components/FormInput';
-
+import hannaServer from '../api/hannaServer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../routes/Router';
 
 const SignupScreen = ({ navigation }) => {
 
@@ -14,10 +16,33 @@ const SignupScreen = ({ navigation }) => {
     const [CarModel, setCarModel] = useState();
     const [CarNumber, setCarNumber] = useState();
 
+    const { signUp } = useContext(AuthContext);
 
-    const register = () => {
-        navigation.navigate('Login')
-        console.log("register Pressed")
+
+    const register = async () => {
+      console.log("user name: ", username)
+      console.log("email: ", email)
+      console.log("password: ", password);
+      let data = {
+        fullName: username,
+        email: email,
+        password: password
+      }
+
+      // try {
+      //   hannaServer.post('/register', data)
+      //   .then(res => console.log("register status: ", res))
+
+      // } catch(e) {
+      //   console.log("error register", e);
+      // }
+
+      // navigation.navigate('Login')
+      // console.log("register Pressed")
+
+      // instead:
+      signUp(data);
+      
     }
 
 
@@ -34,6 +59,7 @@ const SignupScreen = ({ navigation }) => {
         keyboardType="email-address"
         autoCapitalize="none"
         autoCorrect={false}
+        onChangeText={setUserName}
       />
 
       
@@ -44,6 +70,7 @@ const SignupScreen = ({ navigation }) => {
           keyboardType="email-address"
           autoCapitalize="none"
           autoCorrect={false}
+          onChangeText={setEmail}
         />
 
 
@@ -51,6 +78,8 @@ const SignupScreen = ({ navigation }) => {
         labelValue={password}
         placeholderText="Password"
         iconType="lock"
+        onChangeText={setPassword}
+        visible-password = {false}
       />
 
       {/* <FormInput
