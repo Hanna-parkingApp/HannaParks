@@ -70,30 +70,25 @@ export default Router = () => {
     const authContext = useMemo(
         () => ({
             signIn: async (data) => {
-              console.log("line73: ",data);
               // In a production app, we need to send some data (usually username, password) to server and get a token
               // We will also need to handle errors if sign in failed
               // After getting token, we need to persist the token using `SecureStore`
-              // In the example, we'll use a dummy token
-
-              hannaServer.get('/').then(res => console.log(res.data.errors));
 
               hannaServer.post('/login', data) 
               .then(res => {
                 try {
-                    console.log("line 82: ")
-                    // AsyncStorage.setItem('userToken', res.data.token)
-                    // disptach({ type: 'SIGN_IN', token: res.data.token })
+                    AsyncStorage.setItem('userToken', res.data.user.token)
+                    disptach({ type: 'SIGN_IN', token: res.data.user.token })
                 } catch (e) {
                   console.log("error setting token in local storage: ", e);
                 }
         
-                // hannaServer.interceptors.request.use(
-                //     config => {
-                //       config.headers['x-access-token'] = res.data.token;
-                //       return config;
-                //     }
-                // )
+                hannaServer.interceptors.request.use(
+                    config => {
+                      config.headers['x-access-token'] = res.data.user.token;
+                      return config;
+                    }
+                )
               })
               .catch(err => {
                 console.log("error sign in", err);
@@ -123,34 +118,6 @@ export default Router = () => {
           }),
         []
     )
-
-
-
-    // const dispatch = useDispatch();
-
-    // const { isLoading, isSignout, userToken} = useSelector(selectAuth);
-    // console.log("line 14, is loading: ", isLoading);
-    
-    // useEffect(() => {
-    //     const fetchToken = async () => {
-        //     let userToken;
-
-        //     try {
-        //         userToken = await AsyncStorage.getItem('userToken');
-            
-        //     } catch (e) {
-        //         console.log("Restoring token failed. ", e);
-        //     }
-
-        //     // After restoring token, we may need to validate it in production apps
-
-        //     // This will switch to the App screen or Auth screen and this loading
-        //     // screen will be unmounted and thrown away.
-        //     dispatch(setAuthAction({ type: 'RESTORE_TOKEN', payload: userToken}))
-        // }
-
-    //     fetchToken();
-    // }, [])
 
     if (state.isLoading) {
         console.log("Loading app");
