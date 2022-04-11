@@ -1,31 +1,93 @@
-import React, { useState,useEffect } from 'react'
-import {handleLogin, Image, StyleSheet, Text, View, TouchableOpacity, Dimensions,KeyboardAvoidingView,TextInput,ScrollView } from 'react-native'
+import React, { useState,useEffect, useContext } from 'react'
+import {handleLogin, Image, StyleSheet, Text, View, TouchableOpacity, Dimensions,KeyboardAvoidingView,TextInput,ScrollView, Alert } from 'react-native'
 import FormInput from '../components/FormInput'
 import HannaText from '../components/HannaText'
-import { useNavigation } from '@react-navigation/native';
-
+import { DrawerActions, useNavigation } from '@react-navigation/native';
+import hannaServer from '../api/hannaServer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import { changeUserState, Login } from '../features/auth/authSlice';
+import { AuthContext } from '../routes/Router';
 
 
 const LoginScreen = ({ onFinished }) => {
     
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const { signIn } = useContext(AuthContext);
 
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [ currentUser, setCurrentUser ] = useState('');  
     
-    const login = () => {
-        navigation.navigate('Home')
-        console.log("Login Pressed")
+    const handleLogin = async () => {
+            
+      console.log("Login Pressed");
+      console.log(email, password);
+      const data = {
+        email: email,
+        password: password
+      }
+
+      signIn(data);      
+
+      // hannaServer.post('/login', data)
+      // .then(res => {
+      //   try {
+      //   let token = JSON.stringify(res.data.token)
+      //   AsyncStorage.setItem('token', token);
+      //   } catch (e) {
+      //     console.log("error setting token in local storage: ", e);
+      //   }})
+
+      //   try {
+      //     const json = JSON.stringify(data);
+      //     console.log(json);
+      //     AsyncStorage.setItem('user', json)
+      //   } catch (e) {
+      //     console.log("error set user in local storage")
+      //   }
+
+      //   hannaServer.interceptors.request.use(
+      //     config => {
+      //       config.headers['x-access-token'] = res.data.token;
+      //       return config;
+      //     }
+      //   )
+      // }).then(() => setIsLoggedIn(true))
+      // .catch(err => {
+      //   console.log("error sign in", err);
+      // })
+
+      // if (isLoggedIn) {
+      //   // navigation.navigate('Home');
+      //   dispatch(changeUserState(user));
+
+      // } else {
+      //   Alert.alert("Wrong email or password");
+      // }
+
     }
+
     const recoveryPassword = () => {
         navigation.navigate('Recovery Password')
         console.log("recoveryPassword Pressed")
     }
+
     const signup = () => {
         navigation.navigate('Sign Up')
         console.log("signup Pressed")
     }  
+
+    useEffect(() => {
+      if (isLoggedIn) {
+        return;
+      }
+
+    }, [isLoggedIn])
+
+
     return (
         <ScrollView contentContainerStyle={styles.container}>
           <Image source = {require('../assets/hanna_icon.png')} style = {styles.logo} />          
@@ -50,7 +112,7 @@ const LoginScreen = ({ onFinished }) => {
 
           <TouchableOpacity
         //   onPress = {handleLogin}
-        onPress={() => navigation.navigate('Home')}
+        onPress={handleLogin}
           style = {styles.buttonContainer}
           >
             <Text style = {styles.buttonText}>Sign In</Text>

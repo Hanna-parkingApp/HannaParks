@@ -22,7 +22,7 @@ import { useDispatch } from 'react-redux';
 import { changeSrcState } from '../features/location/locationSlice';
 
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const { width, height } = useWindowDimensions();
   const [permissionStatus, setPermissionStatus] = useState('');
   const [endPoint, setEndPoint] = useState('');
@@ -63,7 +63,6 @@ export default function HomeScreen() {
 
 
   const getLocation = async () => {
-    
     const { status } = await Location.requestBackgroundPermissionsAsync();
     if (status !== 'granted') {
         console.log("status not granted")
