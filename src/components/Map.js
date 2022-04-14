@@ -1,9 +1,7 @@
 import React, { useRef } from 'react'
-import { StyleSheet, Text, View, Dimensions, TextInput, Image } from 'react-native'
-import BottomSearchBar from 'react-native-bottom-search-bar'
-import MapView from 'react-native-maps'
+import { StyleSheet, Image } from 'react-native'
+import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
-import FormInput from './FormInput'
 import MapViewDirections from 'react-native-maps-directions';
 import { GoogleMapKey as GOOGLE_API_KEY } from '../constants/googleMapKey';
 import imagePath from '../constants/imagePath';

@@ -23,8 +23,6 @@ const AddressPickup = ({ placeholderText, fetchAddress }) => {
 
         fetchAddress(lat,lng,city,street);
 
-        
-        //console.log(details);
     }
     
 

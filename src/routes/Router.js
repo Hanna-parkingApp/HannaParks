@@ -6,7 +6,6 @@ import AuthStack from '../navigation/AuthStack';
 import LoadingScreen from '../screens/LoadingScreen';
 import hannaServer from "../api/hannaServer";
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import axios from "axios";
 
 const Stack = createNativeStackNavigator();
 

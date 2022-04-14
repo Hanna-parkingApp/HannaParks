@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 import Map from '../components/Map'
 import { useSharedValue } from 'react-native-reanimated';
-import SearchBar from '../components/SearchBar';
-import NavBar from '../components/NavBar';
 import GeoBar from '../components/GeoBar';
 import BottomSheet from '../components/BottomSheetView';
 import Header from '../components/Header';
@@ -93,15 +91,6 @@ export default function HomeScreen({ navigation }) {
 
       <BottomSheet panY={y} handleSearch = {handleSearch} />
 
-      {/* <SafeAreaView
-        style={StyleSheet.absoluteFill}
-        pointerEvents="none"
-      >
-        <View style={styles.container}>
-          <SearchBar panY={y} />
-          <NavBar panY={y} />
-        </View>
-      </SafeAreaView> */}
     </View>
   );
 }
