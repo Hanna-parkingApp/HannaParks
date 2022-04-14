@@ -15,3 +15,5 @@ web-build/
 
 # Tests
 Tests/
+
+src/constants/google-map-api/

@@ -42,7 +42,7 @@ const ProfileScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.titleBar}>
-        <Ionicons name="ios-arrow-back" size={24} color="#52575D"></Ionicons>
+        <Ionicons name="ios-arrow-back" size={24} color="#52575D" onPress={() => navigation.navigate('Home')}></Ionicons>
       </View>
       <View style={{ alignSelf: "center" }}>
         {!modalVisible ? (
