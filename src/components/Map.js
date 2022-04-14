@@ -3,7 +3,7 @@ import { StyleSheet, Image } from 'react-native'
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
-import { GoogleMapKey as GOOGLE_API_KEY } from '../constants/googleMapKey';
+import { GoogleMapKey as GOOGLE_API_KEY } from '../constants/google-map-api/googleMapKey';
 import imagePath from '../constants/imagePath';
 
 

@@ -1,6 +1,6 @@
 import { KeyboardAvoidingView, StyleSheet, View, Platform } from 'react-native'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import GoogleMapKey from '../constants/googleMapKey';
+import GoogleMapKey from '../constants/google-map-api/googleMapKey';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 

@@ -14,7 +14,7 @@ const LoginScreen = ({ onFinished }) => {
     
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const { signIn } = useContext(AuthContext);
+    const { signIn, signUp } = useContext(AuthContext);
 
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');

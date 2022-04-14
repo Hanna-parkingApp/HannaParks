@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { GoogleMapKey as GOOGLE_MAP_KEY } from '../constants/googleMapKey';
+import { GoogleMapKey as GOOGLE_MAP_KEY } from '../constants/google-map-api/googleMapKey';
 
 const AddressPickup = ({ placeholderText, fetchAddress }) => {
 
