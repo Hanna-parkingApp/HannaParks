@@ -28,7 +28,7 @@ export default Router = () => {
                 return {
                   ...prevState,
                   isSignout: false,
-                  userToken: action.token,
+                  userToken: action.token || JSON.parse(action.token),
                 };
               case 'SIGN_OUT':
                 return {
@@ -64,7 +64,7 @@ export default Router = () => {
     
     useEffect(() => {
         getToken();
-    },[])
+    },[state.userToken])
 
     const authContext = useMemo(
         () => ({
@@ -76,15 +76,16 @@ export default Router = () => {
               hannaServer.post('/login', data) 
               .then(res => {
                 try {
-                    AsyncStorage.setItem('userToken', res.data.user.token)
-                    disptach({ type: 'SIGN_IN', token: res.data.user.token })
+                    // AsyncStorage.setItem('userToken', res.data.tokens)
+                    AsyncStorage.setItem('userToken',JSON.stringify(res.data.tokens))
+                    disptach({ type: 'SIGN_IN', token: res.data.tokens })
                 } catch (e) {
                   console.log("error setting token in local storage: ", e);
                 }
         
                 hannaServer.interceptors.request.use(
                     config => {
-                      config.headers['x-access-token'] = res.data.user.token;
+                      config.headers['x-access-token'] = res.data.tokens;
                       return config;
                     }
                 )
@@ -106,13 +107,15 @@ export default Router = () => {
               // In the example, we'll use a dummy token
               try {
                 hannaServer.post('/register', data)
-                .then(res => console.log("register status: ", res))
+                // .then(res => console.log("res: ", res))
+                .then(res => {
+                  AsyncStorage.setItem('userToken',JSON.stringify(res.data.tokens))
+                  disptach({ type: 'SIGN_IN', token: res.data.tokens}) 
+                })
         
               } catch(e) {
                 console.log("error register", e);
               }
-      
-              disptach({ type: 'SIGN_IN' });
             },
           }),
         []
@@ -123,13 +126,14 @@ export default Router = () => {
         // We haven't finished checking for the token yet
         return <LoadingScreen />;
     } else {
+      console.log("STATE.TOKEN: ", state.userToken)
       console.log("Finished loading.Move to either AppStack or AutStack")
     }
 
     return (
         <AuthContext.Provider value={authContext}>
             <NavigationContainer>
-                {state.userToken != null ? ( 
+                {state.userToken != null && state.userToken.length > 0 ? ( 
                 <AppStack /> ) : (
                 <AuthStack isSignout={state.isSignout} />  )}
             </NavigationContainer>
