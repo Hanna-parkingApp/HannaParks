@@ -16,6 +16,7 @@ import { selectLocation } from "../features/location/locationSlice";
 import BottomSheet from '../components/BottomSheetShareView';
 import GeoBar from '../components/GeoBar';
 import { useSharedValue } from 'react-native-reanimated';
+import hannaServer from "../api/hannaServer";
 
 
 const SpecificSharingScreen = () => {
@@ -98,7 +99,9 @@ const SpecificSharingScreen = () => {
           <Text>Expected Arrived Time : 10m</Text>
         </View>
         <TouchableOpacity
-          onPress={console.log("shared parking")}
+          onPress={()=>{console.log("shared parking",userLocation.src,userLocation.des)      
+           hannaServer.post('/share-parks', userLocation.src)}}
+
           style={styles.btnShareContainer}
         >
           <Text style={styles.btnShareText}>Share</Text>
