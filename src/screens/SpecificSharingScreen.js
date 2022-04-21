@@ -27,6 +27,20 @@ const SpecificSharingScreen = () => {
     console.log(dest);
     setEndPoint(dest);
   }
+
+  const getLocation = async () => {
+    const { status } = await Location.requestBackgroundPermissionsAsync();
+    if (status !== 'granted') {
+        console.log("status not granted")
+        setPermissionStatus('PERMISSION NOT GRANTED!');
+        //alert(permissionStatus);
+    }
+
+    const location = await Location.getCurrentPositionAsync({});
+    // setLocation(userLocation);
+    dispatch(changeSrcState(location));
+}
+
   const userLocation = useSelector(selectLocation);
   const y = useSharedValue(0);
 
@@ -35,9 +49,16 @@ const SpecificSharingScreen = () => {
       <HannaText />
       <View style={styles.SharingContainer}>
         <SafeAreaView>
-          <Map width={width} height={height / 2}  myLocation={userLocation.src} desLocation = {userLocation.des}  />
+          {/* <Map width={width} height={height / 2}  myLocation={userLocation.src} desLocation = {userLocation.des}  /> */}
         </SafeAreaView>
       </View>
+
+      {userLocation.src? (
+        <Map width={width} height={height / 2} myLocation={userLocation.src} desLocation = {userLocation.des}/>
+      ): (
+        <Text>Loading Page ...</Text>
+      )}
+
       <GeoBar panY={y} />
 
     <BottomSheet panY={y} handleSearch = {handleSearch} />
