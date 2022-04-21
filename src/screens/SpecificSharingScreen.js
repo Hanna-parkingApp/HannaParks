@@ -55,7 +55,7 @@ const SpecificSharingScreen = () => {
       </View>
 
       {userLocation.src? (
-        <Map width={width} height={height / 2} myLocation={userLocation.src} desLocation = {userLocation.des}/>
+        <Map width={width} height={height /2} myLocation={userLocation.src} desLocation = {userLocation.des}/>
       ): (
         <Text>Loading Page ...</Text>
       )}
@@ -100,8 +100,15 @@ const SpecificSharingScreen = () => {
         </View>
         <TouchableOpacity
           onPress={()=>{console.log("shared parking",userLocation.src,userLocation.des)      
-           hannaServer.post('/share-parks', userLocation.src)}}
-
+           try{
+             const location = {
+               src: userLocation.src,
+               des: userLocation.des
+             }
+             hannaServer.post('/share-parks', location )}
+             catch(e){console.log("failed connect share parking",e)}
+          }}
+           
           style={styles.btnShareContainer}
         >
           <Text style={styles.btnShareText}>Share</Text>

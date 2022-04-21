@@ -107,7 +107,7 @@ export default function BottomSheet({ panY, handleSearch }) {
             <FlatList
             ListHeaderComponent={
             <>
-             <View style = {{ marginBottom: 16 }} />
+             <View style = {{ marginBottom: 16,flex: 1 }} />
                 <AddressPickup 
                  placeholderText={"Enter Destination Location"}
                  fetchAddress = {fetchDestinationCoords}
