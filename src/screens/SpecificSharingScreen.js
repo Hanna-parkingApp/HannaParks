@@ -13,25 +13,57 @@ import Map from "../components/Map";
 import FormDetail from "../components/FormDetail";
 import { useSelector } from "react-redux";
 import { selectLocation } from "../features/location/locationSlice";
+import BottomSheet from '../components/BottomSheetShareView';
+import GeoBar from '../components/GeoBar';
+import { useSharedValue } from 'react-native-reanimated';
+
 
 const SpecificSharingScreen = () => {
   const { width, height } = useWindowDimensions();
-  const [street, setStreet] = useState("Rambam 7");
-  const [city, setCity] = useState("Tel Aviv");
+  // const [street, setStreet] = useState("Rambam 7");
+  // const [city, setCity] = useState("Tel Aviv");
+
+  const handleSearch = (dest) => {
+    console.log(dest);
+    setEndPoint(dest);
+  }
+
+  const getLocation = async () => {
+    const { status } = await Location.requestBackgroundPermissionsAsync();
+    if (status !== 'granted') {
+        console.log("status not granted")
+        setPermissionStatus('PERMISSION NOT GRANTED!');
+        //alert(permissionStatus);
+    }
+
+    const location = await Location.getCurrentPositionAsync({});
+    // setLocation(userLocation);
+    dispatch(changeSrcState(location));
+}
 
   const userLocation = useSelector(selectLocation);
+  const y = useSharedValue(0);
 
   return (
     <View>
       <HannaText />
       <View style={styles.SharingContainer}>
         <SafeAreaView>
-          <Map width={width} height={height / 2}  myLocation={userLocation.src} desLocation = {userLocation.des}  />
+          {/* <Map width={width} height={height / 2}  myLocation={userLocation.src} desLocation = {userLocation.des}  /> */}
         </SafeAreaView>
       </View>
 
+      {userLocation.src? (
+        <Map width={width} height={height / 2} myLocation={userLocation.src} desLocation = {userLocation.des}/>
+      ): (
+        <Text>Loading Page ...</Text>
+      )}
+
+      <GeoBar panY={y} />
+
+    <BottomSheet panY={y} handleSearch = {handleSearch} />
       <View style={styles.SharedParkingDetails}>
-        <Text>Parking Location</Text>
+        {/* <Text>Parking Location</Text>
         <FormDetail
           style={styles.formDetailStyle}
           labelValue={street}
@@ -47,9 +79,12 @@ const SpecificSharingScreen = () => {
         <TouchableOpacity
           style={styles.btnConfirmContainer}
           onPress={console.log("confirm parking location")}
-        >
-          <Text style={styles.btnConfirmText}>Confirm</Text>
-        </TouchableOpacity>
+        > */}
+
+
+          {/* <Text style={styles.btnConfirmText}>Confirm</Text>
+        </TouchableOpacity> */}
+
         <View style={styles.calculateTimeContainer}>
           <View style={styles.deperatureTimeContainer}>
             <Text>Expected Deprature Time: </Text>
