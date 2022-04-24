@@ -11,15 +11,16 @@ const FindDestinationScreen = (props) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
-    const fetchDestinationCoords = (lat, lng, city_name, st_name) => {
+    const fetchDestinationCoords = async (lat, lng, city_name, st_name) => {
         console.log("city ==> ", city_name);
         console.log('street, ', st_name);
         let desLocation = {
             latitude: lat,
-            longitude: lng
+            longitude: lng,
+            generalLoc: city_name
         }
         dispatch(changeDesState(desLocation));
-        navigation.navigate('Home')
+        navigation.navigate('Home');
     }
 
     return (

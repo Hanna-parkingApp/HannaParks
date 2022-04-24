@@ -1,29 +1,81 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, Image } from 'react-native'
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { GoogleMapKey as GOOGLE_API_KEY } from '../constants/google-map-api/googleMapKey';
 import imagePath from '../constants/imagePath';
-
+import hannaServer from "../api/hannaServer";
+import { useSelector } from 'react-redux';
+import { selectLocation } from '../features/location/locationSlice';
+import { add_minutes } from '../constants/helpers/helperFunctions';
 
 const Map = (props) => {
 
-    const {width, height, myLocation, desLocation} = props;
+    const {width, height} = props;
+    const [nearbyParking, setNearbyParking] = useState([]);
+    const [showParking, setShowParking] = useState(false);
+
+    const userLocation = useSelector(selectLocation);
     
-    const markerRef = useRef();
-    
+    const markerRef = useRef();    
 
     const coordinates = [
         {
-            latitude: myLocation.latitude,
-            longitude: myLocation.longitude,
+            latitude: userLocation.src.latitude,
+            longitude: userLocation.src.longitude,
         },
         {
-            latitude: myLocation.latitude + 1,
-            longitude: myLocation.longitude + 1,
+            latitude: userLocation.src.latitude + 1,
+            longitude: userLocation.src.longitude + 1,
         }
     ]
+
+    
+
+    const fetchNearParking = async (result) => {
+        if (!showParking) {
+        console.log(`Distance: ${result.distance} km`);
+        console.log(`Duration: ${result.duration} min`);
+
+        const calTimeStamp = add_minutes(new Date(), result.duration);
+        console.log("cal timestamp: ", calTimeStamp);
+
+        const data = {
+            latitude: userLocation.des.latitude,
+            longitude: userLocation.des.longitude,
+            generalLoc: userLocation.des.generalLoc,
+            timeStamp: calTimeStamp
+        }
+
+        try {
+            await hannaServer.post('/find-parks', data)
+            .then(res => {
+                if (res.status === 200) {
+                    console.log("check")
+                    const specific_parking = res.data.nearbyParking[0].specificLocation;
+                    console.log(specific_parking);
+                    console.log(specific_parking.latitude)
+                    const json = JSON.parse(specific_parking);
+                    console.log("json: ", json.latitude)
+                    
+                    setNearbyParking(res.data.nearbyParking);
+                }
+            })
+            
+        } catch(e) {
+            console.log("error loading near parks")
+        }
+    }
+    }
+
+    useEffect(() => {
+        console.log("array len: ", nearbyParking.length);
+        if (nearbyParking.length > 0 && !showParking) {
+            console.log("change show parking")
+            setShowParking(true);
+        }
+    },[nearbyParking.length])
     
     return (
         <>
@@ -31,8 +83,8 @@ const Map = (props) => {
                 style = {{width, height}}
                 loadingEnabled = {true}
                 region = {{
-                latitude: myLocation.latitude,
-                longitude: myLocation.longitude,
+                latitude: userLocation.src.latitude,
+                longitude: userLocation.src.longitude,
                 latitudeDelta: 0.015,
                 longitudeDelta: 0.0121
                 }}
@@ -47,23 +99,35 @@ const Map = (props) => {
                         style = {styles.icCar}
                     />
                 </Marker.Animated>
-            {desLocation ? (
-                <Marker coordinate = {desLocation} title = "des" />
-                
-            ): (
-                null
+
+                {showParking && nearbyParking.length > 0 && nearbyParking.map((parking, index) => {
+                    const { latitude, longitude} = JSON.parse(parking.specificLocation)
+                    console.log("latitude: ", latitude)
+                    return (
+                        <Marker.Animated
+                            key={index}
+                            coordinate = {{latitude: latitude, longitude: longitude}}
+                        >
+                         <Image 
+                            source={imagePath.icCurLoc}
+                            style = {[styles.icCar, {backgroundColor: 'red'}]}
+                        />   
+                        </Marker.Animated>
+                    )
+                })}
+            {userLocation.des.latitude && (
+                <Marker coordinate = {{latitude: userLocation.des.latitude, longitude: userLocation.des.longitude}} title = "des" />   
             )}
-            {desLocation.latitude !== 0 ? (
+            {userLocation.des.latitude && (
                 <MapViewDirections 
-                origin={myLocation}
-                destination={desLocation}
+                origin={userLocation.src}
+                destination={userLocation.des}
                 apikey={GOOGLE_API_KEY}
                 strokeWidth = {3}
                 strokeColor = "hotpink"
-                />
+                onReady={(result) => fetchNearParking(result)}
                 
-            ): (
-                null
+                />   
             )}  
             </MapView>          
         </> 
@@ -92,5 +156,5 @@ const styles = StyleSheet.create({
     icCar: {
         width: 30,
         height: 30,
-    }
+    },
 })

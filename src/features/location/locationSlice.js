@@ -4,12 +4,13 @@ const locationSlice = createSlice({
     name: 'location',
     initialState: {
         src: {
-            latitude: 0,
-            longitude: 0,
+            latitude: null,
+            longitude: null,
         },
         des: {
-            latitude: 0,
-            longitude: 0,
+            latitude: null,
+            longitude: null,
+            generalLoc: ''
         }
     },
     reducers: {
@@ -19,9 +20,11 @@ const locationSlice = createSlice({
             state.src.longitude = coords.longitude;
         },
         changeDesState: (state, action) => {
+            console.log("action payload: ", action.payload)
             let coords = action.payload;
             state.des.latitude = coords.latitude;
             state.des.longitude = coords.longitude;
+            state.des.generalLoc = coords.generalLoc;
         }
     }
 });

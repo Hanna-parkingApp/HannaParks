@@ -15,8 +15,6 @@ export default Router = () => {
 
     const [state, disptach] = useReducer(
         (prevState, action) => {
-          console.log("prevstate: ", prevState);
-          console.log("action: ", action);
             switch (action.type) {
               case 'RESTORE_TOKEN':
                 return {
@@ -126,7 +124,6 @@ export default Router = () => {
         // We haven't finished checking for the token yet
         return <LoadingScreen />;
     } else {
-      console.log("STATE.TOKEN: ", state.userToken)
       console.log("Finished loading.Move to either AppStack or AutStack")
     }
 
