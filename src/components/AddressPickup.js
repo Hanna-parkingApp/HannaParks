@@ -8,21 +8,22 @@ const AddressPickup = ({ placeholderText, fetchAddress }) => {
     const onPressAddress = (data, details) => {
         
         console.log("************");
+        let city, street;
         let address_components = details.address_components;
 
-        let city = address_components[1].short_name;
-        let street = address_components[0].short_name;
-
-        console.log("##############");
+        if (isNaN(parseInt(address_components[0].short_name))) {
+            city = address_components[1].short_name;
+            street = address_components[0].short_name;
+        } else {
+            city = address_components[2].short_name;
+            street = address_components[1].short_name;
+        }
+        
         let geometry = details.geometry;
         let lat = geometry.location.lat;
         let lng = geometry.location.lng;
 
-        console.log(lat);
-        console.log(lng);
-
         fetchAddress(lat,lng,city,street);
-
     }
     
 

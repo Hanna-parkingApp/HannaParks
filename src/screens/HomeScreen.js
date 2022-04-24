@@ -42,8 +42,11 @@ export default function HomeScreen({ navigation }) {
   }
 
   useEffect(() => {
-    getLocation();
-  },[])
+    if(!userLocation.src.latitude)
+      getLocation();
+    else 
+      console.log(userLocation.src.latitude)
+  },[userLocation.src.latitude])
   
   // useEffect(() => {
   //   if (userLocation.des.latitude !== 0) {
@@ -80,8 +83,8 @@ export default function HomeScreen({ navigation }) {
       <StatusBar barStyle="dark-content" />
       <Header />
 
-      {userLocation.src? (
-        <Map width={width} height={height} myLocation={userLocation.src} desLocation = {userLocation.des}/>
+      {userLocation.src.latitude? (
+        <Map width={width} height={height}/>
       ): (
         <Text>Loading Page ...</Text>
       )}
