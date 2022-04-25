@@ -17,12 +17,15 @@ import BottomSheet from '../components/BottomSheetShareView';
 import GeoBar from '../components/GeoBar';
 import { useSharedValue } from 'react-native-reanimated';
 import hannaServer from "../api/hannaServer";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { add_minutes,diff_minutes } from "../constants/helpers/helperFunctions";
 
 
 const SpecificSharingScreen = () => {
   const { width, height } = useWindowDimensions();
-  // const [street, setStreet] = useState("Rambam 7");
-  // const [city, setCity] = useState("Tel Aviv");
+  const [carDetails,setCarDetails] = useState();
+  const [expectedDepratureTime,setExpectedDepratureTime]=useState();
+  const [diffMins,setDiffMins]=useState();
 
   const handleSearch = (dest) => {
     console.log(dest);
@@ -50,12 +53,11 @@ const SpecificSharingScreen = () => {
       <HannaText />
       <View style={styles.SharingContainer}>
         <SafeAreaView>
-          {/* <Map width={width} height={height / 2}  myLocation={userLocation.src} desLocation = {userLocation.des}  /> */}
         </SafeAreaView>
       </View>
 
       {userLocation.src? (
-        <Map width={width} height={height /2} myLocation={userLocation.src} desLocation = {userLocation.des}/>
+        <Map width={width} height={height /2} request={"SHARE"} setCarDetails={setCarDetails} />
       ): (
         <Text>Loading Page ...</Text>
       )}
@@ -64,49 +66,50 @@ const SpecificSharingScreen = () => {
 
     <BottomSheet panY={y} handleSearch = {handleSearch} />
       <View style={styles.SharedParkingDetails}>
-        {/* <Text>Parking Location</Text>
-        <FormDetail
-          style={styles.formDetailStyle}
-          labelValue={street}
-          placeholderText={"njnj"}
-          detailName={"Street"}
-        ></FormDetail>
-        <FormDetail
-          style={styles.formDetailStyle}
-          labelValue={city}
-          placeholderText={"mkkmk"}
-          detailName={"City"}
-        ></FormDetail>
-        <TouchableOpacity
-          style={styles.btnConfirmContainer}
-          onPress={console.log("confirm parking location")}
-        > */}
-
-
-          {/* <Text style={styles.btnConfirmText}>Confirm</Text>
-        </TouchableOpacity> */}
-
         <View style={styles.calculateTimeContainer}>
           <View style={styles.deperatureTimeContainer}>
             <Text>Expected Deprature Time: </Text>
             <TextInput
             style={styles.deperatureTimeInput}
-              value="7m"
+              value={expectedDepratureTime}
               numberOfLines={1}
               placeholderTextColor="#666"
+              onChangeText={setExpectedDepratureTime}
             />
           </View>
-          <Text>Expected Arrived Time : 10m</Text>
+          <Text>Expected Arrived Time: {diffMins}</Text>
         </View>
         <TouchableOpacity
-          onPress={()=>{console.log("shared parking",userLocation.src,userLocation.des)      
-           try{
-             const location = {
-               src: userLocation.src,
-               des: userLocation.des
+          onPress={async()=>{console.log("shared parking",carDetails)      
+
+          try{
+            let userToken = await AsyncStorage.getItem('userToken');
+            let userTokenJson = JSON.parse(userToken);
+            // console.log(userToken);
+            // console.log("carDetails.timeStamp",carDetails.timeStamp);
+            // console.log("expectedDepratureTime",expectedDepratureTime);
+
+            let durationArrivedTime = add_minutes(carDetails.timeStamp,expectedDepratureTime); 
+            // console.log("durationArrivedTime",durationArrivedTime);
+            setDiffMins(diff_minutes(durationArrivedTime,new Date()));
+            // console.log(userTokenJson.refreshToken);
+            const userParking = {
+              userToken: userTokenJson.refreshToken,
+              specificLocation: 
+              { latitude: carDetails.latitude,
+                longitude: carDetails.longitude
+              },
+                genralLocation: carDetails.generalLoc,
+                timeStamp: carDetails.timeStamp 
              }
-             hannaServer.post('/share-parks', location )}
-             catch(e){console.log("failed connect share parking",e)}
+             hannaServer.post('/share-parks', userParking ).then(
+               res => console.log("############",res.data)
+             )
+            }
+            
+             catch(e){
+               console.log("failed connect share parking",e)
+              }
           }}
            
           style={styles.btnShareContainer}

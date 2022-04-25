@@ -12,7 +12,8 @@ import { add_minutes } from '../constants/helpers/helperFunctions';
 
 const Map = (props) => {
 
-    const {width, height} = props;
+    
+    const {width, height,request} = props;
     const [nearbyParking, setNearbyParking] = useState([]);
     const [showParking, setShowParking] = useState(false);
 
@@ -31,8 +32,6 @@ const Map = (props) => {
         }
     ]
 
-    
-
     const fetchNearParking = async (result) => {
         if (!showParking) {
         console.log(`Distance: ${result.distance} km`);
@@ -47,15 +46,24 @@ const Map = (props) => {
             generalLoc: userLocation.des.generalLoc,
             timeStamp: calTimeStamp
         }
-
+            if(request ==="FIND"){
+                findParking(data);
+            }
+            else if (request==="SHARE"){
+                props.setCarDetails(data); 
+                console.log("col col col");
+            }
+    }
+    }
+    const findParking = async (data) => {
         try {
             await hannaServer.post('/find-parks', data)
             .then(res => {
                 if (res.status === 200) {
                     console.log("check")
                     const specific_parking = res.data.nearbyParking[0].specificLocation;
-                    console.log(specific_parking);
-                    console.log(specific_parking.latitude)
+                    // console.log(specific_parking);
+                    // console.log(specific_parking.latitude)
                     const json = JSON.parse(specific_parking);
                     console.log("json: ", json.latitude)
                     
@@ -66,9 +74,28 @@ const Map = (props) => {
         } catch(e) {
             console.log("error loading near parks")
         }
-    }
-    }
-
+    } 
+    // const shareParking = (data) => {
+    //     try {
+    //         let userToken = await AsyncStorage.getItem('userToken');
+    //         await hannaServer.post('/share-parks', data)
+    //         .then(res => {
+    //             if (res.status === 200) {
+    //                 console.log("check")
+    //                 const specific_parking = res.data.nearbyParking[0].specificLocation;
+    //                 // console.log(specific_parking);
+    //                 // console.log(specific_parking.latitude)
+    //                 const json = JSON.parse(specific_parking);
+    //                 console.log("json: ", json.latitude)
+                    
+    //                 setNearbyParking(res.data.nearbyParking);
+    //             }
+    //         })
+            
+    //     } catch(e) {
+    //         console.log("error loading near parks")
+    //     }
+    // } 
     useEffect(() => {
         console.log("array len: ", nearbyParking.length);
         if (nearbyParking.length > 0 && !showParking) {

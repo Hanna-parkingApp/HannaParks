@@ -84,7 +84,7 @@ export default function HomeScreen({ navigation }) {
       <Header />
 
       {userLocation.src.latitude? (
-        <Map width={width} height={height}/>
+        <Map width={width} height={height} request={"FIND"}/>
       ): (
         <Text>Loading Page ...</Text>
       )}
