@@ -45,8 +45,9 @@ export default function BottomSheet({ panY, handleSearch }) {
      console.log('street, ', st_name);
      let desLocation = {
          latitude: lat,
-         longitude: lng
-     }
+         longitude: lng,
+         generalLoc: city_name
+        }
      dispatch(changeDesState(desLocation));
     }
   const gestureHandler = useAnimatedGestureHandler(
