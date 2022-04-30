@@ -75,6 +75,7 @@ export default Router = () => {
               .then(res => {
                 try {
                     // AsyncStorage.setItem('userToken', res.data.tokens)
+                    console.log(res.data.tokens);
                     AsyncStorage.setItem('userToken',JSON.stringify(res.data.tokens))
                     disptach({ type: 'SIGN_IN', token: res.data.tokens })
                 } catch (e) {

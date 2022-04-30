@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  SafeAreaView,
   StatusBar,
   StyleSheet,
   useWindowDimensions,
@@ -18,6 +17,7 @@ import { useSelector } from 'react-redux';
 import { selectLocation } from '../features/location/locationSlice';
 import { useDispatch } from 'react-redux';
 import { changeSrcState } from '../features/location/locationSlice';
+import MyButton from '../components/MyButton';
 
 
 export default function HomeScreen({ navigation }) {
@@ -65,12 +65,13 @@ export default function HomeScreen({ navigation }) {
 
   const getLocation = async () => {
     const { status } = await Location.requestBackgroundPermissionsAsync();
+    // const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
         console.log("status not granted")
         setPermissionStatus('PERMISSION NOT GRANTED!');
         //alert(permissionStatus);
     }
-
+    
     const location = await Location.getCurrentPositionAsync({});
     // setLocation(userLocation);
     dispatch(changeSrcState(location));
@@ -83,15 +84,14 @@ export default function HomeScreen({ navigation }) {
       <StatusBar barStyle="dark-content" />
       <Header />
 
+      <MyButton title={"Share parking"} onPress={() => navigation.navigate('Share-Parking')}/>
+
       {userLocation.src.latitude? (
         <Map width={width} height={height} request={"FIND"}/>
       ): (
         <Text>Loading Page ...</Text>
       )}
       
-
-      <GeoBar panY={y} />
-
       <BottomSheet panY={y} handleSearch = {handleSearch} />
 
     </View>

@@ -2,8 +2,9 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { GoogleMapKey as GOOGLE_MAP_KEY } from '../constants/google-map-api/googleMapKey';
+import { Ionicons } from "@expo/vector-icons";
 
-const AddressPickup = ({ placeholderText, fetchAddress }) => {
+const AddressPickup = ({ placeholderText, fetchAddress, handleSearchPress }) => {
 
     const onPressAddress = (data, details) => {
         
@@ -13,7 +14,7 @@ const AddressPickup = ({ placeholderText, fetchAddress }) => {
 
         city = address_components.find(element => element.types[0]==="locality").long_name;
         street = address_components.find(element => element.types[0]==="route").short_name  ;        
-        streetNum =  address_components.find(element => element.types[0]==="street_number").short_name;
+        //streetNum =  address_components.find(element => element.types[0]==="street_number").short_name;
         
         let geometry = details.geometry;
         let lat = geometry.location.lat;
@@ -48,6 +49,9 @@ const AddressPickup = ({ placeholderText, fetchAddress }) => {
                 textInput: styles.textInputStyle,
             }}
             />
+            <View>
+            <Ionicons name="search" style={styles.iconStyle} size={25} onPress={handleSearchPress} /> 
+            </View>
         </View>
     )
 };
@@ -55,9 +59,19 @@ const AddressPickup = ({ placeholderText, fetchAddress }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexDirection: 'row-reverse',
+        alignItems:'stretch'
     },
     containerStyle: {
         backgroundColor: 'white'
+    },
+    iconStyle: {
+        padding: 10,
+        height: '100%',
+        width: '50%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 50,
     },
     textInputStyle: {
         height: 48,

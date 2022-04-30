@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
+  SafeAreaView,
   TouchableOpacity,
   useWindowDimensions,
   View,
@@ -16,11 +16,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { PanGestureHandler } from 'react-native-gesture-handler';
-import FormInput from './FormInput';
-import { Ionicons } from '@expo/vector-icons';
-import GooglePlacesInput from './GooglePlacesInput';
 import { useNavigation } from '@react-navigation/native';
-
 export default function BottomSheet({ panY, handleSearch }) {
   const { height } = useWindowDimensions();
   const [dest, setDest] = useState();
@@ -41,7 +37,7 @@ export default function BottomSheet({ panY, handleSearch }) {
       },
       onEnd() {
         if (panY.value < -height * 0.4) {
-          panY.value = withTiming(-(height * 0.7));
+          panY.value = withTiming(-(height * 0.64)); //0.7
         } else {
           panY.value = withTiming(0);
         }
