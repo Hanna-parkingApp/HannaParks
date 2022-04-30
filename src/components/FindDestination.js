@@ -4,6 +4,7 @@ import { View, ScrollView, StyleSheet, FlatList } from "react-native";
 import { useDispatch } from "react-redux";
 import AddressPickup from "./AddressPickup";
 import { changeDesState } from "../features/location/locationSlice";
+import { Ionicons } from "@expo/vector-icons";
 
 const FindDestination = (props) => {
 
@@ -24,16 +25,23 @@ const FindDestination = (props) => {
         //navigation.navigate('Home');
     }
 
+    const handleSearchPress = () => {
+        props.handleSearch();
+    }
+
     return (
         <View style = {styles.container}>
             <FlatList
             ListHeaderComponent={
             <>
-             <View style = {{ marginBottom: 16 }} />
+            <View style = {{ marginBottom: 16, flexDirection:'row' }} >
                 <AddressPickup 
                  placeholderText={placeholderText}
                  fetchAddress = {fetchDestinationCoords}
-                /> 
+                 handleSearchPress={handleSearchPress}
+                />
+            </View>
+                
             </>}
             keyboardShouldPersistTaps='handled'
             style = {{ flex: 1, padding: 24}}

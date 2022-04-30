@@ -27,6 +27,7 @@ const ShareParkingScreen = () => {
     try{
       let userToken = await AsyncStorage.getItem('userToken');
       let userTokenJson = JSON.parse(userToken);
+      console.log("usertokenjson: ", userTokenJson);
 
       let durationArrivedTime = add_minutes(carDetails.timeStamp,expectedDepratureTime); 
       setDiffMins(diff_minutes(durationArrivedTime,new Date()));
@@ -53,7 +54,7 @@ const ShareParkingScreen = () => {
   return (
     <View style={styles.SharingContainer}>
         <ImageBackground source={imageSrc} resizeMode="cover" style={{flex: 1, justifyContent: 'center'}}>
-        <FindDestination placeholderText={"Where is your car at?"}  />
+        <FindDestination placeholderText={"Where is your car at?"} handleSearch={() => console.log('stay in the same page')}  />
             <Map width={width} height={height /2} request={"SHARE"} setCarDetails={setCarDetails} />
         <View style={styles.SharedParkingDetails}>
             <Text style={{fontSize:15, fontWeight: 'bold'}}>Expected Deprature Time:</Text>
