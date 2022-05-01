@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, Image } from 'react-native'
-import MapView from 'react-native-maps';
+import MapView, { Callout } from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { GoogleMapKey as GOOGLE_API_KEY } from '../constants/google-map-api/googleMapKey';
@@ -13,7 +13,7 @@ import { add_minutes } from '../constants/helpers/helperFunctions';
 const Map = (props) => {
 
     
-    const {width, height,request} = props;
+    const {width, height,request, setCarDetailsModal} = props;
     const [nearbyParking, setNearbyParking] = useState([]);
     const [showParking, setShowParking] = useState(false);
 
@@ -55,6 +55,12 @@ const Map = (props) => {
             }
     }
     }
+
+    const stopPropagation = thunk => e => {
+        e.stopPropagation();
+        thunk();
+    }
+
     const findParking = async (data) => {
         try {
             await hannaServer.post('/find-parks', data)
@@ -75,6 +81,11 @@ const Map = (props) => {
             console.log("error loading near parks")
         }
     } 
+
+    const handleMarkerPress = () => {
+        console.log("Marker Pressed");
+        setCarDetailsModal(true);
+    }
     // const shareParking = (data) => {
     //     try {
     //         let userToken = await AsyncStorage.getItem('userToken');
@@ -116,30 +127,33 @@ const Map = (props) => {
                 longitudeDelta: 0.0121
                 }}
             >  
-              <Marker.Animated 
+              <Marker
                     ref={markerRef}
                     title = "source"
                     coordinate= {coordinates[0]} 
+                    
                 >
                     <Image 
                         source={imagePath.icCurLoc}
                         style = {styles.icCar}
                     />
-                </Marker.Animated>
+                </Marker>
 
                 {showParking && nearbyParking.length > 0 && nearbyParking.map((parking, index) => {
                     const { latitude, longitude} = JSON.parse(parking.specificLocation)
-                    console.log("latitude: ", latitude)
+                    
                     return (
-                        <Marker.Animated
+                        <Marker
                             key={index}
                             coordinate = {{latitude: latitude, longitude: longitude}}
+                            onPress={(e) =>{e.stopPropagation(); handleMarkerPress(index)}}
+                            title={"title title"}
                         >
                          <Image 
                             source={imagePath.icCurLoc}
                             style = {[styles.icCar, {backgroundColor: 'red'}]}
                         />   
-                        </Marker.Animated>
+                        </Marker>
                     )
                 })}
             {userLocation.des.latitude && (
