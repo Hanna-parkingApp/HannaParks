@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {StyleSheet, Text, View, useWindowDimensions, ImageBackground,} from "react-native";
+import {StyleSheet, Text, View, useWindowDimensions,Picker, ImageBackground,} from "react-native";
 import hannaServer from "../api/hannaServer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { add_minutes,diff_minutes } from "../constants/helpers/helperFunctions";
@@ -9,11 +9,12 @@ import MyButton from "../components/MyButton";
 import { useNavigation } from "@react-navigation/native";
 import Map from '../components/Map';
 
-
 const ShareParkingScreen = () => {
 
   const navigation = useNavigation();
-    
+
+  const [selectedValue, setSelectedValue] = useState();
+
   const { width, height } = useWindowDimensions();
   const [carDetails,setCarDetails] = useState();
   const [expectedDepratureTime,setExpectedDepratureTime]=useState();
@@ -55,11 +56,19 @@ const ShareParkingScreen = () => {
     <View style={styles.SharingContainer}>
         {/* <ImageBackground source={imageSrc} resizeMode="cover" style={{flex: 1, justifyContent: 'center'}}> */}
         <FindDestination placeholderText={"Where is your car at?"} handleSearch={() => console.log('stay in the same page')}  />
-            <Map width={width} height={height /2} request={"SHARE"} setCarDetails={setCarDetails} />
+            <Map width={width} height={height /2.5} request={"SHARE"} setCarDetails={setCarDetails} />
         <View style={styles.SharedParkingDetails}>
-            <Text style={{fontSize:15, fontWeight: 'bold'}}>Expected Deprature Time:</Text>
+            <Text style={{fontSize:13, fontWeight: 'bold'}}>Expected Deprature Time:</Text>
             <NumericInput minValue={0} onChange={setExpectedDepratureTime}/>
-            <Text style={{fontSize:15, fontWeight: 'bold', alignItems: 'center'}}>Expected Arrived Time: {"\n"} {diffMins}</Text>
+            <Text style={{fontSize:13, fontWeight: 'bold', alignItems: 'center'}}>Expected Arrived Time: {"\n"} {diffMins}</Text>
+            <Text style={{fontSize:13, fontWeight: 'bold', alignItems: 'center'}}>Car Number: </Text>
+                <Picker
+                    selectedValue={selectedValue}
+                    style={{ height: 20, width: 100 }}
+                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}   >
+                    <Picker.Item label="111111" value="car number" />
+                    <Picker.Item label="22222" value="1111111" />
+                </Picker>
         </View>
         <View style={styles.SharedParkingDetails}>
             <MyButton title={"Share"} onPress={handleShareBtn} />
@@ -83,4 +92,9 @@ const styles = StyleSheet.create({
     flex: 0.5,
     alignItems: 'center',
   },
+//   container: {
+//     flex: 1,
+//     paddingTop: 200,
+//     alignItems: "center"
+//   }
 });
