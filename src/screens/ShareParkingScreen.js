@@ -19,7 +19,7 @@ const ShareParkingScreen = () => {
   const [expectedDepratureTime,setExpectedDepratureTime]=useState();
   const [diffMins,setDiffMins]=useState();
 
-  const imageSrc = require('../assets/house-blue-bg.jpeg');
+//   const imageSrc = require('../assets/house-blue-bg.jpeg');
 
   const handleShareBtn = async () => {
     console.log("shared parking",carDetails)      
@@ -53,7 +53,7 @@ const ShareParkingScreen = () => {
 
   return (
     <View style={styles.SharingContainer}>
-        <ImageBackground source={imageSrc} resizeMode="cover" style={{flex: 1, justifyContent: 'center'}}>
+        {/* <ImageBackground source={imageSrc} resizeMode="cover" style={{flex: 1, justifyContent: 'center'}}> */}
         <FindDestination placeholderText={"Where is your car at?"} handleSearch={() => console.log('stay in the same page')}  />
             <Map width={width} height={height /2} request={"SHARE"} setCarDetails={setCarDetails} />
         <View style={styles.SharedParkingDetails}>
@@ -64,7 +64,7 @@ const ShareParkingScreen = () => {
         <View style={styles.SharedParkingDetails}>
             <MyButton title={"Share"} onPress={handleShareBtn} />
         </View>
-        </ImageBackground>
+        {/* </ImageBackground> */}
     </View>
   );
 };
@@ -75,8 +75,8 @@ const styles = StyleSheet.create({
   SharingContainer: {
     flex: 1,
     display: 'flex',
-
-    // justifyContent: 'space-between'
+    // backgroundColor: "white"
+    justifyContent: 'space-between'
   },
   SharedParkingDetails: {
     justifyContent: 'space-evenly',
