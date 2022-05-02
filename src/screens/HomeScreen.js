@@ -86,7 +86,7 @@ export default function HomeScreen({ navigation }) {
       <StatusBar barStyle="dark-content" />
       <Header />
 
-      <MyButton title={"Share parking"} onPress={() => navigation.navigate('Share-Parking')}/>
+      <MyButton title={"Share parking"}  onPress={() => navigation.navigate('Share-Parking')}/>
       
       {carDetailsModal && (
         <CarDetailsModal modalVisible={carDetailsModal} />
