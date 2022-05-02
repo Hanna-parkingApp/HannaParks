@@ -72,7 +72,7 @@ const Map = (props) => {
                     // console.log(specific_parking.latitude)
                     const json = JSON.parse(specific_parking);
                     console.log("json: ", json.latitude)
-                    
+                    console.log("near by parking: ",res.data.nearbyParking);
                     setNearbyParking(res.data.nearbyParking);
                 }
             })
