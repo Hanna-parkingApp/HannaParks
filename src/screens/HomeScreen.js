@@ -89,7 +89,7 @@ export default function HomeScreen({ navigation }) {
       <MyButton title={"Share parking"}  onPress={() => navigation.navigate('Share-Parking')}/>
       
       {carDetailsModal && (
-        <CarDetailsModal modalVisible={carDetailsModal} />
+        <CarDetailsModal modalVisible={carDetailsModal} setModalVisible={setCarDetailsModal} />
       )}
 
       {userLocation.src.latitude? (
