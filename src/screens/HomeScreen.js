@@ -18,12 +18,15 @@ import { selectLocation } from '../features/location/locationSlice';
 import { useDispatch } from 'react-redux';
 import { changeSrcState } from '../features/location/locationSlice';
 import MyButton from '../components/MyButton';
+import CarDetailsModal from '../components/CarDetailsModal';
 
 
 export default function HomeScreen({ navigation }) {
   const { width, height } = useWindowDimensions();
   const [permissionStatus, setPermissionStatus] = useState('');
   const [endPoint, setEndPoint] = useState('');
+
+  const [carDetailsModal, setCarDetailsModal] = useState(false);
 
   const dispatch = useDispatch();
   const userLocation = useSelector(selectLocation);
@@ -65,13 +68,12 @@ export default function HomeScreen({ navigation }) {
 
   const getLocation = async () => {
     const { status } = await Location.requestBackgroundPermissionsAsync();
-    // const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
         console.log("status not granted")
         setPermissionStatus('PERMISSION NOT GRANTED!');
         //alert(permissionStatus);
     }
-    
+
     const location = await Location.getCurrentPositionAsync({});
     // setLocation(userLocation);
     dispatch(changeSrcState(location));
@@ -85,9 +87,13 @@ export default function HomeScreen({ navigation }) {
       <Header />
 
       <MyButton title={"Share parking"} onPress={() => navigation.navigate('Share-Parking')}/>
+      
+      {carDetailsModal && (
+        <CarDetailsModal modalVisible={carDetailsModal} />
+      )}
 
       {userLocation.src.latitude? (
-        <Map width={width} height={height} request={"FIND"}/>
+        <Map width={width} height={height} request={"FIND"} setCarDetailsModal={setCarDetailsModal}/>
       ): (
         <Text>Loading Page ...</Text>
       )}

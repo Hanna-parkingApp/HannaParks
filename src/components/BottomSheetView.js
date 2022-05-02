@@ -61,7 +61,7 @@ export default function BottomSheet({ panY, handleSearch }) {
   });
 
   const onPressLocation = () => {
-    navigation.navigate('Find Destination');
+    navigation.push('Find Destination');
   };
 
   return (

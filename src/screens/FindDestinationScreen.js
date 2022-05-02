@@ -9,7 +9,7 @@ const FindDestinationScreen = () => {
     const navigation = useNavigation();
 
     const handleSearchPress = () => {
-        navigation.navigate('Home')
+        navigation.goBack('Home')
     }
 
     return (
