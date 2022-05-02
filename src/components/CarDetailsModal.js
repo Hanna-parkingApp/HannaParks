@@ -2,12 +2,16 @@ import { Text, Modal, StyleSheet, View, Image } from 'react-native'
 import React from 'react'
 import imagePath from '../constants/imagePath';
 import MyButton from './MyButton';
+import { useSelector } from 'react-redux';
+import { selectCarDetail } from '../features/car-detail/carDetailSlice';
 
 export default function CarDetailsModal(props) {
     const {modalVisible, setModalVisible} = props;
 
-    
+    const carDetail = useSelector(selectCarDetail);
+    console.log(" carDetail: ", carDetail);
 
+    
     const handleCloseBtn = () => {
         setModalVisible(false);
     }
@@ -25,7 +29,7 @@ export default function CarDetailsModal(props) {
             <View style={styles.locationContainer}>
                 <Text style={styles.title}>Car Location:</Text>
                 <Text>St: Rambam 1</Text>
-                <Text>Tel Aviv</Text>
+                <Text>{carDetail.generalLoc}</Text>
             </View>
             <View style={styles.locationContainer}>
                 <Text style={styles.title}>Car Details:</Text>

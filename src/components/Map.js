@@ -6,12 +6,14 @@ import MapViewDirections from 'react-native-maps-directions';
 import { GoogleMapKey as GOOGLE_API_KEY } from '../constants/google-map-api/googleMapKey';
 import imagePath from '../constants/imagePath';
 import hannaServer from "../api/hannaServer";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectLocation } from '../features/location/locationSlice';
 import { add_minutes } from '../constants/helpers/helperFunctions';
+import { changeCarDetailState } from '../features/car-detail/carDetailSlice';
 
 const Map = (props) => {
 
+    const dispatch = useDispatch();
     
     const {width, height,request, setCarDetailsModal} = props;
     const [nearbyParking, setNearbyParking] = useState([]);
@@ -82,31 +84,29 @@ const Map = (props) => {
         }
     } 
 
-    const handleMarkerPress = () => {
+    const handleMarkerPress = (index) => {
         console.log("Marker Pressed");
-        setCarDetailsModal(true);
+        try {
+            //const json = JSON.parse(nearbyParking[index]);
+            console.log(nearbyParking[index]);
+            const { _id, generalLocation, specificLocation, timeStamp, userId } = nearbyParking[index];
+            const carDetail = {
+                id: _id,
+                userId: userId,
+                generalLoc: generalLocation,
+                specificLoc: specificLocation,
+                timeStamp,
+                car: null
+            }
+            console.log("line 101, genloc: ", carDetail.generalLoc);
+            dispatch(changeCarDetailState(carDetail));
+            setCarDetailsModal(true);
+        } catch (e) {
+            console.log("Error in handle Marker Press. ", e);
+        }
+        
     }
-    // const shareParking = (data) => {
-    //     try {
-    //         let userToken = await AsyncStorage.getItem('userToken');
-    //         await hannaServer.post('/share-parks', data)
-    //         .then(res => {
-    //             if (res.status === 200) {
-    //                 console.log("check")
-    //                 const specific_parking = res.data.nearbyParking[0].specificLocation;
-    //                 // console.log(specific_parking);
-    //                 // console.log(specific_parking.latitude)
-    //                 const json = JSON.parse(specific_parking);
-    //                 console.log("json: ", json.latitude)
-                    
-    //                 setNearbyParking(res.data.nearbyParking);
-    //             }
-    //         })
-            
-    //     } catch(e) {
-    //         console.log("error loading near parks")
-    //     }
-    // } 
+
     useEffect(() => {
         console.log("array len: ", nearbyParking.length);
         if (nearbyParking.length > 0 && !showParking) {
