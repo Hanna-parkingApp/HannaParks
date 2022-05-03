@@ -90,11 +90,15 @@ const Map = (props) => {
             //const json = JSON.parse(nearbyParking[index]);
             console.log(nearbyParking[index]);
             const { _id, generalLocation, specificLocation, timeStamp, userId } = nearbyParking[index];
+            const { latitude, longitude} = JSON.parse(nearbyParking[index].specificLocation);
             const carDetail = {
                 id: _id,
                 userId: userId,
                 generalLoc: generalLocation,
-                specificLoc: specificLocation,
+                specificLoc: {
+                    latitude,
+                    longitude
+                },
                 timeStamp,
                 car: null
             }
