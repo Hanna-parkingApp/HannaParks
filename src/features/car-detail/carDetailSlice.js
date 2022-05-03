@@ -6,7 +6,10 @@ const carDetailSlice = createSlice({
         id: '',
         userId: '',
         generalLoc: '',
-        specificLoc: '',
+        specificLoc: {
+            latitude: null,
+            longitude: null,
+        },
         timeStamp: null,
         car: {
             carId: '',
@@ -19,10 +22,12 @@ const carDetailSlice = createSlice({
         changeCarDetailState: (state, action) => {
             console.log("action payload: ", action.payload);
             let payload = action.payload;
+            console.log("general location: ", payload.generalLoc)
             state.id = payload.id;
             state.userId = payload.userId;
             state.generalLoc = payload.generalLoc;
-            state.generalLoc = payload.timeStamp;
+            state.specificLoc = payload.specificLoc;
+            state.timeStamp = payload.timeStamp;
             state.car = payload.car;
         }
     }
