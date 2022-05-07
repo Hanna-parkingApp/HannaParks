@@ -12,8 +12,9 @@ const Stack = createNativeStackNavigator();
 export const AuthContext = createContext();
 
 export default Router = () => {
-  const [state, disptach] = useReducer(
+  const [state, dispatch] = useReducer(
     (prevState, action) => {
+      console.log("actionnn-bar", action.token);
       switch (action.type) {
         case "RESTORE_TOKEN":
           return {
@@ -55,7 +56,7 @@ export default Router = () => {
 
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
-    disptach({ type: "RESTORE_TOKEN", token: userToken });
+    dispatch({ type: "RESTORE_TOKEN", token: userToken });
   };
 
   useEffect(() => {
@@ -75,19 +76,22 @@ export default Router = () => {
             try {
               // AsyncStorage.setItem('userToken', res.data.tokens)
               console.log(res.data.tokens);
+              console.log("user from db", res.data.user, res.data.carDetail);
+              console.log("enddd");
               AsyncStorage.setItem(
                 "userDetails",
-                JSON.stringify({
-                  ...res.data.user,
-                  cars: [{ type: "fff", number: "222222" }],
-                })
+                JSON.stringify(res.data.user)
+              );
+              AsyncStorage.setItem(
+                "carDetails",
+                JSON.stringify(res.data.carDetail)
               );
               console.log("save user details");
               AsyncStorage.setItem(
                 "userToken",
                 JSON.stringify(res.data.tokens)
               );
-              disptach({ type: "SIGN_IN", token: res.data.tokens });
+              dispatch({ type: "SIGN_IN", token: res.data.tokens });
             } catch (e) {
               console.log("error setting token in local storage: ", e);
             }
@@ -103,7 +107,7 @@ export default Router = () => {
       },
       signOut: async () => {
         AsyncStorage.clear();
-        disptach({ type: "SIGN_OUT" });
+        dispatch({ type: "SIGN_OUT" });
       },
 
       signUp: async (data) => {
@@ -116,11 +120,12 @@ export default Router = () => {
             .post("/register", data)
             // .then(res => console.log("res: ", res))
             .then((res) => {
+              console.log("register-test", res.data);
               AsyncStorage.setItem(
                 "userToken",
                 JSON.stringify(res.data.tokens)
               );
-              disptach({ type: "SIGN_IN", token: res.data.tokens });
+              dispatch({ type: "SIGN_IN", token: res.data.tokens });
             });
         } catch (e) {
           console.log("error register", e);
@@ -136,6 +141,7 @@ export default Router = () => {
     return <LoadingScreen />;
   } else {
     console.log("Finished loading.Move to either AppStack or AutStack");
+    console.log(state.userToken?.length || "not ok");
   }
 
   return (

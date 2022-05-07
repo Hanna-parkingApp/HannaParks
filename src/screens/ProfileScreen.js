@@ -15,15 +15,19 @@ import imagePath from "../constants/imagePath";
 
 import PickImageModal from "../constants/alerts/PickImageModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import MyButton from "../components/MyButton";
+import { TextInput } from "react-native-gesture-handler";
+import hannaServer from "../api/hannaServer";
 
 const ProfileScreen = ({ navigation }) => {
   const [userDetails, setUserDetails] = useState();
+  const [carDetails, setCarDetails] = useState();
   const [email, setEmail] = useState();
-  const [userName, setUserName] = useState();
-  const [password, setPassword] = useState();
-  const [carType, setCarType] = useState();
-  const [CarModel, setCarModel] = useState();
-  const [CarNumber, setCarNumber] = useState();
+  const [fullName, setFullName] = useState();
+  const [carMaker, setCarMaker] = useState();
+  const [carModel, setCarModel] = useState();
+  const [carNumber, setCarNumber] = useState();
+  const [carColor, setCarColor] = useState();
   const [points, setPoints] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -32,24 +36,51 @@ const ProfileScreen = ({ navigation }) => {
 
   const getUserDetails = async () => {
     const user = await AsyncStorage.getItem("userDetails");
+    const car = await AsyncStorage.getItem("carDetails");
     if (user !== null) {
       setUserDetails(JSON.parse(user));
     }
-    console.log("user details - profile screen", userDetails);
+    if (car !== null) {
+      const carArray = JSON.parse(car);
+      setCarDetails(carArray[0]);
+    }
   };
 
   useEffect(() => {
     getUserDetails();
   }, []);
 
+  useEffect(() => {
+    if (!userDetails) return;
+    if (!carDetails) return;
+    setFullName(userDetails.fullName);
+    setEmail(userDetails.email);
+    setCarMaker(carDetails.make || "");
+    setCarModel(carDetails.model || "");
+    setCarNumber(carDetails.registrationNumber || "");
+    setCarColor(carDetails.color || "");
+    setPoints(userDetails.points);
+  }, [userDetails, carDetails]);
+
   const imageModalPicker = () => {
     console.log("add image pressed");
     setModalVisible(true);
   };
 
-  const done = () => {
-    navigation.navigate("Home");
+  const saveUserDetails = () => {
+    hannaServer
+      .post("/update-profile", {
+        fullName,
+        email,
+        carMaker,
+        carModel,
+        carNumber,
+        carColor,
+      })
+      .then((res) => console.log(res));
+    console.log({ fullName, email, carMaker, carModel, carNumber, carColor });
     console.log("save changes");
+    // navigation.navigate("Home");
   };
 
   return (
@@ -60,7 +91,7 @@ const ProfileScreen = ({ navigation }) => {
           size={24}
           color="#52575D"
           onPress={() => navigation.navigate("Home")}
-        ></Ionicons>
+        />
       </View>
       <View style={{ alignSelf: "center" }}>
         {!modalVisible ? (
@@ -101,34 +132,50 @@ const ProfileScreen = ({ navigation }) => {
           />
         )}
       </View>
-      {userDetails && (
+      {userDetails && carDetails && (
         <View style={styles.formContainer}>
+          <TextInput>Points: {points}</TextInput>
           <FormDetail
-            labelValue={userName}
-            placeholderText={userDetails["fullName"]}
-            detailName={"User Name"}
+            labelValue={fullName}
+            placeholderText="Full Name"
+            detailName={"Full Name"}
+            onChangeText={setFullName}
           />
           <FormDetail
             labelValue={email}
-            placeholderText={userDetails.email}
+            placeholderText="Email"
             detailName={"Email"}
+            editable={false}
           />
-          {userDetails.cars.map((car, index) => {
-            return (
-              <View key={index}>
-                <FormDetail
-                  labelValue={carType}
-                  placeholderText={car.type}
-                  detailName={"Car Brand"}
-                />
-                <FormDetail
-                  labelValue={CarNumber}
-                  placeholderText={car.number}
-                  detailName={"Car Num."}
-                />
-              </View>
-            );
-          })}
+          {userDetails && (
+            <View>
+              <FormDetail
+                labelValue={carMaker}
+                placeholderText="Car Maker"
+                detailName={"Car Maker"}
+                onChangeText={setCarMaker}
+              />
+              <FormDetail
+                labelValue={carModel}
+                placeholderText="Car Model"
+                detailName={"Car Model"}
+                onChangeText={setCarModel}
+              />
+              <FormDetail
+                labelValue={carNumber}
+                placeholderText="Car Num."
+                detailName={"Car Num."}
+                onChangeText={setCarNumber}
+              />
+              <FormDetail
+                labelValue={carColor}
+                placeholderText="Car Color"
+                detailName={"Car Num."}
+                onChangeText={setCarColor}
+              />
+            </View>
+          )}
+          <MyButton title={"Save"} onPress={saveUserDetails} />
         </View>
       )}
     </SafeAreaView>
@@ -153,14 +200,13 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    height: undefined,
-    width: undefined,
-    borderRadius: 200,
+    width: 160,
+    height: 150,
+    borderRadius: 100,
   },
   profileImage: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
+    width: 160,
+    height: 150,
     overflow: "hidden",
   },
   dm: {
@@ -196,52 +242,8 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     direction: "ltr",
-    marginHorizontal: 5,
-    marginTop: 50,
+    marginHorizontal: 2,
+    marginTop: 20,
     justifyContent: "space-between",
   },
-  // container: {
-  //   justifyContent: "center",
-  //   marginTop: "50%",
-  // },
-  // headerDetails: {
-  //   bottom: 10,
-  //   left: '48%',
-  //   borderWidth: 1,
-  //   borderColor: "#1e90ff",
-  //   borderStyle: "solid",
-  //   width: 180,
-  //   padding: 6,
-  //   margin: 25,
-  //   backgroundColor: "white",
-  // },
-  // headerItem : {
-  //   padding: 2,
-  //   fontWeight: '600',
-  // },
-  // buttonDone: {
-  //   marginTop: 10,
-  //   width: "100%",
-  //   height: windowHeight / 15,
-  //   backgroundColor: "#1e90ff",
-  //   padding: 10,
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  //   borderRadius: 3,
-  //   color: "white",
-  // },
-  // profile: {
-  //   fontSize: 20,
-  //   fontWeight: "bold",
-  //   color: "#1e90ff",
-  //   // fontFamily: "Cochin",
-  // },
-  // input: {
-  //   padding: 10,
-  //   flex: 1,
-  //   fontSize: 16,
-  //   color: "#333",
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  // },
 });
