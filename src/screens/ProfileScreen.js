@@ -1,5 +1,5 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,16 +11,17 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormDetail from "../components/FormDetail";
-import HannaText from "../components/HannaText";
 import imagePath from "../constants/imagePath";
 
 import PickImageModal from "../constants/alerts/PickImageModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProfileScreen = ({ navigation }) => {
+  const [userDetails, setUserDetails] = useState();
   const [email, setEmail] = useState();
   const [userName, setUserName] = useState();
   const [password, setPassword] = useState();
-  const [carType, setcarType] = useState();
+  const [carType, setCarType] = useState();
   const [CarModel, setCarModel] = useState();
   const [CarNumber, setCarNumber] = useState();
   const [points, setPoints] = useState(0);
@@ -29,114 +30,108 @@ const ProfileScreen = ({ navigation }) => {
   const [imageUrl, setImageUrl] = useState(imagePath.defIcUrlImg);
   const [isPicChanged, setIsPicChanged] = useState(false);
 
+  const getUserDetails = async () => {
+    const user = await AsyncStorage.getItem("userDetails");
+    if (user !== null) {
+      setUserDetails(JSON.parse(user));
+    }
+    console.log("user details - profile screen", userDetails);
+  };
+
+  useEffect(() => {
+    getUserDetails();
+  }, []);
+
   const imageModalPicker = () => {
     console.log("add image pressed");
     setModalVisible(true);
   };
 
   const done = () => {
-    navigation.navigate('Home')
+    navigation.navigate("Home");
     console.log("save changes");
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.titleBar}>
-        <Ionicons name="ios-arrow-back" size={24} color="#52575D" onPress={() => navigation.navigate('Home')}></Ionicons>
+        <Ionicons
+          name="ios-arrow-back"
+          size={24}
+          color="#52575D"
+          onPress={() => navigation.navigate("Home")}
+        ></Ionicons>
       </View>
       <View style={{ alignSelf: "center" }}>
         {!modalVisible ? (
           <>
-          <View style={styles.profileImage}>
-            {!modalVisible && !isPicChanged && (
-              <Image source={imagePath.icProfile} style={styles.image} resizeMode="center" />
-            )}
-            {!modalVisible && isPicChanged && (
-              <Image source={{uri: imageUrl}} style={styles.image} resizeMode="center" />
-            )}
-        </View>
-          <View style={styles.add}>
-            <Pressable
-              onPress={imageModalPicker}
-            >
-              <Ionicons name="ios-add" size={48} color="#DFD8C8" style={{ marginTop: 6, marginLeft: 2 }}></Ionicons>
-            </Pressable>
-          </View>
-        
+            <View style={styles.profileImage}>
+              {!modalVisible && !isPicChanged && (
+                <Image
+                  source={imagePath.icProfile}
+                  style={styles.image}
+                  resizeMode="center"
+                />
+              )}
+              {!modalVisible && isPicChanged && (
+                <Image
+                  source={{ uri: imageUrl }}
+                  style={styles.image}
+                  resizeMode="center"
+                />
+              )}
+            </View>
+            <View style={styles.add}>
+              <Pressable onPress={imageModalPicker}>
+                <Ionicons
+                  name="ios-add"
+                  size={48}
+                  color="#DFD8C8"
+                  style={{ marginTop: 6, marginLeft: 2 }}
+                ></Ionicons>
+              </Pressable>
+            </View>
           </>
         ) : (
-          <PickImageModal 
-          modalVisible={modalVisible} 
-          setModalVisible={setModalVisible} 
-          setImageUrl={setImageUrl}
-          setIsPicChanged={setIsPicChanged} />
+          <PickImageModal
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            setImageUrl={setImageUrl}
+            setIsPicChanged={setIsPicChanged}
+          />
         )}
-        </View>
+      </View>
+      {userDetails && (
         <View style={styles.formContainer}>
-        <FormDetail
-          labelValue={userName}
-          placeholderText={"John Dong"}
-          detailName={"User Name"}
-        />
-        <FormDetail
-          labelValue={email}
-          placeholderText={"johndo@gmail.com"}
-          detailName={"Email"}
-        />
-        <FormDetail
-          labelValue={carType}
-          placeholderText={"Mercedes-Benz A-Class 2018"}
-          detailName={"Car Brand"}
-        />
-         <FormDetail
-          labelValue={CarNumber}
-          placeholderText={"98-294-63"}
-          detailName={"Car Num."}
-        />
+          <FormDetail
+            labelValue={userName}
+            placeholderText={userDetails["fullName"]}
+            detailName={"User Name"}
+          />
+          <FormDetail
+            labelValue={email}
+            placeholderText={userDetails.email}
+            detailName={"Email"}
+          />
+          {userDetails.cars.map((car, index) => {
+            return (
+              <View key={index}>
+                <FormDetail
+                  labelValue={carType}
+                  placeholderText={car.type}
+                  detailName={"Car Brand"}
+                />
+                <FormDetail
+                  labelValue={CarNumber}
+                  placeholderText={car.number}
+                  detailName={"Car Num."}
+                />
+              </View>
+            );
+          })}
         </View>
-        <View style = {styles.emptyBottom} />
-        <View style = {styles.emptyBottom2} />
+      )}
     </SafeAreaView>
-    // <View>
-    //   <View>
-    //     <HannaText />
-    //   </View>
-    //   <View style={styles.headerDetails}>
-    //     <Text style={styles.headerItem}>Joined : 3 month ago </Text>
-    //     <Text style={styles.headerItem}>My Points : {points}</Text>
-    //   </View>
-    //   <TouchableOpacity style={styles.profile}>
-    //     <Text>profile</Text>
-    //   </TouchableOpacity>
-    //   <View>
- 
-        // <FormDetail
-        //   labelValue={password}
-        //   placeholderText={"........"}
-        //   detailName={"Password"}
-        // />
-    //     <FormDetail
-    //       labelValue={carType}
-    //       placeholderText={"KIA"}
-    //       detailName={"Car Make"}
-    //     />
-    //     <FormDetail
-    //       labelValue={CarModel}
-    //       placeholderText={"Picanto"}
-    //       detailName={"Car Model"}
-    //     />
-    //     <FormDetail
-    //       labelValue={CarNumber}
-    //       placeholderText={"111111"}
-    //       detailName={"Car No."}
-    //     />
-    //   </View>
-    //   <View>
-    //     <TouchableOpacity style={styles.buttonDone} onPress={done}>
-    //       <Text>Done</Text>
-    //     </TouchableOpacity>
-    //   </View>
-    // </View>
   );
 };
 
@@ -146,14 +141,13 @@ const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
-  
   container: {
     flex: 1,
-    backgroundColor: "#F2F3F4"
+    backgroundColor: "#F2F3F4",
   },
   titleBar: {
     flexDirection: "row-reverse",
-    direction: 'ltr',
+    direction: "ltr",
     marginTop: 24,
     marginHorizontal: 16,
   },
@@ -161,7 +155,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: undefined,
     width: undefined,
-    borderRadius: 200
+    borderRadius: 200,
   },
   profileImage: {
     width: 200,
@@ -177,7 +171,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   active: {
     backgroundColor: "#34FFB9",
@@ -187,35 +181,25 @@ const styles = StyleSheet.create({
     padding: 4,
     height: 20,
     width: 20,
-    borderRadius: 10
+    borderRadius: 10,
   },
   add: {
-      backgroundColor: "#41444B",
-      position: "absolute",
-      bottom: 0,
-      right: 0,
-      width: 60,
-      height: 60,
-      borderRadius: 30,
-      alignItems: "center",
-      justifyContent: "center"
+    backgroundColor: "#41444B",
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
   },
   formContainer: {
-    direction: 'ltr',
+    direction: "ltr",
     marginHorizontal: 5,
     marginTop: 50,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
-  emptyBottom: {
-    backgroundColor: '#A3D1FF',
-    flex: 1,
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-  },
-  emptyBottom2: {
-    backgroundColor: '#F2F8FF',
-    flex: 1,
-  }
   // container: {
   //   justifyContent: "center",
   //   marginTop: "50%",
@@ -234,7 +218,7 @@ const styles = StyleSheet.create({
   // headerItem : {
   //   padding: 2,
   //   fontWeight: '600',
-  // },    
+  // },
   // buttonDone: {
   //   marginTop: 10,
   //   width: "100%",
