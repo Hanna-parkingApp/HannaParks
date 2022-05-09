@@ -20,46 +20,70 @@ import { TextInput } from "react-native-gesture-handler";
 import hannaServer from "../api/hannaServer";
 
 const ProfileScreen = ({ navigation }) => {
-  const [userDetails, setUserDetails] = useState();
+
+  const initialState = {
+    email: '',
+    fullName: '',
+    carMaker: '',
+    carModel: '',
+    carNumber: '',
+    carColor: '',
+    points: 0
+  };
+
+  const [userDetails, setUserDetails] = useState(initialState);
   const [carDetails, setCarDetails] = useState();
-  const [email, setEmail] = useState();
-  const [fullName, setFullName] = useState();
-  const [carMaker, setCarMaker] = useState();
-  const [carModel, setCarModel] = useState();
-  const [carNumber, setCarNumber] = useState();
-  const [carColor, setCarColor] = useState();
-  const [points, setPoints] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
 
   const [imageUrl, setImageUrl] = useState(imagePath.defIcUrlImg);
   const [isPicChanged, setIsPicChanged] = useState(false);
 
   const getUserDetails = async () => {
+    console.log("here")
     const user = await AsyncStorage.getItem("userDetails");
     const car = await AsyncStorage.getItem("carDetails");
+    let carDetObj = {};
+    let userDetObj = {};
+    console.log("user: ", user);
+    console.log("car: ", car);
     if (user !== null) {
-      setUserDetails(JSON.parse(user));
+      const user_json = JSON.parse(user);
+      userDetObj = {
+        email: user_json.email,
+        fullName: user_json.fullName,
+        points: user_json.points,
+      }
+      console.log("userdetobjj:" ,userDetObj);
+      //setUserDetails(JSON.parse(user));
     }
     if (car !== null) {
       const carArray = JSON.parse(car);
-      setCarDetails(carArray[0]);
+      console.log("carArray:", carArray);
+      if (carArray.length > 0) {
+        carDetObj = {
+          carModel: carArray[0].carModel,
+          carMaker: carArray[0].carMaker,
+          carNumber: carArray[0].carNumber,
+          carColor: carArray[0].carColor,
+        }
+        console.log("carDetObj:" ,carDetObj);
+        //setCarDetails(carArray[0]);
+      }
     }
+
+    const finalDetails = Object.assign(userDetObj, carDetObj);
+    console.log(finalDetails);
+    setUserDetails(finalDetails);
   };
 
   useEffect(() => {
-    getUserDetails();
+      getUserDetails();
+    
   }, []);
 
   useEffect(() => {
     if (!userDetails) return;
     if (!carDetails) return;
-    setFullName(userDetails.fullName);
-    setEmail(userDetails.email);
-    setCarMaker(carDetails.make || "");
-    setCarModel(carDetails.model || "");
-    setCarNumber(carDetails.registrationNumber || "");
-    setCarColor(carDetails.color || "");
-    setPoints(userDetails.points);
   }, [userDetails, carDetails]);
 
   const imageModalPicker = () => {
@@ -68,18 +92,17 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   const saveUserDetails = () => {
-    hannaServer
-      .post("/update-profile", {
-        fullName,
-        email,
-        carMaker,
-        carModel,
-        carNumber,
-        carColor,
-      })
+    try {
+      hannaServer.post("/update-profile", userDetails)
       .then((res) => console.log(res));
-    console.log({ fullName, email, carMaker, carModel, carNumber, carColor });
+    
+    } catch (e) {
+      console.log("Error update profile", e);
+    } 
+    
+    console.log("user Detail After change",userDetails);
     console.log("save changes");
+    //
     // navigation.navigate("Home");
   };
 
@@ -132,17 +155,17 @@ const ProfileScreen = ({ navigation }) => {
           />
         )}
       </View>
-      {userDetails && carDetails && (
+      {userDetails && (
         <View style={styles.formContainer}>
-          <TextInput>Points: {points}</TextInput>
+          <TextInput>Points: {userDetails.points}</TextInput>
           <FormDetail
-            labelValue={fullName}
+            labelValue={userDetails.fullName}
             placeholderText="Full Name"
             detailName={"Full Name"}
-            onChangeText={setFullName}
+            onChangeText={(t) => setUserDetails({...userDetails, fullName: t})}
           />
           <FormDetail
-            labelValue={email}
+            labelValue={userDetails.email}
             placeholderText="Email"
             detailName={"Email"}
             editable={false}
@@ -150,28 +173,28 @@ const ProfileScreen = ({ navigation }) => {
           {userDetails && (
             <View>
               <FormDetail
-                labelValue={carMaker}
+                labelValue={userDetails.carMaker}
                 placeholderText="Car Maker"
                 detailName={"Car Maker"}
-                onChangeText={setCarMaker}
+                onChangeText={(t) => setUserDetails({...userDetails, carMaker: t})}
               />
               <FormDetail
-                labelValue={carModel}
+                labelValue={userDetails.carModel}
                 placeholderText="Car Model"
                 detailName={"Car Model"}
-                onChangeText={setCarModel}
+                onChangeText={(t) => setUserDetails({...userDetails, carModel: t})}
               />
               <FormDetail
-                labelValue={carNumber}
+                labelValue={userDetails.carNumber}
                 placeholderText="Car Num."
                 detailName={"Car Num."}
-                onChangeText={setCarNumber}
+                onChangeText={(t) => setUserDetails({...userDetails, carNumber: t})}
               />
               <FormDetail
-                labelValue={carColor}
+                labelValue={userDetails.carColor}
                 placeholderText="Car Color"
-                detailName={"Car Num."}
-                onChangeText={setCarColor}
+                detailName={"Car Color"}
+                onChangeText={(t) => setUserDetails({...userDetails, carColor: t})}
               />
             </View>
           )}
