@@ -39,13 +39,10 @@ const ProfileScreen = ({ navigation }) => {
   const [isPicChanged, setIsPicChanged] = useState(false);
 
   const getUserDetails = async () => {
-    console.log("here")
     const user = await AsyncStorage.getItem("userDetails");
     const car = await AsyncStorage.getItem("carDetails");
     let carDetObj = {};
     let userDetObj = {};
-    console.log("user: ", user);
-    console.log("car: ", car);
     if (user !== null) {
       const user_json = JSON.parse(user);
       userDetObj = {
@@ -53,21 +50,16 @@ const ProfileScreen = ({ navigation }) => {
         fullName: user_json.fullName,
         points: user_json.points,
       }
-      console.log("userdetobjj:" ,userDetObj);
-      //setUserDetails(JSON.parse(user));
     }
     if (car !== null) {
       const carArray = JSON.parse(car);
-      console.log("carArray:", carArray);
       if (carArray.length > 0) {
         carDetObj = {
-          carModel: carArray[0].carModel,
-          carMaker: carArray[0].carMaker,
-          carNumber: carArray[0].carNumber,
-          carColor: carArray[0].carColor,
+          carModel: carArray[0].model,
+          carMaker: carArray[0].make,
+          carNumber: carArray[0].registrationNumber,
+          carColor: carArray[0].color,
         }
-        console.log("carDetObj:" ,carDetObj);
-        //setCarDetails(carArray[0]);
       }
     }
 
@@ -100,7 +92,6 @@ const ProfileScreen = ({ navigation }) => {
       console.log("Error update profile", e);
     } 
     
-    console.log("user Detail After change",userDetails);
     console.log("save changes");
     //
     // navigation.navigate("Home");

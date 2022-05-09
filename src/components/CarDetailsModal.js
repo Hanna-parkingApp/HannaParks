@@ -31,8 +31,7 @@ export default function CarDetailsModal(props) {
           <View style={styles.modalView}>
               <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}} >
             <View style={styles.locationContainer}>
-                <Text style={styles.title}>Car Location:</Text>
-                <Text>St: Rambam 1</Text>
+                <Text>St: Rambam 1 // TOdo: Update location</Text>
                 <Text>{carDetail.generalLoc}</Text>
             </View>
             <View style={styles.locationContainer}>

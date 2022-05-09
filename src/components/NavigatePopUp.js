@@ -8,17 +8,18 @@ const NavigatePopUp = (props) => {
     const [isVisible, setIsVisible] = useState(false);
 
     const carDetail = useSelector(selectCarDetail)
+    console.log("car detail longitude: ", carDetail.specificLoc.longitude)
 
     const showLoc = showLocation({
-        latitude: 38.8976763,
-        longitude: -77.0387185,
+        latitude: carDetail.specificLoc.latitude,
+        longitude: carDetail.specificLoc.longitude,
         sourceLatitude: -8.0870631,  // optionally specify starting location for directions
         sourceLongitude: -34.8941619,  // not optional if sourceLatitude is specified
-        title: 'The White House',  // optional
+        title: carDetail.generalLoc,  // optional
         googleForceLatLon: false,  // optionally force GoogleMaps to use the latlon for the query instead of the title
         googlePlaceId: 'ChIJGVtI4by3t4kRr51d_Qm_x58',  // optionally specify the google-place-id
         alwaysIncludeGoogle: true, // optional, true will always add Google Maps to iOS and open in Safari, even if app is not installed (default: false)
-        dialogTitle: 'Do you want to navidate to parking location?', // optional (default: 'Open in Maps')
+        dialogTitle: 'Do you want to navigate to parking location?', // optional (default: 'Open in Maps')
         dialogMessage: 'choose the app', // optional (default: 'What app would you like to use?')
         cancelText: 'cancel', // optional (default: 'Cancel')
         // appsWhiteList:['waze','apple-maps','google-maps'], // optionally you can set which apps to show (default: will show all supported apps installed on device)
