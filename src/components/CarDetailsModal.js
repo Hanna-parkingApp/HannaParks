@@ -26,7 +26,7 @@ export default function CarDetailsModal(props) {
         animationType={'slide'}
         transparent={true}
         visible={modalVisible}
-        onRequestClose={handleCloseBtn}
+        //onRequestClose={handleCloseBtn}
       >
           <View style={styles.modalView}>
               <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}} >
@@ -47,7 +47,9 @@ export default function CarDetailsModal(props) {
             </View>
             <View style={{flexDirection: 'column', justifyContent: 'flex-end'}}>
             <MyButton title={"Park Me"} onPress={handleCloseBtn}/>
-            <NavigatePopUp isVisible={showNavPopup} setIsVisible={setShowNavPopup}/>
+            {showNavPopup && (
+                <NavigatePopUp isVisible={showNavPopup} setModalVisible={setModalVisible}/>
+            )}
             </View>
           </View>
       </Modal>

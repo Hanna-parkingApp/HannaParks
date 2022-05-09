@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     flexDirection: "row-reverse",
     alignItems: "flex-end",
     backgroundColor: "#fff",
-    direction: "ltr",
+    direction: "rtl",
   },
   detailStyle: {
     padding: 10,

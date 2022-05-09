@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import { selectCarDetail } from '../features/car-detail/carDetailSlice';
 
 const NavigatePopUp = (props) => {
-    const { isVisible, setIsVisible} = props;
-    console.log("is visible: ", isVisible);
+    const { setModalVisible } = props;
+    const [isVisible, setIsVisible] = useState(false);
 
     const carDetail = useSelector(selectCarDetail)
 
@@ -30,9 +30,9 @@ const NavigatePopUp = (props) => {
 
     return (
         <Popup
-            // isVisible={isVisible}
-            // onCancelPressed={() => setIsVisible(false) }
-            // onAppPressed={() => setIsVisible(false)}
+            isVisible={isVisible}
+            onCancelPressed={() =>{ setIsVisible(false)} }
+            //onAppPressed={() => {setIsVisible(false); setModalVisible(false)}}
             // onBackButtonPressed={() => setIsVisible(false) }
             // modalProps={{ // you can put all react-native-modal props inside.
             //     animationIn: 'slideInUp'

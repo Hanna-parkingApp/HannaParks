@@ -74,10 +74,6 @@ export default Router = () => {
           .post("/login", data)
           .then((res) => {
             try {
-              // AsyncStorage.setItem('userToken', res.data.tokens)
-              console.log(res.data.tokens);
-              console.log("user from db", res.data.user, res.data.carDetail);
-              console.log("enddd");
               AsyncStorage.setItem(
                 "userDetails",
                 JSON.stringify(res.data.user)
@@ -120,7 +116,6 @@ export default Router = () => {
             .post("/register", data)
             // .then(res => console.log("res: ", res))
             .then((res) => {
-              console.log("register-test", res.data);
               AsyncStorage.setItem(
                 "userToken",
                 JSON.stringify(res.data.tokens)

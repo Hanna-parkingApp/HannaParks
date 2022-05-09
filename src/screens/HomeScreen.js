@@ -67,15 +67,14 @@ export default function HomeScreen({ navigation }) {
 
 
   const getLocation = async () => {
-    const { status } = await Location.requestBackgroundPermissionsAsync();
+    console.log('get location');
+    const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
         console.log("status not granted")
         setPermissionStatus('PERMISSION NOT GRANTED!');
         //alert(permissionStatus);
     }
-
     const location = await Location.getCurrentPositionAsync({});
-    // setLocation(userLocation);
     dispatch(changeSrcState(location));
 }
 
