@@ -8,6 +8,7 @@ import NumericInput from "react-native-numeric-input";
 import MyButton from "../components/MyButton";
 import { useNavigation } from "@react-navigation/native";
 import Map from '../components/Map';
+import { showMessage } from "react-native-flash-message";
 
 
 const ShareParkingScreen = () => {
@@ -22,7 +23,8 @@ const ShareParkingScreen = () => {
 //   const imageSrc = require('../assets/house-blue-bg.jpeg');
 
   const handleShareBtn = async () => {
-    console.log("shared parking",carDetails)      
+    console.log("shared parking",carDetails)    
+    showMessage("Thanks for sharing")  
 
     try{
       let userToken = await AsyncStorage.getItem('userToken');
@@ -42,7 +44,8 @@ const ShareParkingScreen = () => {
        }
        hannaServer.post('/share-parks', userParking ).then(
          res => console.log("############",res.data)
-       ).then(() => navigation.navigate('Home'));
+       )//.then(() => navigation.navigate('Home'))
+       .then(() => showMessage("Thanks for sharing"));
       }
       
        catch(e){
