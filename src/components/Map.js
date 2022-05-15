@@ -16,12 +16,19 @@ const Map = (props) => {
     const dispatch = useDispatch();
     
     const {width, height,request, setCarDetailsModal} = props;
+    const ASPECT_RATIO = width / height;
+    const LATITUDE_DELTA = 0.04;
+    const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
     const [nearbyParking, setNearbyParking] = useState([]);
     const [showParking, setShowParking] = useState(false);
+
+    const [dirOrigin, setDirOrigin] = useState(null);
 
     const userLocation = useSelector(selectLocation);
     
     const markerRef = useRef();    
+    const mapRef = useRef();
 
     const coordinates = [
         {
@@ -34,10 +41,21 @@ const Map = (props) => {
         }
     ]
 
+    console.log("**********");
+    console.log("coords: ", coordinates[0])
+
+    const initialRegion = {
+        latitude: dirOrigin?.latitude || userLocation.src.latitude,
+        longitude: dirOrigin?.longitude || userLocation.src.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA
+    }
+
     const fetchNearParking = async (result) => {
         if (!showParking) {
         console.log(`Distance: ${result.distance} km`);
         console.log(`Duration: ${result.duration} min`);
+        console.log("fit to coords: ", result.coordinates[0]);
 
         const calTimeStamp = add_minutes(new Date(), result.duration);
         console.log("cal timestamp: ", calTimeStamp);
@@ -112,6 +130,11 @@ const Map = (props) => {
     }
 
     useEffect(() => {
+        console.log("use effect")
+        setDirOrigin(userLocation.src);
+    },[])
+
+    useEffect(() => {
         console.log("array len: ", nearbyParking.length);
         if (nearbyParking.length > 0 && !showParking) {
             console.log("change show parking")
@@ -122,32 +145,31 @@ const Map = (props) => {
     return (
         <>
             <MapView
+                ref={mapRef}
                 style = {{width, height}}
                 loadingEnabled = {true}
-                region = {{
-                latitude: userLocation.src.latitude,
-                longitude: userLocation.src.longitude,
+                initialRegion = {{
+                ...userLocation.src,
                 latitudeDelta: 0.015,
                 longitudeDelta: 0.0121
                 }}
             >  
-              <Marker
+              <Marker.Animated
                     ref={markerRef}
                     title = "source"
                     coordinate= {coordinates[0]} 
-                    
                 >
                     <Image 
                         source={imagePath.icCurLoc}
                         style = {styles.icCar}
                     />
-                </Marker>
+                </Marker.Animated>
 
                 {showParking && nearbyParking.length > 0 && nearbyParking.map((parking, index) => {
                     const { latitude, longitude} = JSON.parse(parking.specificLocation)
                     
                     return (
-                        <Marker
+                        <Marker.Animated
                             key={index}
                             coordinate = {{latitude: latitude, longitude: longitude}}
                             onPress={(e) =>{e.stopPropagation(); handleMarkerPress(index)}}
@@ -157,20 +179,27 @@ const Map = (props) => {
                             source={imagePath.icCurLoc}
                             style = {[styles.icCar, {backgroundColor: 'red'}]}
                         />   
-                        </Marker>
+                        </Marker.Animated>
                     )
                 })}
             {userLocation.des.latitude && (
-                <Marker coordinate = {{latitude: userLocation.des.latitude, longitude: userLocation.des.longitude}} title = "des" />   
+                <Marker.Animated coordinate = {{latitude: userLocation.des.latitude, longitude: userLocation.des.longitude}} title = "des" />   
             )}
             {userLocation.des.latitude && (
                 <MapViewDirections 
-                origin={userLocation.src}
+                origin={dirOrigin}
                 destination={userLocation.des}
                 apikey={GOOGLE_API_KEY}
                 strokeWidth = {3}
                 strokeColor = "hotpink"
-                onReady={(result) => fetchNearParking(result)}
+                onReady={(result) => {fetchNearParking(result); mapRef.current.fitToCoordinates(result.coordinates, {
+                    edgePadding: {
+                        // right: 30,
+                        // bottom: 300,
+                        // left: 30,
+                        // top: 100,
+                    },
+                });}}
                 
                 />   
             )}  
