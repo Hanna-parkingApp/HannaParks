@@ -41,6 +41,9 @@ const Map = (props) => {
         }
     ]
 
+    console.log("**********");
+    console.log("coords: ", coordinates[0])
+
     const initialRegion = {
         latitude: dirOrigin?.latitude || userLocation.src.latitude,
         longitude: dirOrigin?.longitude || userLocation.src.longitude,
@@ -145,8 +148,8 @@ const Map = (props) => {
                 ref={mapRef}
                 style = {{width, height}}
                 loadingEnabled = {true}
-                region = {{
-                ...dirOrigin,
+                initialRegion = {{
+                ...userLocation.src,
                 latitudeDelta: 0.015,
                 longitudeDelta: 0.0121
                 }}

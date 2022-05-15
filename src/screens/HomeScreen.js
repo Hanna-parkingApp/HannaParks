@@ -74,6 +74,7 @@ export default function HomeScreen({ navigation }) {
   const getLocation = async () => {
     console.log('get location');
     const location = await Location.getCurrentPositionAsync({});
+    console.log("location:## ", location.coords.latitude);
     dispatch(changeSrcState(location));
 }
 
