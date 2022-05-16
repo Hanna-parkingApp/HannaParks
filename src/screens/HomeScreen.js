@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux';
 import { changeSrcState } from '../features/location/locationSlice';
 import MyButton from '../components/MyButton';
 import CarDetailsModal from '../components/CarDetailsModal';
+import { showMessage } from 'react-native-flash-message';
 
 
 export default function HomeScreen({ navigation }) {
@@ -44,6 +45,7 @@ export default function HomeScreen({ navigation }) {
   };
 
   const handleSearch = (dest) => {
+    showMessage("hello")
     console.log(dest);
     setEndPoint(dest);
   }

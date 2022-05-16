@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {StyleSheet, Text, View, useWindowDimensions, ImageBackground,} from "react-native";
 import hannaServer from "../api/hannaServer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { add_minutes,diff_minutes } from "../constants/helpers/helperFunctions";
+import { add_minutes,diff_minutes, showSuccess } from "../constants/helpers/helperFunctions";
 import FindDestination from "../components/FindDestination";
 import NumericInput from "react-native-numeric-input";
 import MyButton from "../components/MyButton";
@@ -21,7 +21,7 @@ const ShareParkingScreen = () => {
 //   const imageSrc = require('../assets/house-blue-bg.jpeg');
 
   const handleShareBtn = async () => {
-    console.log("shared parking",carDetails)      
+    console.log("shared parking",carDetails)    
 
     try{
       let userToken = await AsyncStorage.getItem('userToken');
@@ -46,7 +46,8 @@ const ShareParkingScreen = () => {
        }
        hannaServer.post('/share-parks', userParking ).then(
          res => console.log("############",res.data)
-       ).then(() => navigation.navigate('Home'));
+       ).then(() => navigation.navigate('Home'))
+       .then(() => showSuccess("Thanks for sharing"));
       }
       
        catch(e){

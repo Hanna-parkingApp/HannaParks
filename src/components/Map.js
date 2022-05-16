@@ -192,6 +192,7 @@ const Map = (props) => {
                 apikey={GOOGLE_API_KEY}
                 strokeWidth = {3}
                 strokeColor = "hotpink"
+                mode={request === "SHARE" ? "WALKING" : "DRIVING"}
                 onReady={(result) => {fetchNearParking(result); mapRef.current.fitToCoordinates(result.coordinates, {
                     edgePadding: {
                         // right: 30,
@@ -200,7 +201,6 @@ const Map = (props) => {
                         // top: 100,
                     },
                 });}}
-                
                 />   
             )}  
             </MapView>          
