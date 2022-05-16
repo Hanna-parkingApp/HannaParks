@@ -9,6 +9,10 @@ export const diff_minutes = (dt2, dt1)  =>
   return Math.abs(Math.round(diff));
  }
 
+ export const delay = (time) => {
+    return new Promise((resolve) => setTimeout(resolve, time));
+};
+
  export const showError = (message) => {
     showMessage({
         message,
@@ -17,10 +21,11 @@ export const diff_minutes = (dt2, dt1)  =>
     })
 }
 
-export const showSuccess = (message) => {
+export const showSuccess = async (message) => {
+    await delay(2);
     showMessage({
         message,
         type: 'success',
-        icon: 'success'
+        icon: 'success',
     })
 }

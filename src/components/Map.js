@@ -171,7 +171,7 @@ const Map = (props) => {
                 strokeWidth = {3}
                 strokeColor = "hotpink"
                 onReady={(result) => fetchNearParking(result)}
-                
+                mode={request === "SHARE" ? "WALKING" : "DRIVING"}
                 />   
             )}  
             </MapView>          

@@ -1,15 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import FindDestination from "../components/FindDestination";
-import { selectLocation } from "../features/location/locationSlice";
+import { showSuccess } from "../constants/helpers/helperFunctions";
 
 const FindDestinationScreen = () => {
 
     const navigation = useNavigation();
 
     const handleSearchPress = () => {
-        navigation.goBack('Home')
+        showSuccess("hello");
+        //navigation.goBack('Home')
     }
 
     return (
