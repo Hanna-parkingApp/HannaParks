@@ -71,7 +71,7 @@ const LoginScreen = ({ onFinished }) => {
     }
 
     const recoveryPassword = () => {
-        navigation.navigate('Recovery Password')
+        navigation.navigate('RecoveryPassword')
         console.log("recoveryPassword Pressed")
     }
 
@@ -145,7 +145,8 @@ const LoginScreen = ({ onFinished }) => {
         justifyContent: 'center',
         alignItems: 'center',
         padding: 1,
-        paddingTop: 100
+        paddingTop: 100,
+        backgroundColor: 'white'
       },
       logo: {
         height: 150,
@@ -155,32 +156,39 @@ const LoginScreen = ({ onFinished }) => {
       text: {
         fontSize: 24,
         marginBottom: 10,
-        color: '#1e90ff',
+        color: '#48D1CC',
+
       },
       navButton: {
         marginTop: 15,
       },
       forgotButton: {
         marginVertical: 35,
+
       },
       navButtonText: {
         fontSize: 18,
         fontWeight: '500',
-        color: '#1e90ff',
+        color: '#48D1CC',
+
       },
       buttonContainer: {
         marginTop: 10,
         width: '100%',
         height: windowHeight / 15,
-        backgroundColor: '#1e90ff',
+        backgroundColor: '#48D1CC',
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 3,
+        backgroundColor: '#48D1CC',
+
       },
       buttonText: {
         fontSize: 18,
         fontWeight: 'bold',
         color: '#ffffff',
+        backgroundColor: '#48D1CC',
+
       },
     });
