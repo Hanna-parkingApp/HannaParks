@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -24,8 +24,12 @@ import { showMessage } from 'react-native-flash-message';
 
 export default function HomeScreen({ navigation }) {
   const { width, height } = useWindowDimensions();
+  
+
   const [permissionStatus, setPermissionStatus] = useState('');
   const [endPoint, setEndPoint] = useState('');
+
+  const markerRef = useRef();
 
   const [carDetailsModal, setCarDetailsModal] = useState(false);
 
@@ -47,36 +51,32 @@ export default function HomeScreen({ navigation }) {
   }
 
   useEffect(() => {
-    if(!userLocation.src.latitude)
-      getLocation();
-    else 
-      console.log(userLocation.src.latitude)
-  },[userLocation.src.latitude])
+    if (permissionStatus !== '')
+      askForPermissions();
+  }, [])
   
-  // useEffect(() => {
-  //   if (userLocation.des.latitude !== 0) {
-  //   const interval = setInterval(() => {
-  //     console.log(userLocation.des);
-  //     getLocation();
-  //   }, 6 * 1000);
-  //   return () => clearInterval(interval)
-  
-  // } else {
-  //   console.log("not interval")
-  //   getLocation();
-  // }
-  // }, [])
+  useEffect(() => { 
+   // getLocation()
+    console.log(permissionStatus);
+    const interval = setInterval(() => getLocation(), 6 * 1000);
+    return () => clearInterval(interval)
+  }, [permissionStatus])
 
-
-  const getLocation = async () => {
-    console.log('get location');
+  const askForPermissions = async () => {
+    console.log("ask for permissions...");
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
         console.log("status not granted")
         setPermissionStatus('PERMISSION NOT GRANTED!');
         //alert(permissionStatus);
     }
+    setPermissionStatus(status);
+  }
+
+  const getLocation = async () => {
+    console.log('get location');
     const location = await Location.getCurrentPositionAsync({});
+    console.log("location:## ", location.coords.latitude);
     dispatch(changeSrcState(location));
 }
 

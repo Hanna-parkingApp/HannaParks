@@ -9,7 +9,6 @@ import MyButton from "../components/MyButton";
 import { useNavigation } from "@react-navigation/native";
 import Map from '../components/Map';
 
-
 const ShareParkingScreen = () => {
 
   const navigation = useNavigation();
@@ -29,6 +28,10 @@ const ShareParkingScreen = () => {
       let userTokenJson = JSON.parse(userToken);
       console.log("usertokenjson: ", userTokenJson);
 
+      let carDetail = await AsyncStorage.getItem('carDetails');
+      let carDetailJson = JSON.parse(carDetail);
+      let carNumber = carDetailJson[0].registrationNumber;
+
       let durationArrivedTime = add_minutes(carDetails.timeStamp,expectedDepratureTime); 
       setDiffMins(diff_minutes(durationArrivedTime,new Date()));
       const userParking = {
@@ -38,7 +41,8 @@ const ShareParkingScreen = () => {
           longitude: carDetails.longitude
         },
           genralLocation: carDetails.generalLoc,
-          timeStamp: carDetails.timeStamp 
+          timeStamp: carDetails.timeStamp,
+          registrationNumber: carNumber 
        }
        hannaServer.post('/share-parks', userParking ).then(
          res => console.log("############",res.data)

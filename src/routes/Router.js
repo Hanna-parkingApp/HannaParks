@@ -74,6 +74,7 @@ export default Router = () => {
           .post("/login", data)
           .then((res) => {
             try {
+              console.log("res.data.carDetail: ", res.data.carDetail)
               AsyncStorage.setItem(
                 "userDetails",
                 JSON.stringify(res.data.user)
