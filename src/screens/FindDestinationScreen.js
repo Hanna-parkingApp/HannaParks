@@ -7,8 +7,8 @@ const FindDestinationScreen = () => {
     const navigation = useNavigation();
 
     const handleSearchPress = () => {
-        showSuccess("hello");
-        //navigation.goBack('Home')
+        // showSuccess("hello");
+        navigation.goBack('Home')
     }
 
     return (

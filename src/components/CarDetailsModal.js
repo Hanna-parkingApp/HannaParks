@@ -1,7 +1,8 @@
 import { Text, Modal, StyleSheet, View, Image } from 'react-native'
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import React, {useEffect, useState} from 'react'
 import imagePath from '../constants/imagePath';
-import MyButton from './MyButton';
+import Button from './Button';
 import { useSelector } from 'react-redux';
 import { selectCarDetail } from '../features/car-detail/carDetailSlice';
 import NavigatePopUp from './NavigatePopUp';
@@ -26,8 +27,8 @@ export default function CarDetailsModal(props) {
         animationType={'slide'}
         transparent={true}
         visible={modalVisible}
-        //onRequestClose={handleCloseBtn}
-      >
+        // onRequestClose={handleCloseBtn}
+        >
           <View style={styles.modalView}>
               <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}} >
             <View style={styles.locationContainer}>
@@ -44,8 +45,8 @@ export default function CarDetailsModal(props) {
             <View style={styles.imgContainer}>
                 <Image source={imagePath.icProfile} resizeMode="center" style={{height:150, width:150}}/>
             </View>
-            <View style={{flexDirection: 'column', justifyContent: 'flex-end'}}>
-            <MyButton title={"Park Me"} onPress={handleCloseBtn}/>
+            <View style={{  right:'20%' ,top: '-3r%',justifyContent: 'flex-end'}}>
+            <Button title={"Park Me"} onPress={handleCloseBtn}/>
             {showNavPopup && (
                 <NavigatePopUp isVisible={showNavPopup} setModalVisible={setModalVisible}/>
             )}
@@ -58,13 +59,15 @@ export default function CarDetailsModal(props) {
 
 const styles = StyleSheet.create({
     modalView: {
-        height: '35%',
+        height: '34%',
         marginBottom: 'auto',
-        backgroundColor: 'yellow',
-        marginTop: 65,
-        borderTopLeftRadius: 40,
-        borderTopRightRadius: 40,
-        justifyContent: 'space-evenly',
+        backgroundColor: '#48D1CC',
+        marginTop: 58,
+        borderTopLeftRadius: 15,
+        borderTopRightRadius: 15,
+        borderBottomLeftRadius: 15,
+        borderBottomRightRadius: 15,
+        justifyContent: 'space-around',
         flexDirection: 'row'
     },
     locationContainer: {
@@ -78,6 +81,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     imgContainer: {
-        justifyContent: 'center'
+        justifyContent: 'space-around',
+        height: '85%',
+
     }
 })
