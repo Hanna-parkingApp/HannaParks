@@ -176,8 +176,8 @@ const Map = (props) => {
                             title={"title title"}
                         >
                          <Image 
-                            source={imagePath.icCurLoc}
-                            style = {[styles.icCar, {backgroundColor: 'red'}]}
+                            source={imagePath.redCar}
+                            
                         />   
                         </Marker.Animated>
                     )
