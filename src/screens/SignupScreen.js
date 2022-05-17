@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 22,
     marginBottom: 10,
-    color: "#1e90ff",
+    color: "#48D1CC",
     marginTop: 40,
   },
   navButton: {
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   navButtonText: {
     fontSize: 18,
     fontWeight: "500",
-    color: "#1e90ff",
+    color: "#48D1CC",
   },
   textPrivate: {
     flexDirection: "row",
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     width: "100%",
     height: windowHeight / 15,
-    backgroundColor: "#1e90ff",
+    backgroundColor: "#48D1CC",
     padding: 10,
     alignItems: "center",
     justifyContent: "center",

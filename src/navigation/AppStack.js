@@ -6,6 +6,7 @@ import SpecificSharingScreen from '../screens/SpecificSharingScreen';
 import Drawer from './Drawer';
 import FindDestinationScreen from '../screens/FindDestinationScreen';
 import ShareParkingScreen from '../screens/ShareParkingScreen';
+import RecoveryPassword from '../screens/RecoveryPasswordScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,9 @@ const AppStack = () => {
             <Stack.Screen name="Share-Parking" component={ShareParkingScreen} />
             <Stack.Screen name="Sign Up" component={SignupScreen} />
             <Stack.Screen name="Find Destination" component={FindDestinationScreen} />
+            <Stack.Screen name="RecoveryPassword" component={RecoveryPassword} />
+
+
         </Stack.Navigator> 
 
     )

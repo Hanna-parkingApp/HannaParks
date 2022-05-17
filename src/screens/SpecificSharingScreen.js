@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     marginBottom: 1,
   },
   btnShareContainer: {
-    backgroundColor: "#1e90ff",
+    backgroundColor: "#48D1CC",
     marginBottom: 8,
     width: "90%",
     marginTop: 10,

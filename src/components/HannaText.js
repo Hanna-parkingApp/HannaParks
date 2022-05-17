@@ -10,7 +10,7 @@ const HannaText = () => {
   return (
       <Text style={styles.titleText} >
         {titleText} 
-        <AntDesign name={"car"} size={20} color="#1e90ff" />
+        <AntDesign name={"car"} size={20} color="#48D1CC" />
       </Text>
   );
 };
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 30,
     fontWeight: "bold",
-    color:"#1e90ff",
+    color:"#48D1CC",
     // fontFamily: "Cochin",
     alignSelf: 'center',
     letterSpacing: 3,
