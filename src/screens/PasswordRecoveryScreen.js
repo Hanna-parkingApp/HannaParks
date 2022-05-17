@@ -1,18 +1,27 @@
-import React, { useState } from 'react'
-import { handleLogin, Image, StyleSheet, Text, View, TouchableOpacity, Dimensions,KeyboardAvoidingView,TextInput,ScrollView } from 'react-native'
+import React, { useState, useContext } from 'react'
+import { handleLogin, Image, StyleSheet, Text, View, TouchableOpacity, 
+	Dimensions, KeyboardAvoidingView, TextInput, ScrollView } from 'react-native'
 import StyleSheetValidation from 'react-native/Libraries/StyleSheet/StyleSheetValidation'
 import FormInput from '../components/FormInput'
 import HannaText from '../components/HannaText'
+import { AuthContext } from '../routes/Router'
 
+const PasswordRecoveryScreen = ({ navigation }) => {
 
-
-const RecoveryPassword = ({ navigation }) => {
+  	const { generateCode } = useContext(AuthContext);
 
     const [email, setEmail] = useState();
 
-    const sendCode = () => {
-        navigation.navigate('Login')
-        console.log("sendCode Pressed")
+    const sendCode = async () => {
+		console.log(email)
+        if (email) {
+			const data = { email: email };
+			const res = await generateCode(data);
+			console.log(res);
+		}
+		else {
+			console.log('Please enter your email')
+		}
     }
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -24,9 +33,10 @@ const RecoveryPassword = ({ navigation }) => {
             iconType="user"
             keyboardType="email-address"
             autoCapitalize="none"
+			onChangeText={(userEmail) => setEmail(userEmail)}
             />
                 <TouchableOpacity
-                onPress={() => navigation.navigate('Login')}
+                onPress={sendCode}
                 style = {styles.buttonContainer}>
             <Text style = {styles.buttonText}>Send Code</Text>
           </TouchableOpacity>  
@@ -35,9 +45,7 @@ const RecoveryPassword = ({ navigation }) => {
     )
 }
 
-export default RecoveryPassword
-
-
+export default PasswordRecoveryScreen
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;

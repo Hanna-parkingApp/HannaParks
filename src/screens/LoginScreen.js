@@ -71,7 +71,7 @@ const LoginScreen = ({ onFinished }) => {
     }
 
     const recoveryPassword = () => {
-        navigation.navigate('Recovery Password')
+        navigation.navigate('Password Recovery');
         console.log("recoveryPassword Pressed")
     }
 

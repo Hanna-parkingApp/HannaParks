@@ -6,6 +6,7 @@ import SpecificSharingScreen from '../screens/SpecificSharingScreen';
 import Drawer from './Drawer';
 import FindDestinationScreen from '../screens/FindDestinationScreen';
 import ShareParkingScreen from '../screens/ShareParkingScreen';
+import PasswordRecoveryScreen from '../screens/PasswordRecoveryScreen'
 
 const Stack = createNativeStackNavigator();
 
@@ -22,5 +23,10 @@ const AppStack = () => {
 
     )
 }
+
+/*
+            <Stack.Screen name="Password Recovery" component={PasswordRecoveryScreen} />
+
+*/
 
 export default AppStack;

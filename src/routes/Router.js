@@ -10,6 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 const Stack = createNativeStackNavigator();
 
 export const AuthContext = createContext();
+export const ForgotPasswordContext = createContext();
 
 export default Router = () => {
 
@@ -116,6 +117,18 @@ export default Router = () => {
                 console.log("error register", e);
               }
             },
+
+            generateCode: async (data) => {
+              hannaServer.post('/generateRecoveryCode', data)
+              .then(res => {
+                console.log(res.data)
+                return res.status;
+              })
+              .catch(err => console.log(err))
+            },
+            verifyCode: async (data) => {},
+            changePasswords: async (data) => {}
+    
           }),
         []
     )
