@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {StyleSheet, Text, View, useWindowDimensions, ImageBackground,} from "react-native";
 import hannaServer from "../api/hannaServer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -8,15 +8,21 @@ import NumericInput from "react-native-numeric-input";
 import MyButton from "../components/MyButton";
 import { useNavigation } from "@react-navigation/native";
 import Map from '../components/Map';
+import { useDispatch, useSelector } from "react-redux";
+import { changeParkingAvailable, selectTransaction } from "../features/transaction/transactionSlice";
 
 const ShareParkingScreen = () => {
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const {isParkingAvail} = useSelector(selectTransaction)
     
   const { width, height } = useWindowDimensions();
   const [carDetails,setCarDetails] = useState();
   const [expectedDepratureTime,setExpectedDepratureTime]=useState();
   const [diffMins,setDiffMins]=useState();
+
 
 //   const imageSrc = require('../assets/house-blue-bg.jpeg');
 
@@ -26,7 +32,6 @@ const ShareParkingScreen = () => {
     try{
       let userToken = await AsyncStorage.getItem('userToken');
       let userTokenJson = JSON.parse(userToken);
-      console.log("usertokenjson: ", userTokenJson);
 
       let carDetail = await AsyncStorage.getItem('carDetails');
       let carDetailJson = JSON.parse(carDetail);
@@ -44,12 +49,20 @@ const ShareParkingScreen = () => {
           timeStamp: carDetails.timeStamp,
           registrationNumber: carNumber 
        }
-       hannaServer.post('/share-parks', userParking ).then(
-         res => console.log("############",res.data)
-       ).then(() => navigation.navigate('Home'))
-       .then(() => showSuccess("Thanks for sharing"));
+       hannaServer.post('/share-parks', userParking )
+       .then(res => {
+         console.log(res.data)
+         dispatch(changeParkingAvailable(true))
+         const userParkingId = res.data.userParkingId;
+         console.log("userParkingId-SHARE", userParkingId)
+         navigation.navigate('Home', {userId: userParkingId})
+         showSuccess("Thanks for sharing")
+        })
+      //  .then(() => useDispatch(changeParkingAvailable(true)))
+      //  .then(() => navigation.navigate('Home'))
+      //   .then(() => showSuccess("Thanks for sharing"))
+        .catch((e) => console.log("failed connect share parking",e))
       }
-      
        catch(e){
          console.log("failed connect share parking",e)
         }

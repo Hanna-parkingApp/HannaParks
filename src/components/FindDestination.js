@@ -14,8 +14,6 @@ const FindDestination = (props) => {
     const navigation = useNavigation();
 
     const fetchDestinationCoords = async (lat, lng, city_name, st_name) => {
-        console.log("city ==> ", city_name);
-        console.log('street, ', st_name);
         let desLocation = {
             latitude: lat,
             longitude: lng,

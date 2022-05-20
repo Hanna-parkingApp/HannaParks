@@ -24,8 +24,6 @@ export default function BottomSheet() {
  const dispatch = useDispatch();
 
  const fetchDestinationCoords = (lat, lng, city_name, st_name) => {
-     console.log("city ==> ", city_name);
-     console.log('street, ', st_name);
      let desLocation = {
          latitude: lat,
          longitude: lng,

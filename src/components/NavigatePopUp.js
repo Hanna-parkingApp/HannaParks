@@ -8,7 +8,6 @@ const NavigatePopUp = (props) => {
     const [isVisible, setIsVisible] = useState(false);
 
     const carDetail = useSelector(selectCarDetail)
-    console.log("car detail longitude: ", carDetail.specificLoc.longitude)
 
     const showLoc = showLocation({
         latitude: carDetail.specificLoc.latitude,
