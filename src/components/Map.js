@@ -41,8 +41,6 @@ const Map = (props) => {
         }
     ]
 
-    console.log("**********");
-    console.log("coords: ", coordinates[0])
 
     const initialRegion = {
         latitude: dirOrigin?.latitude || userLocation.src.latitude,
@@ -86,13 +84,8 @@ const Map = (props) => {
             await hannaServer.post('/find-parks', data)
             .then(res => {
                 if (res.status === 200) {
-                    console.log("check")
                     const specific_parking = res.data.nearbyParking[0].specificLocation;
-                    // console.log(specific_parking);
-                    // console.log(specific_parking.latitude)
                     const json = JSON.parse(specific_parking);
-                    console.log("json: ", json.latitude)
-                    console.log("near by parking: ",res.data.nearbyParking);
                     setNearbyParking(res.data.nearbyParking);
                 }
             })
@@ -105,8 +98,6 @@ const Map = (props) => {
     const handleMarkerPress = (index) => {
         console.log("Marker Pressed");
         try {
-            //const json = JSON.parse(nearbyParking[index]);
-            console.log(nearbyParking[index]);
             const { _id, generalLocation, specificLocation, timeStamp, userId } = nearbyParking[index];
             const { latitude, longitude} = JSON.parse(nearbyParking[index].specificLocation);
             const carDetail = {
@@ -130,14 +121,11 @@ const Map = (props) => {
     }
 
     useEffect(() => {
-        console.log("use effect")
         setDirOrigin(userLocation.src);
     },[])
 
     useEffect(() => {
-        console.log("array len: ", nearbyParking.length);
         if (nearbyParking.length > 0 && !showParking) {
-            console.log("change show parking")
             setShowParking(true);
         }
     },[nearbyParking.length])

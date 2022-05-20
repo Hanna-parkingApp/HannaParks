@@ -16,9 +16,6 @@ const GooglePlacesInput = () => {
                     placeholder='Search'
                     
                     onPress={(data, details = null) => {
-                        console.log("pressed!!")
-                    // 'details' is provided when fetchDetails = true
-                    console.log(data, details);
                     }}
                     query={{
                     key: {GoogleMapKey},
