@@ -6,20 +6,31 @@ import Button from './Button';
 import { useSelector } from 'react-redux';
 import { selectCarDetail } from '../features/car-detail/carDetailSlice';
 import NavigatePopUp from './NavigatePopUp';
+import hannaServer from '../api/hannaServer';
 
 export default function CarDetailsModal(props) {
-    const {modalVisible, setModalVisible} = props;
+    const {modalVisible, setModalVisible, setIsParking} = props;
 
     const [showNavPopup, setShowNavPopup] = useState(false);
 
     const carDetail = useSelector(selectCarDetail);
+    
     console.log(" carDetail: ", carDetail);
 
     
-    const handleCloseBtn = () => {
-        setShowNavPopup(true);
-        //setModalVisible(false);
+    const handleCloseBtn = async () => {
+        // console.log("carDetail: ####", carDetail.userId)
+        // hannaServer.post('/update-parking-status', carDetail.userId)
+        // .then(() => {
+            setIsParking(true);
+            setModalVisible(false);
+        // })
+        // .catch(e => console.log(e.response))
     }
+
+    useEffect(() => {
+        console.log("modalVisible: ", modalVisible);
+    },[modalVisible])
 
   return (
     <>

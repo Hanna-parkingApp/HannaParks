@@ -14,6 +14,7 @@ const transactionSlice = createSlice({
             state.isParkingAvail = action.payload;
         },
         changeOtherUserLoc: (state, action) => {
+            console.log("$$$$$ coords: ", action.payload);
             let coords = action.payload;
             state.otherUserLoc.latitude = coords.latitude;
             state.otherUserLoc.longitude = coords.longitude; 

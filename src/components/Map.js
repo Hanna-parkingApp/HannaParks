@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectLocation } from '../features/location/locationSlice';
 import { add_minutes } from '../constants/helpers/helperFunctions';
 import { changeCarDetailState } from '../features/car-detail/carDetailSlice';
+import { selectTransaction } from '../features/transaction/transactionSlice';
 
 const Map = (props) => {
 
@@ -26,6 +27,7 @@ const Map = (props) => {
     const [dirOrigin, setDirOrigin] = useState(null);
 
     const userLocation = useSelector(selectLocation);
+    const transactionDetails = useSelector(selectTransaction);
     
     const markerRef = useRef();    
     const mapRef = useRef();
@@ -179,7 +181,7 @@ const Map = (props) => {
                 destination={userLocation.des}
                 apikey={GOOGLE_API_KEY}
                 strokeWidth = {3}
-                strokeColor = "hotpink"
+                strokeColor = {props.isParking? "green" : "hotpink"}
                 mode={request === "SHARE" ? "WALKING" : "DRIVING"}
                 onReady={(result) => {fetchNearParking(result); mapRef.current.fitToCoordinates(result.coordinates, {
                     edgePadding: {
@@ -190,6 +192,19 @@ const Map = (props) => {
                     },
                 });}}
                 />   
+            )}
+            {transactionDetails.otherUserLoc.latitude && (
+                <>
+                <Marker.Animated coordinate = {{latitude: transactionDetails.otherUserLoc.latitude, longitude: transactionDetails.otherUserLoc.longitude}} />
+                <MapViewDirections 
+                    origin={transactionDetails.otherUserLoc}
+                    destination={userLocation.des}
+                    apikey={GOOGLE_API_KEY}
+                    strokeWidth = {3}
+                    strokeColor = {props.isParking? "yellow" : "hotpink"}
+                    mode={request === "SHARE" ? "DRIVING" : "WALKING"}
+                />
+                </>
             )}  
             </MapView>          
         </> 
