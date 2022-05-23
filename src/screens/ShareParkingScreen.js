@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import Map from '../components/Map';
 import { useDispatch, useSelector } from "react-redux";
 import { changeParkingAvailable, selectTransaction } from "../features/transaction/transactionSlice";
+import { selectLocation } from "../features/location/locationSlice";
 
 const ShareParkingScreen = () => {
 
@@ -17,6 +18,7 @@ const ShareParkingScreen = () => {
   const dispatch = useDispatch();
 
   const {isParkingAvail} = useSelector(selectTransaction)
+  const myLocation = useSelector(selectLocation);
     
   const { width, height } = useWindowDimensions();
   const [carDetails,setCarDetails] = useState();
@@ -47,7 +49,8 @@ const ShareParkingScreen = () => {
         },
           genralLocation: carDetails.generalLoc,
           timeStamp: carDetails.timeStamp,
-          registrationNumber: carNumber 
+          registrationNumber: carNumber,
+          myLoc: myLocation.src,
        }
        hannaServer.post('/share-parks', userParking )
        .then(res => {
@@ -61,7 +64,7 @@ const ShareParkingScreen = () => {
       //  .then(() => useDispatch(changeParkingAvailable(true)))
       //  .then(() => navigation.navigate('Home'))
       //   .then(() => showSuccess("Thanks for sharing"))
-        .catch((e) => console.log("failed connect share parking",e))
+        .catch((e) => console.log("failed connect share parking",e.response))
       }
        catch(e){
          console.log("failed connect share parking",e)
@@ -73,7 +76,7 @@ const ShareParkingScreen = () => {
     <View style={styles.SharingContainer}>
         {/* <ImageBackground source={imageSrc} resizeMode="cover" style={{flex: 1, justifyContent: 'center'}}> */}
         <FindDestination placeholderText={"Where is your car at?"} handleSearch={() => console.log('stay in the same page')}  />
-            <Map width={width} height={height /2} request={"SHARE"} setCarDetails={setCarDetails} />
+            <Map width={width} height={height /2} request={"SHARE"} setCarDetails={setCarDetails} isParking={false} />
         <View style={styles.SharedParkingDetails}>
             <Text style={{fontSize:15, fontWeight: 'bold'}}>Expected Deprature Time:</Text>
             <NumericInput minValue={0} onChange={setExpectedDepratureTime}/>

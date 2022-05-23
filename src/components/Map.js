@@ -179,7 +179,7 @@ const Map = (props) => {
                 destination={userLocation.des}
                 apikey={GOOGLE_API_KEY}
                 strokeWidth = {3}
-                strokeColor = "hotpink"
+                strokeColor = {props.isParking? "green" : "hotpink"}
                 mode={request === "SHARE" ? "WALKING" : "DRIVING"}
                 onReady={(result) => {fetchNearParking(result); mapRef.current.fitToCoordinates(result.coordinates, {
                     edgePadding: {

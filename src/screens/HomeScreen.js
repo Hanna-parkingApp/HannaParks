@@ -14,7 +14,7 @@ import Header from '../components/Header';
 import * as Location from 'expo-location';
 import { OpenMapDirections } from 'react-native-navigation-directions';
 import { useSelector } from 'react-redux';
-import { selectLocation } from '../features/location/locationSlice';
+import { changeDesState, selectLocation } from '../features/location/locationSlice';
 import { useDispatch } from 'react-redux';
 import { changeSrcState } from '../features/location/locationSlice';
 import MyButton from '../components/MyButton';
@@ -23,6 +23,8 @@ import { showMessage } from 'react-native-flash-message';
 import { selectTransaction } from '../features/transaction/transactionSlice';
 import hannaServer from '../api/hannaServer';
 import { useNavigation } from '@react-navigation/native';
+import { selectCarDetail } from '../features/car-detail/carDetailSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function HomeScreen({route}) {
@@ -36,10 +38,15 @@ export default function HomeScreen({route}) {
   const navigation = useNavigation();
   const userLocation = useSelector(selectLocation);
   const [userParkingId, setUserParkingId] = useState();
+  
   const {isParkingAvail} = useSelector(selectTransaction);
+  const carDetails = useSelector(selectCarDetail);
 
   const [isAvail, setIsAvail] = useState(isParkingAvail);
+  
+  const [askForLocation, setAskForLocation] = useState(false);
 
+  const [isParking, setIsParking] = useState(false);
 
   const handleSearch = (dest) => {
     showMessage("hello")
@@ -83,17 +90,17 @@ export default function HomeScreen({route}) {
     dispatch(changeSrcState(location));
 }
 
-const checkParkingStatus = async () => {
-  console.log("check if parking is available ");
+// const checkParkingStatus = async () => {
+//   console.log("check if parking is available ");
   
-    hannaServer.post('/parking-status', { userParkingId })
-    .then(res => {
-      console.log(res.data.isAvail)
-      setIsAvail(res.data.isAvail);
-    })
-    .catch(e => console.log("error getting parking status from server, ", e.response))
+//     hannaServer.post('/parking-status', { userParkingId })
+//     .then(res => {
+//       console.log(res.data.isAvail)
+//       setIsAvail(res.data.isAvail);
+//     })
+//     .catch(e => console.log("error getting parking status from server, ", e.response))
   
-}
+// }
 
 useEffect(() => {
   console.log("user parking id: ", userParkingId);
@@ -117,6 +124,31 @@ useEffect(() => {
 
 },[isParkingAvail, userParkingId])
 
+useEffect(() => {
+  if (askForLocation) {
+    console.log("asking for opponent location")
+    let interval = setInterval(async () => {
+      let userToken = await AsyncStorage.getItem('userToken');
+      let userTokenJson = JSON.parse(userToken);
+
+      hannaServer.post('/navigation-updater', {
+        userId: carDetails.userId,
+        userToken: userTokenJson.refreshToken,
+        userType: "FIND",
+        myLoc: userLocation.src
+      })
+      .then((res) => console.log(res.data))
+    }, 6 * 1000);
+  }
+},[askForLocation])
+
+useEffect(() => {
+  if(isParking) {
+    dispatch(changeDesState(carDetails.specificLoc))
+    setAskForLocation(true)
+  }
+},[isParking])
+
   const y = useSharedValue(0);
 
   return (
@@ -127,11 +159,11 @@ useEffect(() => {
       <MyButton title={"Share parking"}  onPress={() => navigation.navigate('Share-Parking')}/>
       
       {carDetailsModal && (
-        <CarDetailsModal modalVisible={carDetailsModal} setModalVisible={setCarDetailsModal} />
+        <CarDetailsModal modalVisible={carDetailsModal} setModalVisible={setCarDetailsModal} setIsParking={setIsParking} />
       )}
 
       {userLocation.src.latitude? (
-        <Map width={width} height={height} request={"FIND"} setCarDetailsModal={setCarDetailsModal}/>
+        <Map width={width} height={height} request={"FIND"} setCarDetailsModal={setCarDetailsModal} isParking={isParking}/>
       ): (
         <Text>Loading Page ...</Text>
       )}

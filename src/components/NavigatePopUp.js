@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Popup, showLocation} from 'react-native-map-link';
 import { useSelector } from 'react-redux';
+import { delay } from '../constants/helpers/helperFunctions';
 import { selectCarDetail } from '../features/car-detail/carDetailSlice';
 
 const NavigatePopUp = (props) => {
@@ -31,7 +32,12 @@ const NavigatePopUp = (props) => {
     return (
         <Popup
             isVisible={isVisible}
-            onCancelPressed={() =>{ setIsVisible(false)} }
+            onCancelPressed={async () =>{ 
+                setIsVisible(false);
+                await delay(2);
+                setModalVisible(false);
+                
+            } }
             //onAppPressed={() => {setIsVisible(false); setModalVisible(false)}}
             // onBackButtonPressed={() => setIsVisible(false) }
             // modalProps={{ // you can put all react-native-modal props inside.
