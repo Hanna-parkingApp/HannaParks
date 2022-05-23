@@ -19,15 +19,13 @@ export default function CarDetailsModal(props) {
 
     
     const handleCloseBtn = async () => {
-        console.log("carDetail: ####", carDetail.userId)
-        // hannaServer.post('navigation-updater', {
-        //     userId: carDetail.userId,
-        //     userType: "FIND",
-        //     myLoc
+        // console.log("carDetail: ####", carDetail.userId)
+        // hannaServer.post('/update-parking-status', carDetail.userId)
+        // .then(() => {
+            setIsParking(true);
+            setModalVisible(false);
         // })
-        //setShowNavPopup(true);
-        setIsParking(true);
-        setModalVisible(false);
+        // .catch(e => console.log(e.response))
     }
 
     useEffect(() => {

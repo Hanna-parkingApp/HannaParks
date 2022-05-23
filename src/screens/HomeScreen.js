@@ -20,7 +20,7 @@ import { changeSrcState } from '../features/location/locationSlice';
 import MyButton from '../components/MyButton';
 import CarDetailsModal from '../components/CarDetailsModal';
 import { showMessage } from 'react-native-flash-message';
-import { selectTransaction } from '../features/transaction/transactionSlice';
+import { changeOtherUserLoc, selectTransaction } from '../features/transaction/transactionSlice';
 import hannaServer from '../api/hannaServer';
 import { useNavigation } from '@react-navigation/native';
 import { selectCarDetail } from '../features/car-detail/carDetailSlice';
@@ -41,6 +41,7 @@ export default function HomeScreen({route}) {
   
   const {isParkingAvail} = useSelector(selectTransaction);
   const carDetails = useSelector(selectCarDetail);
+  const transactionDetails = useSelector(selectTransaction);
 
   const [isAvail, setIsAvail] = useState(isParkingAvail);
   
@@ -90,17 +91,11 @@ export default function HomeScreen({route}) {
     dispatch(changeSrcState(location));
 }
 
-// const checkParkingStatus = async () => {
-//   console.log("check if parking is available ");
-  
-//     hannaServer.post('/parking-status', { userParkingId })
-//     .then(res => {
-//       console.log(res.data.isAvail)
-//       setIsAvail(res.data.isAvail);
-//     })
-//     .catch(e => console.log("error getting parking status from server, ", e.response))
-  
-// }
+const updateParkingStatus = async () => {
+        console.log("####%% ", carDetails.userId);
+        hannaServer.post('/update-parking-status', carDetails.userId)
+        .catch(e => console.log("Error updating parking status. ", e.response))
+}
 
 useEffect(() => {
   console.log("user parking id: ", userParkingId);
@@ -125,6 +120,7 @@ useEffect(() => {
 },[isParkingAvail, userParkingId])
 
 useEffect(() => {
+  console.log(askForLocation)
   if (askForLocation) {
     console.log("asking for opponent location")
     let interval = setInterval(async () => {
@@ -137,13 +133,18 @@ useEffect(() => {
         userType: "FIND",
         myLoc: userLocation.src
       })
-      .then((res) => console.log(res.data))
+      .then(res => {
+        const shareCurLoc = JSON.parse(res.data.updatedObj.shareCurLoc);
+        dispatch(changeOtherUserLoc(shareCurLoc));
+      })
+      .catch(e => console.log(e))
     }, 6 * 1000);
   }
 },[askForLocation])
 
 useEffect(() => {
   if(isParking) {
+    updateParkingStatus();
     dispatch(changeDesState(carDetails.specificLoc))
     setAskForLocation(true)
   }
