@@ -28,6 +28,9 @@ const Map = (props) => {
 
     const userLocation = useSelector(selectLocation);
     const transactionDetails = useSelector(selectTransaction);
+
+    console.log("transcion detail lat: ", transactionDetails.otherUserLoc.latitude)
+    console.log("user des lat: ", userLocation.des.latitude)
     
     const markerRef = useRef();    
     const mapRef = useRef();
@@ -193,7 +196,7 @@ const Map = (props) => {
                 });}}
                 />   
             )}
-            {transactionDetails.otherUserLoc.latitude && (
+            {userLocation.des.latitude && transactionDetails.otherUserLoc.latitude && (
                 <>
                 <Marker.Animated coordinate = {{latitude: transactionDetails.otherUserLoc.latitude, longitude: transactionDetails.otherUserLoc.longitude}} />
                 <MapViewDirections 
