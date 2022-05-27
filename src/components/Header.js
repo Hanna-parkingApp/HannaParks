@@ -28,12 +28,14 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '10%',
         flexDirection: 'row',
+        alignContent: 'center',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        //marginTop: 20
     },
     icon: {
         position: 'absolute',
-        left: 16
+        left: 16,
     }
 });

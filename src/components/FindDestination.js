@@ -32,7 +32,7 @@ const FindDestination = (props) => {
             <FlatList
             ListHeaderComponent={
             <>
-            <View style = {{ marginBottom: 16, flexDirection:'row' }} >
+            <View style = {{ marginBottom: 16, flexDirection:'row', zIndex: 10 }} >
                 <AddressPickup 
                  placeholderText={placeholderText}
                  fetchAddress = {fetchDestinationCoords}
@@ -42,7 +42,7 @@ const FindDestination = (props) => {
                 
             </>}
             keyboardShouldPersistTaps='handled'
-            style = {{ flex: 1, padding: 24}}
+            style = {{ flex: 1, padding: 24, zIndex: 10}}
             >
                  
             </FlatList>
@@ -54,6 +54,8 @@ export default FindDestination;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 0.5,
+        marginTop: 30,
+        zIndex: 10,
     },
 });

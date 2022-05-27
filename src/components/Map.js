@@ -139,7 +139,7 @@ const Map = (props) => {
         <>
             <MapView
                 ref={mapRef}
-                style = {{width, height}}
+                style = {{width, height, zIndex: -1, position: 'absolute'}}
                 loadingEnabled = {true}
                 initialRegion = {{
                 ...userLocation.src,
@@ -153,7 +153,7 @@ const Map = (props) => {
                     coordinate= {coordinates[0]} 
                 >
                     <Image 
-                        source={imagePath.icCurLoc}
+                        source={request === 'SHARE' ? imagePath.manWalking : imagePath.icCurLoc}
                         style = {styles.icCar}
                     />
                 </Marker.Animated>
@@ -166,11 +166,13 @@ const Map = (props) => {
                             key={index}
                             coordinate = {{latitude: latitude, longitude: longitude}}
                             onPress={(e) =>{e.stopPropagation(); handleMarkerPress(index)}}
-                            title={"title title"}
                         >
                          <Image 
-                            source={imagePath.redCar}
-                            
+                            source={imagePath.parkingBlueCar}
+                            style = {{
+                                height: 50,
+                                width: 50
+                            }}
                         />   
                         </Marker.Animated>
                     )
@@ -198,7 +200,15 @@ const Map = (props) => {
             )}
             {userLocation.des.latitude && transactionDetails.otherUserLoc.latitude && (
                 <>
-                <Marker.Animated coordinate = {{latitude: transactionDetails.otherUserLoc.latitude, longitude: transactionDetails.otherUserLoc.longitude}} />
+                <Marker.Animated coordinate = {{latitude: transactionDetails.otherUserLoc.latitude, longitude: transactionDetails.otherUserLoc.longitude}}>
+                <Image 
+                    source={imagePath.manWalking}
+                    style = {{
+                        height: 50,
+                        width: 50
+                    }}
+                />   
+                </Marker.Animated>
                 <MapViewDirections 
                     origin={transactionDetails.otherUserLoc}
                     destination={userLocation.des}
