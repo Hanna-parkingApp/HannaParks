@@ -74,9 +74,12 @@ const ShareParkingScreen = () => {
 
   return (
     <View style={styles.SharingContainer}>
-        {/* <ImageBackground source={imageSrc} resizeMode="cover" style={{flex: 1, justifyContent: 'center'}}> */}
-        <FindDestination placeholderText={"Where is your car at?"} handleSearch={() => console.log('stay in the same page')}  />
-            <Map width={width} height={height /2} request={"SHARE"} setCarDetails={setCarDetails} isParking={false} />
+        <View style={styles.findDes}>
+          <FindDestination placeholderText={"Where is your car at?"} handleSearch={() => console.log('stay in the same page')}  />
+        {/* </View>
+        <View style={styles.map}> */}
+            <Map width={width} height={height /1.5} request={"SHARE"} setCarDetails={setCarDetails} isParking={false} />
+        </View>
         <View style={styles.SharedParkingDetails}>
             <Text style={{fontSize:15, fontWeight: 'bold'}}>Expected Deprature Time:</Text>
             <NumericInput minValue={0} onChange={setExpectedDepratureTime}/>
@@ -103,5 +106,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     flex: 0.5,
     alignItems: 'center',
+
   },
+  findDes: {
+    flex: 2
+  },
+  map: {
+    flex: 2,
+  }
 });
