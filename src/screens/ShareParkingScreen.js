@@ -58,7 +58,7 @@ const ShareParkingScreen = () => {
          dispatch(changeParkingAvailable(true))
          const userParkingId = res.data.userParkingId;
          console.log("userParkingId-SHARE", userParkingId)
-         navigation.navigate('Home', {userId: userParkingId})
+         navigation.goBack('Home', {userId: userParkingId})
          showSuccess("Thanks for sharing")
         })
       //  .then(() => useDispatch(changeParkingAvailable(true)))

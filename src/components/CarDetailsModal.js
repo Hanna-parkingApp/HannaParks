@@ -18,10 +18,11 @@ export default function CarDetailsModal(props) {
     console.log(" carDetail: ", carDetail);
 
     
-    const handleCloseBtn = async () => {
+    const handleCloseBtn = () => {
         // console.log("carDetail: ####", carDetail.userId)
         // hannaServer.post('/update-parking-status', carDetail.userId)
         // .then(() => {
+            console.log("modal close")
             setIsParking(true);
             setModalVisible(false);
         // })
