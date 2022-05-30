@@ -34,7 +34,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function HomeScreen({ route }) {
   const { width, height } = useWindowDimensions();
-  const [permissionStatus, setPermissionStatus] = useState(null);
+  const [permissionStatus, setPermissionStatus] = useState("");
   const [endPoint, setEndPoint] = useState("");
 
   const [carDetailsModal, setCarDetailsModal] = useState(false);
@@ -61,23 +61,17 @@ export default function HomeScreen({ route }) {
 
   useEffect(() => {
     if (route.params?.userId) {
-      console.log("here");
       setUserParkingId(route.params.userId);
     }
   }, [route.params?.userId]);
 
   useEffect(() => {
-    if (!permissionStatus) askForPermissions();
+    if (permissionStatus !== "") askForPermissions();
   }, []);
 
   useEffect(() => {
-    console.log("route params: ", route.params);
-    // getLocation()
-    console.log(permissionStatus);
-    if (permissionStatus === "granted") {
-      const interval = setInterval(() => getLocation(), 6 * 1000);
-      return () => clearInterval(interval);
-    }
+    const interval = setInterval(() => getLocation(), 6 * 1000);
+    return () => clearInterval(interval);
   }, [permissionStatus]);
 
   const askForPermissions = async () => {
@@ -88,7 +82,6 @@ export default function HomeScreen({ route }) {
       setPermissionStatus("PERMISSION NOT GRANTED!");
       //alert(permissionStatus);
     }
-    console.log("dddd", status);
     setPermissionStatus(status);
   };
 
@@ -99,22 +92,19 @@ export default function HomeScreen({ route }) {
   };
 
   const updateParkingStatus = async () => {
-    console.log("####%% ", carDetails.userId);
     hannaServer
-      .post("/update-parking-status", carDetails.userId)
+      .post("/update-parking-status", { userParkingId: carDetails.id })
       .catch((e) => console.log("Error updating parking status. ", e.response));
   };
 
   useEffect(() => {
-    console.log("user parking id: ", userParkingId);
-    console.log("is avail: ", isAvail);
     if (isParkingAvail && isAvail && userParkingId) {
       let interval = setInterval(() => {
         console.log("check if parking is available ");
         hannaServer
           .post("/parking-status", { userParkingId })
           .then((res) => {
-            console.log(res.data.isAvail);
+            console.log("res.data.isAvail", res.data.isAvail);
             if (!res.data.isAvail) {
               console.log("clearing interval");
               clearInterval(interval);
@@ -132,12 +122,16 @@ export default function HomeScreen({ route }) {
   }, [isParkingAvail, userParkingId]);
 
   useEffect(() => {
-    console.log(askForLocation);
     if (askForLocation) {
       console.log("asking for opponent location");
+      let userTokenJson;
       let interval = setInterval(async () => {
-        let userToken = await AsyncStorage.getItem("userToken");
-        let userTokenJson = JSON.parse(userToken);
+        try {
+          let userToken = await AsyncStorage.getItem("userToken");
+          userTokenJson = JSON.parse(userToken);
+        } catch (e) {
+          console.log("Error getting user token from local storage");
+        }
 
         hannaServer
           .post("/navigation-updater", {
@@ -150,7 +144,9 @@ export default function HomeScreen({ route }) {
             const shareCurLoc = JSON.parse(res.data.updatedObj.shareCurLoc);
             dispatch(changeOtherUserLoc(shareCurLoc));
           })
-          .catch((e) => console.log(e));
+          .catch((e) =>
+            console.log("error calling navigation updater", e.data)
+          );
       }, 6 * 1000);
     }
   }, [askForLocation]);

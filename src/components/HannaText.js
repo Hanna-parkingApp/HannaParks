@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     // fontFamily: "Cochin",
     alignSelf: 'center',
     letterSpacing: 3,
+    marginTop: 10,
   }
 });
 
