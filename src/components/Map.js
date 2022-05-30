@@ -27,10 +27,12 @@ const Map = (props) => {
     const [dirOrigin, setDirOrigin] = useState(null);
 
     const userLocation = useSelector(selectLocation);
+    console.log("map user Location: ", userLocation.src);
     const transactionDetails = useSelector(selectTransaction);
 
     console.log("transcion detail lat: ", transactionDetails.otherUserLoc.latitude)
     console.log("user des lat: ", userLocation.des.latitude)
+    console.log("isParking: ", props.isParking)
     
     const markerRef = useRef();    
     const mapRef = useRef();
@@ -55,6 +57,7 @@ const Map = (props) => {
     }
 
     const fetchNearParking = async (result) => {
+        console.log("here hrer ehere")
         if (!showParking) {
         console.log(`Distance: ${result.distance} km`);
         console.log(`Duration: ${result.duration} min`);
@@ -85,6 +88,7 @@ const Map = (props) => {
     }
 
     const findParking = async (data) => {
+        console.log("find parking ...");
         try {
             await hannaServer.post('/find-parks', data)
             .then(res => {
@@ -128,6 +132,18 @@ const Map = (props) => {
     useEffect(() => {
         setDirOrigin(userLocation.src);
     },[])
+
+    useEffect(() => {
+        if (!userLocation.des?.latitude) {
+            console.log("user location des latitude is null")
+            setNearbyParking([]);
+            setShowParking(false);
+
+        }
+        else {
+            console.log("user location des is not null")
+        }
+    }, [userLocation.des?.latitude])
 
     useEffect(() => {
         if (nearbyParking.length > 0 && !showParking) {
