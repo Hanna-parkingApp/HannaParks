@@ -7,6 +7,7 @@ import Drawer from './Drawer';
 import FindDestinationScreen from '../screens/FindDestinationScreen';
 import ShareParkingScreen from '../screens/ShareParkingScreen';
 import RecoveryPassword from '../screens/RecoveryPasswordScreen';
+import { spring } from 'react-native-reanimated';
 
 const Stack = createNativeStackNavigator();
 

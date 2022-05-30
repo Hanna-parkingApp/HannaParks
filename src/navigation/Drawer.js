@@ -5,6 +5,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import CustomDrawer from "../components/CustomDrawer";
 import { Ionicons } from "@expo/vector-icons";
 import SpecificSharingScreen from "../screens/SpecificSharingScreen"; 
+import ShareParkingScreen from "../screens/ShareParkingScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -33,7 +34,7 @@ const DrawerNav = () => {
             component={ProfileScreen} />
             <Drawer.Screen 
             name="Share Parking"
-            component={SpecificSharingScreen} />
+            component={ShareParkingScreen} />
           
         </Drawer.Navigator>
     )
