@@ -93,9 +93,9 @@ const Map = (props) => {
             await hannaServer.post('/find-parks', data)
             .then(res => {
                 if (res.status === 200) {
-                    const specific_parking = res.data.nearbyParking[0].specificLocation;
-                    const json = JSON.parse(specific_parking);
-                    setNearbyParking(res.data.nearbyParking);
+                    // const specific_parking = res.data.nearbyParking[0].specificLocation;
+                    // const json = JSON.parse(specific_parking);
+                    setNearbyParking(res.data.relevantParking);
                 }
             })
             
