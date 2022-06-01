@@ -32,6 +32,7 @@ const Map = (props) => {
 
     console.log("transcion detail lat: ", transactionDetails.otherUserLoc.latitude)
     console.log("user des lat: ", userLocation.des.latitude)
+
     console.log("isParking: ", props.isParking)
     
     const markerRef = useRef();    

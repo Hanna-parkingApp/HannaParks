@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import {
   StatusBar,
   StyleSheet,
   useWindowDimensions,
   View,
   Text,
+
 } from 'react-native';
 import Map from '../components/Map'
 import { useSharedValue } from 'react-native-reanimated';
@@ -40,13 +41,13 @@ export default function HomeScreen({route}) {
   const navigation = useNavigation();
   const userLocation = useSelector(selectLocation);
   const [userParkingId, setUserParkingId] = useState();
-  
-  const {isParkingAvail} = useSelector(selectTransaction);
+
+  const { isParkingAvail } = useSelector(selectTransaction);
   const carDetails = useSelector(selectCarDetail);
   const transactionDetails = useSelector(selectTransaction);
 
   const [isAvail, setIsAvail] = useState(isParkingAvail);
-  
+
   const [askForLocation, setAskForLocation] = useState(false);
 
   const [isParking, setIsParking] = useState(false);
@@ -54,15 +55,20 @@ export default function HomeScreen({route}) {
   const [isArrivedModal, setIsArrivedModal] = useState(false);
 
   const handleSearch = (dest) => {
-    showMessage("hello")
+    showMessage("hello");
     setEndPoint(dest);
-  }
+  };
 
   useEffect(() => {
+
     if(route.params?.userId) {
       setUserParkingId(route.params.userId);
     }
-  },[route.params?.userId])
+  }, [route.params?.userId]);
+
+  useEffect(() => {
+    if (permissionStatus !== "") askForPermissions();
+  }, []);
 
   useEffect(() => {
     if (!permissionStatus)
@@ -80,19 +86,19 @@ export default function HomeScreen({route}) {
   const askForPermissions = async () => {
     console.log("ask for permissions...");
     const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-        console.log("status not granted")
-        setPermissionStatus('PERMISSION NOT GRANTED!');
-        //alert(permissionStatus);
+    if (status !== "granted") {
+      console.log("status not granted");
+      setPermissionStatus("PERMISSION NOT GRANTED!");
+      //alert(permissionStatus);
     }
     setPermissionStatus(status);
-  }
+  };
 
   const getLocation = async () => {
-    console.log('get location');
+    console.log("get location");
     const location = await Location.getCurrentPositionAsync({});
     dispatch(changeSrcState(location));
-}
+  };
 
 const updateParkingStatus = async () => {
         hannaServer.post('/update-parking-status', { userParkingId: carDetails.id})
@@ -170,22 +176,37 @@ useEffect(() => {
       <StatusBar barStyle="dark-content" />
       <Header />
 
-      <MyButton title={"Share parking"}  onPress={() => navigation.navigate('Share-Parking')}/>
-      
+      <MyButton
+        title={"Share parking"}
+        onPress={() => navigation.navigate("Share-Parking")}
+      />
+
       {carDetailsModal && (
-        <CarDetailsModal modalVisible={carDetailsModal} setModalVisible={setCarDetailsModal} setIsParking={setIsParking} />
+        <CarDetailsModal
+          modalVisible={carDetailsModal}
+          setModalVisible={setCarDetailsModal}
+          setIsParking={setIsParking}
+        />
       )}
 
-      {userLocation.src.latitude? (
-        <Map width={width} height={height} request={"FIND"} setCarDetailsModal={setCarDetailsModal} isParking={isParking}/>
-      ): (
+      {userLocation.src.latitude ? (
+        <Map
+          width={width}
+          height={height}
+          request={"FIND"}
+          setCarDetailsModal={setCarDetailsModal}
+          isParking={isParking}
+        />
+      ) : (
         <Text>Loading Page ...</Text>
       )}
+
 
       <IsArrivedModal modalVisible={isArrivedModal} setModalVisible={setIsArrivedModal} width={width / 2} height={height / 1.5} setIsParking={setIsParking} />
 
       <BottomSheet panY={y} handleSearch = {handleSearch} />
 
+      <BottomSheet panY={y} handleSearch={handleSearch} />
     </View>
   );
 }
