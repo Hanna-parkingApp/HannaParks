@@ -28,6 +28,7 @@ export default function CarDetailsModal(props) {
     // .catch(e => console.log(e.response))
   };
 
+
   useEffect(() => {
     console.log("modalVisible: ", modalVisible);
     console.log(" carDetail: ", carDetail);

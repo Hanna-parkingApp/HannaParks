@@ -5,37 +5,35 @@ import {
   useWindowDimensions,
   View,
   Text,
-} from "react-native";
-import Map from "../components/Map";
-import { useSharedValue } from "react-native-reanimated";
-import GeoBar from "../components/GeoBar";
-import BottomSheet from "../components/BottomSheetView";
-import Header from "../components/Header";
-import * as Location from "expo-location";
-import { OpenMapDirections } from "react-native-navigation-directions";
-import { useSelector } from "react-redux";
-import {
-  changeDesState,
-  selectLocation,
-} from "../features/location/locationSlice";
-import { useDispatch } from "react-redux";
-import { changeSrcState } from "../features/location/locationSlice";
-import MyButton from "../components/MyButton";
-import CarDetailsModal from "../components/CarDetailsModal";
-import { showMessage } from "react-native-flash-message";
-import {
-  changeOtherUserLoc,
-  selectTransaction,
-} from "../features/transaction/transactionSlice";
-import hannaServer from "../api/hannaServer";
-import { useNavigation } from "@react-navigation/native";
-import { selectCarDetail } from "../features/car-detail/carDetailSlice";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function HomeScreen({ route }) {
+} from 'react-native';
+import Map from '../components/Map'
+import { useSharedValue } from 'react-native-reanimated';
+import GeoBar from '../components/GeoBar';
+import BottomSheet from '../components/BottomSheetView';
+import Header from '../components/Header';
+import * as Location from 'expo-location';
+import { OpenMapDirections } from 'react-native-navigation-directions';
+import { useSelector } from 'react-redux';
+import { changeDesState, selectLocation } from '../features/location/locationSlice';
+import { useDispatch } from 'react-redux';
+import { changeSrcState } from '../features/location/locationSlice';
+import MyButton from '../components/MyButton';
+import CarDetailsModal from '../components/CarDetailsModal';
+import { showMessage } from 'react-native-flash-message';
+import { changeOtherUserLoc, selectTransaction } from '../features/transaction/transactionSlice';
+import hannaServer from '../api/hannaServer';
+import { useNavigation } from '@react-navigation/native';
+import { selectCarDetail } from '../features/car-detail/carDetailSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getDistance } from 'geolib';
+import IsArrivedModal from '../constants/alerts/IsArrivedModal';
+
+
+export default function HomeScreen({route}) {
   const { width, height } = useWindowDimensions();
-  const [permissionStatus, setPermissionStatus] = useState("");
-  const [endPoint, setEndPoint] = useState("");
+  const [permissionStatus, setPermissionStatus] = useState(null);
+  const [endPoint, setEndPoint] = useState('');
 
   const [carDetailsModal, setCarDetailsModal] = useState(false);
 
@@ -54,13 +52,16 @@ export default function HomeScreen({ route }) {
 
   const [isParking, setIsParking] = useState(false);
 
+  const [isArrivedModal, setIsArrivedModal] = useState(false);
+
   const handleSearch = (dest) => {
     showMessage("hello");
     setEndPoint(dest);
   };
 
   useEffect(() => {
-    if (route.params?.userId) {
+
+    if(route.params?.userId) {
       setUserParkingId(route.params.userId);
     }
   }, [route.params?.userId]);
@@ -70,9 +71,17 @@ export default function HomeScreen({ route }) {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => getLocation(), 6 * 1000);
-    return () => clearInterval(interval);
-  }, [permissionStatus]);
+    if (!permissionStatus)
+      askForPermissions();
+  }, [])
+  
+  useEffect(() => {
+    if (permissionStatus) {
+      const interval = setInterval(() => getLocation(), 6 * 1000);
+      return () => clearInterval(interval)
+    } 
+    
+  }, [permissionStatus])
 
   const askForPermissions = async () => {
     console.log("ask for permissions...");
@@ -91,73 +100,74 @@ export default function HomeScreen({ route }) {
     dispatch(changeSrcState(location));
   };
 
-  const updateParkingStatus = async () => {
-    hannaServer
-      .post("/update-parking-status", { userParkingId: carDetails.id })
-      .catch((e) => console.log("Error updating parking status. ", e.response));
-  };
+const updateParkingStatus = async () => {
+        hannaServer.post('/update-parking-status', { userParkingId: carDetails.id})
+        .catch(e => console.log("Error updating parking status. ", e.response))
+}
 
-  useEffect(() => {
-    if (isParkingAvail && isAvail && userParkingId) {
-      let interval = setInterval(() => {
-        console.log("check if parking is available ");
-        hannaServer
-          .post("/parking-status", { userParkingId })
-          .then((res) => {
-            console.log("res.data.isAvail", res.data.isAvail);
-            if (!res.data.isAvail) {
-              console.log("clearing interval");
-              clearInterval(interval);
-            }
-            //setIsAvail(res.data.isAvail);
-          })
-          .catch((e) =>
-            console.log(
-              "error getting parking status from server, ",
-              e.response
-            )
-          );
-      }, 6 * 1000);
-    }
-  }, [isParkingAvail, userParkingId]);
-
-  useEffect(() => {
-    if (askForLocation) {
-      console.log("asking for opponent location");
-      let userTokenJson;
-      let interval = setInterval(async () => {
-        try {
-          let userToken = await AsyncStorage.getItem("userToken");
-          userTokenJson = JSON.parse(userToken);
-        } catch (e) {
-          console.log("Error getting user token from local storage");
+useEffect(() => {
+  if (isParkingAvail && isAvail && userParkingId) {
+    let interval = setInterval(() => {
+      console.log("check if parking is available ");
+      hannaServer.post('/parking-status', { userParkingId })
+      .then(res => {
+        console.log("res.data.isAvail", res.data.isAvail);
+        if (!res.data.isAvail) {
+          console.log("clearing interval");
+          clearInterval(interval)
         }
+        //setIsAvail(res.data.isAvail);
+      })
+      .catch(e => console.log("error getting parking status from server, ", e.response))
 
-        hannaServer
-          .post("/navigation-updater", {
-            userId: carDetails.userId,
-            userToken: userTokenJson.refreshToken,
-            userType: "FIND",
-            myLoc: userLocation.src,
-          })
-          .then((res) => {
-            const shareCurLoc = JSON.parse(res.data.updatedObj.shareCurLoc);
-            dispatch(changeOtherUserLoc(shareCurLoc));
-          })
-          .catch((e) =>
-            console.log("error calling navigation updater", e.data)
-          );
-      }, 6 * 1000);
-    }
-  }, [askForLocation]);
+    }, 6 * 1000);
+  }
 
-  useEffect(() => {
-    if (isParking) {
-      updateParkingStatus();
-      dispatch(changeDesState(carDetails.specificLoc));
-      setAskForLocation(true);
-    }
-  }, [isParking]);
+},[isParkingAvail, userParkingId])
+
+useEffect(() => {
+  if (askForLocation) {
+    console.log("asking for opponent location")
+    let userTokenJson;
+    const interval = setInterval(async () => {
+      try {
+        let userToken = await AsyncStorage.getItem('userToken');
+        userTokenJson = JSON.parse(userToken);
+      
+    } catch (e) {
+        console.log("Error getting user token from local storage");
+      }
+
+      hannaServer.post('/navigation-updater', {
+        userId: carDetails.userId,
+        userToken: userTokenJson.refreshToken,
+        userType: "FIND",
+        myLoc: userLocation.src
+      })
+      .then(res => {
+        const shareCurLoc = JSON.parse(res.data.updatedObj.shareCurLoc);
+        console.log("home screen user location: ", userLocation.src);
+        
+        const distance = getDistance(userLocation.src, userLocation.des);
+        if (distance < 1000) {
+          setIsArrivedModal(true);
+          clearInterval(interval);
+        }
+        dispatch(changeOtherUserLoc(shareCurLoc));
+      })
+      .catch(e => console.log("error calling navigation updater",e.data))
+    }, 6 * 1000);
+  }
+},[askForLocation])
+
+useEffect(() => {
+  console.log("is parking!!!", isParking);
+  if(isParking) {
+    updateParkingStatus();
+    dispatch(changeDesState(carDetails.specificLoc))
+    setAskForLocation(true)
+  }
+},[isParking])
 
   const y = useSharedValue(0);
 
@@ -190,6 +200,11 @@ export default function HomeScreen({ route }) {
       ) : (
         <Text>Loading Page ...</Text>
       )}
+
+
+      <IsArrivedModal modalVisible={isArrivedModal} setModalVisible={setIsArrivedModal} width={width / 2} height={height / 1.5} setIsParking={setIsParking} />
+
+      <BottomSheet panY={y} handleSearch = {handleSearch} />
 
       <BottomSheet panY={y} handleSearch={handleSearch} />
     </View>
