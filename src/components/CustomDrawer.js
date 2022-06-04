@@ -19,6 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 import imagePath from "../constants/imagePath";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../routes/Router";
+import {  showError, showSuccess } from "../constants/helpers/helperFunctions";
 
 const CustomDrawer = (props) => {
   const navigation = useNavigation();
@@ -57,14 +58,22 @@ const CustomDrawer = (props) => {
         if (result.action === Share.sharedAction) {
           if (result.activityType) {
             // shared with activity type of result.activityType
+            showSuccess("Thanks for sharing the HannaPark app. You received x points for this action")
+
           } else {
             // shared
+            showSuccess("Thanks for sharing the HannaPark app. You received x points for this action")
+
           }
         } else if (result.action === Share.dismissedAction) {
           // dismissed
+          showSuccess("Thanks for sharing the HannaPark app. You received x points for this action")
+
         }
       } catch (error) {
         alert(error.message);
+        showError("failed to share app. Please try again.",e)
+
       }
     };    
     // useEffect(() => {

@@ -6,6 +6,7 @@ import AuthStack from "../navigation/AuthStack";
 import LoadingScreen from "../screens/LoadingScreen";
 import hannaServer from "../api/hannaServer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {  showError, showSuccess } from "../constants/helpers/helperFunctions";
 
 const Stack = createNativeStackNavigator();
 
@@ -74,6 +75,7 @@ export default Router = () => {
           .post("/login", data)
           .then((res) => {
             try {
+              showSuccess("Login successfully. Welcome to hanna parks!")
               console.log("res.data.carDetail: ", res.data.carDetail)
               AsyncStorage.setItem(
                 "userDetails",
@@ -99,6 +101,7 @@ export default Router = () => {
             });
           })
           .catch((err) => {
+            showError("Login failed. Please try again.",err)
             console.log("error sign in", err);
           });
       },
@@ -112,11 +115,13 @@ export default Router = () => {
         // We will also need to handle errors if sign up failed
         // After getting token, we need to persist the token using `SecureStore`
         // In the example, we'll use a dummy token
+       
         try {
           hannaServer
             .post("/register", data)
             // .then(res => console.log("res: ", res))
             .then((res) => {
+              showSuccess("Register successfully.Welcome to hanna parks!")
               AsyncStorage.setItem(
                 "userToken",
                 JSON.stringify(res.data.tokens)
@@ -125,6 +130,8 @@ export default Router = () => {
             });
         } catch (e) {
           console.log("error register", e);
+          showError("Register failed. Please try again.",e)
+
         }
       },
     }),
