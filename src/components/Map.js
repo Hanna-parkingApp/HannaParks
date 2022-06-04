@@ -105,6 +105,7 @@ const Map = (props) => {
       });
     } catch (e) {
       console.log("error loading near parks");
+      
     }
   };
 

@@ -12,6 +12,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormDetail from "../components/FormDetail";
 import imagePath from "../constants/imagePath";
+import {  showError, showSuccess } from "../constants/helpers/helperFunctions";
 
 import PickImageModal from "../constants/alerts/PickImageModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -87,9 +88,12 @@ const ProfileScreen = ({ navigation }) => {
     try {
       hannaServer.post("/update-profile", userDetails)
       .then((res) => console.log(res));
-    
+      showSuccess("Profile changes saved successfully.")
+
     } catch (e) {
       console.log("Error update profile", e);
+      showError("failed to save changes. Please try again.",e)
+
     } 
     
     console.log("save changes");
