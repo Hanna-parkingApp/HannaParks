@@ -7,55 +7,54 @@ import { changeDesState } from "../features/location/locationSlice";
 import { Ionicons } from "@expo/vector-icons";
 
 const FindDestination = (props) => {
+  const { placeholderText } = props;
 
-    const { placeholderText } = props;
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
 
-    const dispatch = useDispatch();
-    const navigation = useNavigation();
+  const fetchDestinationCoords = async (lat, lng, city_name, st_name) => {
+    let desLocation = {
+      latitude: lat,
+      longitude: lng,
+      generalLoc: `${st_name}, ${city_name}`,
+    };
+    dispatch(changeDesState(desLocation));
+    //navigation.navigate('Home');
+  };
 
-    const fetchDestinationCoords = async (lat, lng, city_name, st_name) => {
-        let desLocation = {
-            latitude: lat,
-            longitude: lng,
-            generalLoc: city_name
-        }
-        dispatch(changeDesState(desLocation));
-        //navigation.navigate('Home');
-    }
+  const handleSearchPress = () => {
+    props.handleSearch();
+  };
 
-    const handleSearchPress = () => {
-        props.handleSearch();
-    }
-
-    return (
-        <View style = {styles.container}>
-            <FlatList
-            ListHeaderComponent={
-            <>
-            <View style = {{ marginBottom: 16, flexDirection:'row', zIndex: 10 }} >
-                <AddressPickup 
-                 placeholderText={placeholderText}
-                 fetchAddress = {fetchDestinationCoords}
-                 handleSearchPress={handleSearchPress}
-                />
-            </View>
-                
-            </>}
-            keyboardShouldPersistTaps='handled'
-            style = {{ flex: 1, padding: 24, zIndex: 10}}
+  return (
+    <View style={styles.container}>
+      <FlatList
+        ListHeaderComponent={
+          <>
+            <View
+              style={{ marginBottom: 16, flexDirection: "row", zIndex: 10 }}
             >
-                 
-            </FlatList>
-        </View>
-    )
+              <AddressPickup
+                placeholderText={placeholderText}
+                fetchAddress={fetchDestinationCoords}
+                handleSearchPress={handleSearchPress}
+              />
+            </View>
+          </>
+        }
+        keyboardShouldPersistTaps="handled"
+        style={{ flex: 1, padding: 24, zIndex: 10 }}
+      ></FlatList>
+    </View>
+  );
 };
 
 export default FindDestination;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 0.5,
-        marginTop: 30,
-        zIndex: 10,
-    },
+  container: {
+    flex: 0.5,
+    marginTop: 30,
+    zIndex: 10,
+  },
 });
