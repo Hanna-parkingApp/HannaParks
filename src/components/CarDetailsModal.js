@@ -54,20 +54,20 @@ export default function CarDetailsModal(props) {
           <View style={styles.content}>
             <View>
               <View style={styles.locationContainer}>
-                <Text>St: Rambam 1, {carDetail.generalLoc}</Text>
+                <Text style={styles.title}>{carDetail.generalLoc ?? ""}</Text>
               </View>
               <View style={styles.locationContainer}>
-                <Text style={styles.title}>Car Details:</Text>
-                <Text>brand: kia</Text>
-                <Text>color: red</Text>
-                <Text>Number: 82-292-54</Text>
+                <Text style={{ fontWeight: "bold" }}>Car Details:</Text>
+                <Text>brand: {carDetail.car.make}</Text>
+                <Text>color: {carDetail.car.color}</Text>
+                <Text>Number: {carDetail.car.registrationNumber}</Text>
               </View>
             </View>
             <View style={styles.imgContainer}>
               <Image
                 source={imagePath.icProfile}
                 resizeMode="center"
-                style={{ height: 130, width: 130, borderRadius: 60 }}
+                style={{ height: 100, width: 100, borderRadius: 60 }}
               />
             </View>
           </View>
@@ -90,15 +90,18 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
-    padding: 20,
+    padding: 5,
     borderRadius: 20,
   },
   locationContainer: {
-    marginTop: 15,
+    marginTop: 12,
+    marginRight: 12,
+    width: 140,
   },
   title: {
-    fontSize: 17,
+    fontSize: 14,
     fontWeight: "bold",
+    color: "green",
   },
   imgContainer: {
     borderRadius: 20,
@@ -109,5 +112,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     justifyContent: "space-between",
     alignItems: "center",
+    marginLeft: 30,
   },
 });
