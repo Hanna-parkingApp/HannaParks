@@ -11,9 +11,11 @@ import { selectLocation } from "../features/location/locationSlice";
 import { add_minutes } from "../constants/helpers/helperFunctions";
 import { changeCarDetailState } from "../features/car-detail/carDetailSlice";
 import { selectTransaction } from "../features/transaction/transactionSlice";
+import { selectRoleMode } from "../features/mode/roleModeSlice";
 
 const Map = (props) => {
   const dispatch = useDispatch();
+  const USER_MODE = useSelector(selectRoleMode);
 
   const { width, height, request, setCarDetailsModal } = props;
   const ASPECT_RATIO = width / height;
@@ -27,15 +29,7 @@ const Map = (props) => {
   const [dirOrigin, setDirOrigin] = useState(null);
 
   const userLocation = useSelector(selectLocation);
-  console.log("map user Location: ", userLocation.src);
   const transactionDetails = useSelector(selectTransaction);
-
-  console.log(
-    "transcion detail lat: ",
-    transactionDetails.otherUserLoc.latitude
-  );
-  console.log("user des lat: ", userLocation.des.latitude);
-  console.log("isParking: ", props.isParking);
 
   const markerRef = useRef();
   const mapRef = useRef();
@@ -99,13 +93,12 @@ const Map = (props) => {
 
           console.log("relevant", res.data.relevantParking);
           setNearbyParking(res.data.relevantParking);
-          console.log("parking cars barush", res.data.relevantCars);
+          console.log("parking cars", res.data.relevantCars);
           setParkingCars(res.data.relevantCars);
         }
       });
     } catch (e) {
       console.log("error loading near parks");
-      
     }
   };
 
@@ -118,7 +111,6 @@ const Map = (props) => {
       const { latitude, longitude } = JSON.parse(
         nearbyParking[index].specificLocation
       );
-      console.log("barush parking cars", parkingCars, index);
       const carDetail = {
         id: _id,
         userId: userId,
@@ -178,13 +170,16 @@ const Map = (props) => {
         >
           <Image
             source={
-              request === "SHARE" ? imagePath.manWalking : imagePath.icCurLoc
+              USER_MODE.state === "SHARE"
+                ? imagePath.manWalking
+                : imagePath.icCurLoc
             }
             style={styles.icCar}
           />
         </Marker.Animated>
 
-        {showParking &&
+        {(USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER") &&
+          showParking &&
           nearbyParking.length > 0 &&
           nearbyParking.map((parking, index) => {
             const { latitude, longitude } = JSON.parse(
@@ -226,7 +221,7 @@ const Map = (props) => {
             apikey={GOOGLE_API_KEY}
             strokeWidth={3}
             strokeColor={props.isParking ? "green" : "hotpink"}
-            mode={request === "SHARE" ? "WALKING" : "DRIVING"}
+            mode={USER_MODE.state === "SHARE" ? "WALKING" : "DRIVING"}
             onReady={(result) => {
               fetchNearParking(result);
               mapRef.current.fitToCoordinates(result.coordinates, {
@@ -262,7 +257,7 @@ const Map = (props) => {
               apikey={GOOGLE_API_KEY}
               strokeWidth={3}
               strokeColor={props.isParking ? "yellow" : "hotpink"}
-              mode={request === "SHARE" ? "DRIVING" : "WALKING"}
+              mode={USER_MODE.state === "SEARCHER" ? "DRIVING" : "WALKING"}
             />
           </>
         )}
