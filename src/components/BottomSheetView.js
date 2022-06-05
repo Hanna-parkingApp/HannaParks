@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,25 +7,27 @@ import {
   TouchableOpacity,
   useWindowDimensions,
   View,
-} from 'react-native';
+} from "react-native";
 import Animated, {
   Extrapolate,
   interpolate,
   useAnimatedGestureHandler,
   useAnimatedStyle,
   withTiming,
-} from 'react-native-reanimated';
-import { PanGestureHandler } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
-export default function BottomSheet({ panY, handleSearch }) {
+} from "react-native-reanimated";
+import { PanGestureHandler } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
+import FindDestination from "./FindDestination";
+
+export default function BottomSheet({ panY, showBottomSheet }) {
   const { height } = useWindowDimensions();
   const [dest, setDest] = useState();
-  
+
   const navigation = useNavigation();
 
- const clearSearchContent = () => {
-  setDest('');
- };
+  const clearSearchContent = () => {
+    setDest("");
+  };
 
   const gestureHandler = useAnimatedGestureHandler(
     {
@@ -46,7 +48,6 @@ export default function BottomSheet({ panY, handleSearch }) {
     [height]
   );
 
-
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [
@@ -61,45 +62,49 @@ export default function BottomSheet({ panY, handleSearch }) {
   });
 
   const onPressLocation = () => {
-    navigation.push('Find Destination');
+    // navigation.push("Find Destination");
+    setChooseDes(true);
   };
+
+  const calculateTop = () => {
+    if (chooseDes) return 0.2;
+    return 0.8;
+  };
+
+  const [chooseDes, setChooseDes] = useState(false);
+  const [findParks, setFindParks] = useState(false);
 
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
       <Animated.View
         style={[
           styles.container,
-          { top: height * 0.8 },
+          { top: height * calculateTop() },
           animatedStyle,
         ]}
       >
         <SafeAreaView style={styles.wrapper}>
           <View style={styles.bottomCard}>
-            <Text>Where are you going?</Text>
-            <TouchableOpacity
-            onPress={onPressLocation}
-            style={styles.inputStyle}
-            >
-            <Text>Choose your destination</Text>
-            </TouchableOpacity>
-            {/* <View style={styles.contentContainer}>
-            <Ionicons name='search' size={25} color={'grey'} style = {styles.searchIcon}  />
-            <GooglePlacesInput />
-            <TextInput 
-              style = {styles.searchInput}
-              placeholder='Where are we going?'
-              placeholderTextColor={'grey'}
-              value={dest}
-              onChangeText={setDest}
-              
-              // onPressIn={gestureHandler.onEnd()}
-            />
-            </View> */}
-            {/* <Ionicons name='arrow-forward' size={40} style = {{marginRight: 10}} onPress= {() =>{ 
-              handleSearch(dest);
-              clearSearchContent();
-              }} /> */}
-            <View style={styles.fakeContent} />
+            {chooseDes ? (
+              <FindDestination
+                placeholderText={"Enter Destination Location"}
+                handleSearch={() => {
+                  setChooseDes(false);
+                  showBottomSheet(false);
+                }}
+              />
+            ) : (
+              <>
+                <Text>Where are you going?</Text>
+                <TouchableOpacity
+                  onPress={onPressLocation}
+                  style={styles.inputStyle}
+                >
+                  <Text>Choose your destination</Text>
+                </TouchableOpacity>
+                <View style={styles.fakeContent} />
+              </>
+            )}
           </View>
         </SafeAreaView>
       </Animated.View>
@@ -109,12 +114,12 @@ export default function BottomSheet({ panY, handleSearch }) {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#D6EAF8',
-    shadowColor: 'black',
+    backgroundColor: "#D6EAF8",
+    shadowColor: "black",
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     shadowOffset: {
@@ -125,31 +130,30 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
   bottomCard: {
-    backgroundColor: 'white',
-    width: '100%',
+    backgroundColor: "white",
+    width: "100%",
     padding: 30,
     borderTopEndRadius: 24,
     borderTopStartRadius: 24,
-},
+  },
   wrapper: {
     flex: 1,
   },
   content: {
     flex: 1,
     padding: 20,
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
   },
   contentContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
     borderRadius: 40,
     marginHorizontal: 30,
     height: 40,
     width: 250,
-    
   },
   fakeContent: {
     flex: 1,
@@ -157,20 +161,19 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     left: 0,
-    alignSelf: 'flex-start'
+    alignSelf: "flex-start",
   },
   searchInput: {
     fontSize: 15,
-    fontWeight: 'normal',
+    fontWeight: "normal",
   },
   inputStyle: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 4,
     borderWidth: 1,
-    alignItems: 'center',
+    alignItems: "center",
     height: 48,
-    justifyContent: 'center',
-    marginTop: 10
-},
-
+    justifyContent: "center",
+    marginTop: 10,
+  },
 });

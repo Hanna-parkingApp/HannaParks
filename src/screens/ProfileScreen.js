@@ -12,7 +12,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormDetail from "../components/FormDetail";
 import imagePath from "../constants/imagePath";
-import {  showError, showSuccess } from "../constants/helpers/helperFunctions";
+import { showError, showSuccess } from "../constants/helpers/helperFunctions";
 
 import PickImageModal from "../constants/alerts/PickImageModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,15 +21,14 @@ import { TextInput } from "react-native-gesture-handler";
 import hannaServer from "../api/hannaServer";
 
 const ProfileScreen = ({ navigation }) => {
-
   const initialState = {
-    email: '',
-    fullName: '',
-    carMaker: '',
-    carModel: '',
-    carNumber: '',
-    carColor: '',
-    points: 0
+    email: "",
+    fullName: "",
+    carMaker: "",
+    carModel: "",
+    carNumber: "",
+    carColor: "",
+    points: 0,
   };
 
   const [userDetails, setUserDetails] = useState(initialState);
@@ -50,7 +49,7 @@ const ProfileScreen = ({ navigation }) => {
         email: user_json.email,
         fullName: user_json.fullName,
         points: user_json.points,
-      }
+      };
     }
     if (car !== null) {
       const carArray = JSON.parse(car);
@@ -60,7 +59,7 @@ const ProfileScreen = ({ navigation }) => {
           carMaker: carArray[0].make,
           carNumber: carArray[0].registrationNumber,
           carColor: carArray[0].color,
-        }
+        };
       }
     }
 
@@ -70,8 +69,7 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-      getUserDetails();
-    
+    getUserDetails();
   }, []);
 
   useEffect(() => {
@@ -86,16 +84,15 @@ const ProfileScreen = ({ navigation }) => {
 
   const saveUserDetails = () => {
     try {
-      hannaServer.post("/update-profile", userDetails)
-      .then((res) => console.log(res));
-      showSuccess("Profile changes saved successfully.")
-
+      hannaServer
+        .post("/update-profile", userDetails)
+        .then((res) => console.log(res));
+      showSuccess("Profile changes saved successfully.");
     } catch (e) {
       console.log("Error update profile", e);
-      showError("failed to save changes. Please try again.",e)
+      showError("failed to save changes. Please try again.", e);
+    }
 
-    } 
-    
     console.log("save changes");
     //
     // navigation.navigate("Home");
@@ -109,6 +106,7 @@ const ProfileScreen = ({ navigation }) => {
           size={24}
           color="#52575D"
           onPress={() => navigation.navigate("Home")}
+          style={{ position: "absolute", right: 0 }}
         />
       </View>
       <View style={{ alignSelf: "center" }}>
@@ -157,7 +155,9 @@ const ProfileScreen = ({ navigation }) => {
             labelValue={userDetails.fullName}
             placeholderText="Full Name"
             detailName={"Full Name"}
-            onChangeText={(t) => setUserDetails({...userDetails, fullName: t})}
+            onChangeText={(t) =>
+              setUserDetails({ ...userDetails, fullName: t })
+            }
           />
           <FormDetail
             labelValue={userDetails.email}
@@ -171,25 +171,33 @@ const ProfileScreen = ({ navigation }) => {
                 labelValue={userDetails.carMaker}
                 placeholderText="Car Maker"
                 detailName={"Car Maker"}
-                onChangeText={(t) => setUserDetails({...userDetails, carMaker: t})}
+                onChangeText={(t) =>
+                  setUserDetails({ ...userDetails, carMaker: t })
+                }
               />
               <FormDetail
                 labelValue={userDetails.carModel}
                 placeholderText="Car Model"
                 detailName={"Car Model"}
-                onChangeText={(t) => setUserDetails({...userDetails, carModel: t})}
+                onChangeText={(t) =>
+                  setUserDetails({ ...userDetails, carModel: t })
+                }
               />
               <FormDetail
                 labelValue={userDetails.carNumber}
                 placeholderText="Car Num."
                 detailName={"Car Num."}
-                onChangeText={(t) => setUserDetails({...userDetails, carNumber: t})}
+                onChangeText={(t) =>
+                  setUserDetails({ ...userDetails, carNumber: t })
+                }
               />
               <FormDetail
                 labelValue={userDetails.carColor}
                 placeholderText="Car Color"
                 detailName={"Car Color"}
-                onChangeText={(t) => setUserDetails({...userDetails, carColor: t})}
+                onChangeText={(t) =>
+                  setUserDetails({ ...userDetails, carColor: t })
+                }
               />
             </View>
           )}

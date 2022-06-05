@@ -19,7 +19,6 @@ const FindDestination = (props) => {
       generalLoc: `${st_name}, ${city_name}`,
     };
     dispatch(changeDesState(desLocation));
-    //navigation.navigate('Home');
   };
 
   const handleSearchPress = () => {
@@ -44,6 +43,7 @@ const FindDestination = (props) => {
         }
         keyboardShouldPersistTaps="handled"
         style={{ flex: 1, padding: 24, zIndex: 10 }}
+        handleSearchPress={handleSearchPress}
       ></FlatList>
     </View>
   );
@@ -53,8 +53,6 @@ export default FindDestination;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.5,
-    marginTop: 30,
-    zIndex: 10,
+    height: 480,
   },
 });
