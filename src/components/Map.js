@@ -99,13 +99,12 @@ const Map = (props) => {
 
           console.log("relevant", res.data.relevantParking);
           setNearbyParking(res.data.relevantParking);
-          console.log("parking cars barush", res.data.relevantCars);
+          console.log("parking cars", res.data.relevantCars);
           setParkingCars(res.data.relevantCars);
         }
       });
     } catch (e) {
       console.log("error loading near parks");
-      
     }
   };
 
@@ -118,7 +117,6 @@ const Map = (props) => {
       const { latitude, longitude } = JSON.parse(
         nearbyParking[index].specificLocation
       );
-      console.log("barush parking cars", parkingCars, index);
       const carDetail = {
         id: _id,
         userId: userId,

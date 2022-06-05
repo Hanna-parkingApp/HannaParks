@@ -7,6 +7,7 @@ import {
   Text,
   Pressable,
 } from "react-native";
+import { ActivityIndicator } from "react-native";
 import Map from "../components/Map";
 import { useSharedValue } from "react-native-reanimated";
 import GeoBar from "../components/GeoBar";
@@ -34,6 +35,7 @@ import { selectCarDetail } from "../features/car-detail/carDetailSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDistance } from "geolib";
 import IsArrivedModal from "../constants/alerts/IsArrivedModal";
+import LoadingScreen from "./LoadingScreen";
 
 export default function HomeScreen({ route }) {
   const { width, height } = useWindowDimensions();
@@ -176,7 +178,7 @@ export default function HomeScreen({ route }) {
 
   const y = useSharedValue(0);
 
-  const [showBottomSheet, setShowBottomSheet] = useState(false);
+  const [showBottomSheet, setShowBottomSheet] = useState(true);
 
   return (
     <View style={styles.container}>
@@ -205,7 +207,11 @@ export default function HomeScreen({ route }) {
           isParking={isParking}
         />
       ) : (
-        <Text>Loading Page ...</Text>
+        <ActivityIndicator
+          size="large"
+          style={{ marginTop: 50 }}
+          color="#48D1CC"
+        />
       )}
 
       <IsArrivedModal
