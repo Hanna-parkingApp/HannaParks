@@ -6,6 +6,7 @@ import {
   View,
   Text,
   Pressable,
+  Alert,
 } from "react-native";
 import { ActivityIndicator } from "react-native";
 import Map from "../components/Map";
@@ -38,19 +39,19 @@ import IsArrivedModal from "../constants/alerts/IsArrivedModal";
 import LoadingScreen from "./LoadingScreen";
 import { changeMode, selectRoleMode } from "../features/mode/roleModeSlice";
 import { showSuccessHandShake } from "../constants/helpers/helperFunctions";
+import { selectUserDetails } from "../features/profile/userDetailsSlice";
+
+const SEARCH_COST = -1;
 
 export default function HomeScreen({ route }) {
   const USER_MODE = useSelector(selectRoleMode);
   console.log("USER_MODE: ", USER_MODE);
 
-  const initialState = {
-    myLoc: null,
-    parkingLoc: null,
-  };
-
   const { width, height } = useWindowDimensions();
   const [permissionStatus, setPermissionStatus] = useState(null);
   const [endPoint, setEndPoint] = useState("");
+
+  const userDetails = useSelector(selectUserDetails);
 
   const [carDetailsModal, setCarDetailsModal] = useState(false);
 
@@ -113,6 +114,7 @@ export default function HomeScreen({ route }) {
       (USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER")
     ) {
       updateParkingStatus();
+      updatePoints(SEARCH_COST);
       dispatch(changeDesState(carDetails.specificLoc));
       setAskForLocation(true);
     }
@@ -123,6 +125,34 @@ export default function HomeScreen({ route }) {
       .post("/update-parking-status", { userParkingId: carDetails.id })
       .catch((e) => console.log("Error updating parking status. ", e.response));
   };
+
+  const updatePoints = async (points) => {
+    console.log("lost points");
+    let token_json;
+    try{
+      const token = await AsyncStorage.getItem('userToken');
+      token_json = JSON.parse(token);
+    } catch (e) {
+      console.log('error getting user token for points');
+    }
+    hannaServer.post('/update-user-points', {
+      token: token_json.refreshToken,
+      pointsModifier: points
+    })
+    .then(res => {
+      console.log(res);
+    })
+    .catch(e => console.log("Error points update"))
+  }
+
+  //  TODO: Maybe modal for that message
+  const onPressLocBtn = () => {
+    if (userDetails.points < 1) {
+      Alert.alert("Can't search for new parking due lack of points\n Cheer up! Go and get more points by share parking spot of your own");
+      return false;
+    }
+    return true;
+  }
 
   //  SHARE CONTROLL
   const [showSearchLoading, setShowSearchLoading] = useState(true);

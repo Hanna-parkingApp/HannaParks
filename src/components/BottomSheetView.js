@@ -18,16 +18,22 @@ import Animated, {
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import FindDestination from "./FindDestination";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../features/profile/userDetailsSlice";
 
 export default function BottomSheet({ panY, showBottomSheet }) {
   const { height } = useWindowDimensions();
   const [dest, setDest] = useState();
+
+  const userDetails = useSelector(selectUserDetails);
 
   const navigation = useNavigation();
 
   const clearSearchContent = () => {
     setDest("");
   };
+
+  
 
   const gestureHandler = useAnimatedGestureHandler(
     {
@@ -67,6 +73,7 @@ export default function BottomSheet({ panY, showBottomSheet }) {
   };
 
   const calculateTop = () => {
+    console.log("calculate top: ", chooseDes);
     if (chooseDes) return 0.5;
     return 0.8;
   };
@@ -79,7 +86,7 @@ export default function BottomSheet({ panY, showBottomSheet }) {
       <Animated.View
         style={[
           styles.container,
-          { top: height * calculateTop() },
+          { top: height * 0.8 },
           animatedStyle,
         ]}
       >
@@ -99,6 +106,7 @@ export default function BottomSheet({ panY, showBottomSheet }) {
                 <TouchableOpacity
                   onPress={onPressLocation}
                   style={styles.inputStyle}
+                  disabled={userDetails.points > 1 ? false : true}
                 >
                   <Text>Choose your destination</Text>
                 </TouchableOpacity>

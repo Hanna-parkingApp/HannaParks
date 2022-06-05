@@ -19,6 +19,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import MyButton from "../components/MyButton";
 import { TextInput } from "react-native-gesture-handler";
 import hannaServer from "../api/hannaServer";
+import { useDispatch, useSelector } from "react-redux";
+import { changeUserDetails, selectUserDetails } from "../features/profile/userDetailsSlice";
 
 const ProfileScreen = ({ navigation }) => {
   const initialState = {
@@ -31,7 +33,11 @@ const ProfileScreen = ({ navigation }) => {
     points: 0,
   };
 
-  const [userDetails, setUserDetails] = useState(initialState);
+  const dispatch = useDispatch();
+
+  const userDetails = useSelector(selectUserDetails);  
+
+  // const [userDetails, setUserDetails] = useState(initialState);
   const [carDetails, setCarDetails] = useState();
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -65,7 +71,8 @@ const ProfileScreen = ({ navigation }) => {
 
     const finalDetails = Object.assign(userDetObj, carDetObj);
     console.log(finalDetails);
-    setUserDetails(finalDetails);
+    // setUserDetails(finalDetails);
+    dispatch(changeUserDetails(finalDetails));
   };
 
   useEffect(() => {
