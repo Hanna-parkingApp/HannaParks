@@ -101,7 +101,11 @@ export default Router = () => {
             });
           })
           .catch((err) => {
-            showError("Login failed. Please try again.",err)
+            showError("Login failed. Please try again.",err.data)
+            new Error (err)
+            if (err.match(/(^|\W)400($|\W)/)){
+              showError("Login failed. The password or user is incorrect")
+            }
             console.log("error sign in", err);
           });
       },
@@ -129,8 +133,8 @@ export default Router = () => {
               dispatch({ type: "SIGN_IN", token: res.data.tokens });
             });
         } catch (e) {
+          showError("Register failed. Please try again.")
           console.log("error register", e);
-          showError("Register failed. Please try again.",e)
 
         }
       },
