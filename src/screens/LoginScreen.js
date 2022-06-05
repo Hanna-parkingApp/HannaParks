@@ -6,7 +6,6 @@ import { DrawerActions, useNavigation } from '@react-navigation/native';
 import hannaServer from '../api/hannaServer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
-import { changeUserState, Login } from '../features/auth/authSlice';
 import { AuthContext } from '../routes/Router';
 import {  showSuccess } from "../constants/helpers/helperFunctions";
 

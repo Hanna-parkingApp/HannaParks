@@ -107,7 +107,6 @@ const Map = (props) => {
     try {
       const { _id, address, specificLocation, timeStamp, userId } =
         nearbyParking[index];
-      console.log("adress barush", address);
       const { latitude, longitude } = JSON.parse(
         nearbyParking[index].specificLocation
       );
@@ -122,8 +121,7 @@ const Map = (props) => {
         timeStamp,
         car: parkingCars[index],
       };
-      console.log("line 101, genloc: ", carDetail.generalLoc);
-      console.log("barush", carDetail);
+      
       dispatch(changeCarDetailState(carDetail));
       setCarDetailsModal(true);
     } catch (e) {

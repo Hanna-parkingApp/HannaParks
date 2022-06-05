@@ -27,6 +27,8 @@ import {
 import { selectLocation } from "../features/location/locationSlice";
 import { selectRoleMode } from "../features/mode/roleModeSlice";
 
+const SHARE_COST = 3;
+
 const ShareParkingScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -76,6 +78,13 @@ const ShareParkingScreen = () => {
           dispatch(changeParkingAvailable(true));
           const userParkingId = res.data.userParkingId;
           console.log("userParkingId-SHARE", userParkingId);
+          return userParkingId;
+        })
+        .then(userParkingId => {
+          updatePoints(SHARE_COST);
+          return userParkingId;
+        })
+        .then(userParkingId => {
           navigation.navigate("Home", { userId: userParkingId });
           showSuccess("Thanks for sharing");
         })
@@ -84,6 +93,25 @@ const ShareParkingScreen = () => {
       console.log("failed connect share parking", e);
     }
   };
+
+  const updatePoints = async (points) => {
+    console.log("update points");
+    let token_json;
+    try{
+      const token = await AsyncStorage.getItem('userToken');
+      token_json = JSON.parse(token);
+    } catch (e) {
+      console.log('error getting user token for points');
+    }
+    hannaServer.post('/update-user-points', {
+      token: token_json.refreshToken,
+      pointsModifier: points
+    })
+    .then(res => {
+      console.log(res);
+    })
+    .catch(e => console.log("Error points update"))
+  }
 
   React.useEffect(() => {
     if (!carDetails) return;
