@@ -42,10 +42,22 @@ const AddressPickup = ({
 
   return (
     <View style={styles.container}>
+      <View>
+        <Ionicons
+          name="search"
+          style={styles.iconStyle}
+          size={25}
+          onPress={handleSearchPress}
+        />
+      </View>
       <GooglePlacesAutocomplete
         placeholder={placeholderText}
         onPress={onPressAddress}
         fetchDetails={true}
+        textInputProps={{
+          placeholderTextColor: "gray",
+          returnKeyType: "search",
+        }}
         query={{
           key: GOOGLE_MAP_KEY,
           language: "en",
@@ -56,14 +68,6 @@ const AddressPickup = ({
           textInput: styles.textInputStyle,
         }}
       />
-      <View>
-        <Ionicons
-          name="search"
-          style={styles.iconStyle}
-          size={25}
-          onPress={handleSearchPress}
-        />
-      </View>
     </View>
   );
 };
@@ -76,20 +80,22 @@ const styles = StyleSheet.create({
   },
   containerStyle: {
     backgroundColor: "white",
+    paddingLeft: 5,
+    paddingTop: 5,
+    color: "black",
   },
   iconStyle: {
-    padding: 10,
+    padding: 15,
     height: "100%",
-    width: "50%",
     justifyContent: "center",
     alignItems: "center",
     width: 50,
+    backgroundColor: "white",
   },
   textInputStyle: {
     height: 48,
     color: "black",
     fontSize: 16,
-    backgroundColor: "#f3f3f3",
   },
 });
 
