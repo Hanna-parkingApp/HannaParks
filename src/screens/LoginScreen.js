@@ -31,6 +31,25 @@ const LoginScreen = ({ onFinished }) => {
         password: password
       }
 
+
+        const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      if (reg.test(data.email) === true){
+      }
+      else{
+        Alert.alert("The email entered is invalid");
+      }
+
+
+      if ( data.email.length == 0 || data.password.length == 0 ) {
+        // Alert.alert('Wrong Input!', 'Username or password field cannot be empty.', [
+        // ]);
+        Alert.alert('Username or password field cannot be empty.');
+    }
+
+      if ( data.password.length < 8 ) {
+        Alert.alert('The password must contain minimum of 8 fields');
+    }
+
       signIn(data);      
 
       // hannaServer.post('/login', data)

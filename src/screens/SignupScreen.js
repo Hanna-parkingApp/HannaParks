@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  Alert
 } from "react-native";
 import FormInput from "../components/FormInput";
 import { AuthContext } from "../routes/Router";
@@ -31,6 +32,23 @@ const SignupScreen = ({ navigation }) => {
       carNumber: carNumber,
       carColor: carColor,
     };
+    console.log(data)
+
+    // if( data.fullName.length == 0 || data.email.length == 0 || data.password.length == 0
+    //   || data.carMaker.length == 0 || data.carModel.length == 0 || data.carNumber.length == 0
+    //   || data.carColor.length == 0)
+    //   {
+    //     Alert.alert("One of the fields is empty");
+    //    } 
+
+    console.log("!@#!#!@#1",data.fullName);
+      const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      if (reg.test(data.email) === true){
+      }
+      else{
+        Alert.alert("The email entered is invalid");
+      }
+
     signUp(data);
     //TODO: check if sign up success + add validations
   };
