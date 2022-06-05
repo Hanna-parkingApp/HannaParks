@@ -11,6 +11,7 @@ import Map from '../components/Map';
 import { useDispatch, useSelector } from "react-redux";
 import { changeParkingAvailable, selectTransaction } from "../features/transaction/transactionSlice";
 import { selectLocation } from "../features/location/locationSlice";
+import { selectRoleMode } from "../features/mode/roleModeSlice";
 
 const ShareParkingScreen = () => {
 
@@ -25,6 +26,8 @@ const ShareParkingScreen = () => {
   const [expectedDepratureTime,setExpectedDepratureTime]=useState();
   const [diffMins,setDiffMins]=useState();
 
+  const USER_MODE = useSelector(selectRoleMode);
+  console.log("user mode share screen: ", USER_MODE.state)
 
 //   const imageSrc = require('../assets/house-blue-bg.jpeg');
 
@@ -58,13 +61,10 @@ const ShareParkingScreen = () => {
          dispatch(changeParkingAvailable(true))
          const userParkingId = res.data.userParkingId;
          console.log("userParkingId-SHARE", userParkingId)
-         navigation.goBack('Home', {userId: userParkingId})
+         navigation.navigate('Home', {userId: userParkingId})
          showSuccess("Thanks for sharing")
         })
-      //  .then(() => useDispatch(changeParkingAvailable(true)))
-      //  .then(() => navigation.navigate('Home'))
-      //   .then(() => showSuccess("Thanks for sharing"))
-        .catch((e) => console.log("failed connect share parking",e.response))
+        .catch((e) => console.log("failed connect share parking",e))
       }
        catch(e){
          console.log("failed connect share parking",e)

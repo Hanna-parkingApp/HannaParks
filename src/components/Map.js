@@ -11,10 +11,12 @@ import { selectLocation } from '../features/location/locationSlice';
 import { add_minutes } from '../constants/helpers/helperFunctions';
 import { changeCarDetailState } from '../features/car-detail/carDetailSlice';
 import { selectTransaction } from '../features/transaction/transactionSlice';
+import { selectRoleMode } from '../features/mode/roleModeSlice';
 
 const Map = (props) => {
 
     const dispatch = useDispatch();
+    const USER_MODE = useSelector(selectRoleMode);
     
     const {width, height,request, setCarDetailsModal} = props;
     const ASPECT_RATIO = width / height;
@@ -27,12 +29,11 @@ const Map = (props) => {
     const [dirOrigin, setDirOrigin] = useState(null);
 
     const userLocation = useSelector(selectLocation);
-    console.log("map user Location: ", userLocation.src);
     const transactionDetails = useSelector(selectTransaction);
 
-    console.log("transcion detail lat: ", transactionDetails.otherUserLoc.latitude)
-    console.log("user des lat: ", userLocation.des.latitude)
-    console.log("isParking: ", props.isParking)
+    // console.log("transcion detail lat: ", transactionDetails.otherUserLoc.latitude)
+    // console.log("user des lat: ", userLocation.des.latitude)
+    // console.log("isParking: ", props.isParking)
     
     const markerRef = useRef();    
     const mapRef = useRef();
@@ -57,14 +58,12 @@ const Map = (props) => {
     }
 
     const fetchNearParking = async (result) => {
-        console.log("here hrer ehere")
         if (!showParking) {
         console.log(`Distance: ${result.distance} km`);
         console.log(`Duration: ${result.duration} min`);
         console.log("fit to coords: ", result.coordinates[0]);
 
         const calTimeStamp = add_minutes(new Date(), result.duration);
-        console.log("cal timestamp: ", calTimeStamp);
 
         const data = {
             latitude: userLocation.des.latitude,
@@ -92,14 +91,9 @@ const Map = (props) => {
         try {
             await hannaServer.post('/find-parks', data)
             .then(res => {
-                console.log("res.data",res.data)
-                if (res.status === 200) {
-                    // const specific_parking = res.data.nearbyParking[0].specificLocation;
-                    // const json = JSON.parse(specific_parking);
-
-                    console.log("relevant",res.data.relevantParking)
-                    setNearbyParking(res.data.relevantParking);
-                }
+                // console.log("res.data",res.data)
+                // console.log("relevant",res.data.relevantParking)
+                setNearbyParking(res.data.relevantParking);
             })
             
         } catch(e) {
@@ -108,7 +102,6 @@ const Map = (props) => {
     } 
 
     const handleMarkerPress = (index) => {
-        console.log("Marker Pressed");
         try {
             const { _id, generalLocation, specificLocation, timeStamp, userId } = nearbyParking[index];
             const { latitude, longitude} = JSON.parse(nearbyParking[index].specificLocation);
@@ -123,7 +116,6 @@ const Map = (props) => {
                 timeStamp,
                 car: null
             }
-            console.log("line 101, genloc: ", carDetail.generalLoc);
             dispatch(changeCarDetailState(carDetail));
             setCarDetailsModal(true);
         } catch (e) {
@@ -149,10 +141,10 @@ const Map = (props) => {
     }, [userLocation.des?.latitude])
 
     useEffect(() => {
-        if (nearbyParking.length > 0 && !showParking) {
+        if (nearbyParking?.length > 0 && !showParking) {
             setShowParking(true);
         }
-    },[nearbyParking.length])
+    },[nearbyParking?.length])
     
     return (
         <>
@@ -172,12 +164,12 @@ const Map = (props) => {
                     coordinate= {coordinates[0]} 
                 >
                     <Image 
-                        source={request === 'SHARE' ? imagePath.manWalking : imagePath.icCurLoc}
+                        source={USER_MODE.state === 'SHARE' ? imagePath.manWalking : imagePath.icCurLoc}
                         style = {styles.icCar}
                     />
                 </Marker.Animated>
 
-                {showParking && nearbyParking.length > 0 && nearbyParking.map((parking, index) => {
+                {(USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER") && showParking && nearbyParking.length > 0 && nearbyParking.map((parking, index) => {
                     const { latitude, longitude} = JSON.parse(parking.specificLocation)
                     
                     return (
@@ -206,7 +198,7 @@ const Map = (props) => {
                 apikey={GOOGLE_API_KEY}
                 strokeWidth = {3}
                 strokeColor = {props.isParking? "green" : "hotpink"}
-                mode={request === "SHARE" ? "WALKING" : "DRIVING"}
+                mode={USER_MODE.state === "SHARE" ? "WALKING" : "DRIVING"}
                 onReady={(result) => {fetchNearParking(result); mapRef.current.fitToCoordinates(result.coordinates, {
                     edgePadding: {
                         // right: 30,
@@ -234,7 +226,7 @@ const Map = (props) => {
                     apikey={GOOGLE_API_KEY}
                     strokeWidth = {3}
                     strokeColor = {props.isParking? "yellow" : "hotpink"}
-                    mode={request === "SHARE" ? "DRIVING" : "WALKING"}
+                    mode={USER_MODE.state === "SEARCHER" ? "DRIVING" : "WALKING"}
                 />
                 </>
             )}  

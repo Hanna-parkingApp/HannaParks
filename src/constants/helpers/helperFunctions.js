@@ -29,3 +29,12 @@ export const showSuccess = async (message) => {
         icon: 'success',
     })
 }
+
+export const showSuccessHandShake = async (message) => {
+    await delay(2);
+    showMessage({
+        message,
+        type: 'info',
+        icon: 'info',
+    })
+}
