@@ -67,7 +67,7 @@ export default function BottomSheet({ panY, showBottomSheet }) {
   };
 
   const calculateTop = () => {
-    if (chooseDes) return 0.2;
+    if (chooseDes) return 0.5;
     return 0.8;
   };
 

@@ -4,6 +4,7 @@ import {
   Text,
   View,
   useWindowDimensions,
+  ImageBackground,
   Pressable,
 } from "react-native";
 import hannaServer from "../api/hannaServer";
@@ -24,6 +25,7 @@ import {
   selectTransaction,
 } from "../features/transaction/transactionSlice";
 import { selectLocation } from "../features/location/locationSlice";
+import { selectRoleMode } from "../features/mode/roleModeSlice";
 
 const ShareParkingScreen = () => {
   const navigation = useNavigation();
@@ -37,6 +39,9 @@ const ShareParkingScreen = () => {
   const [expectedDepartureTime, setExpectedDepartureTime] = useState();
   const [diffMins, setDiffMins] = useState(0);
 
+  const USER_MODE = useSelector(selectRoleMode);
+  console.log("user mode share screen: ", USER_MODE.state);
+
   const handleShareBtn = async () => {
     console.log("shared parking", carDetails);
 
@@ -48,6 +53,11 @@ const ShareParkingScreen = () => {
       let carDetailJson = JSON.parse(carDetail);
       let carNumber = carDetailJson[0].registrationNumber;
 
+      let durationArrivedTime = add_minutes(
+        carDetails.timeStamp,
+        expectedDepartureTime
+      );
+      setDiffMins(diff_minutes(durationArrivedTime, new Date()));
       const userParking = {
         userToken: userTokenJson.refreshToken,
         specificLocation: {
@@ -66,10 +76,10 @@ const ShareParkingScreen = () => {
           dispatch(changeParkingAvailable(true));
           const userParkingId = res.data.userParkingId;
           console.log("userParkingId-SHARE", userParkingId);
-          navigation.goBack("Home", { userId: userParkingId });
-          showSuccess("Thanks for sharing Parking");
+          navigation.navigate("Home", { userId: userParkingId });
+          showSuccess("Thanks for sharing");
         })
-        .catch((e) => console.log("failed connect share parking", e.response));
+        .catch((e) => console.log("failed connect share parking", e));
     } catch (e) {
       console.log("failed connect share parking", e);
     }
@@ -164,7 +174,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 5,
+    marginBottom: 35,
   },
   cancelBtn: {
     borderRadius: 10,
@@ -186,96 +196,3 @@ const styles = StyleSheet.create({
     flex: 2,
   },
 });
-
-// React.useEffect(() => {
-//   if (!carDetails) return;
-//   let durationArrivedTime = add_minutes(
-//     carDetails.timeStamp,
-//     expectedDepartureTime
-//   );
-//   setDiffMins(diff_minutes(durationArrivedTime, new Date()));
-// }, [expectedDepartureTime]);
-
-//   return (
-//     <View style={styles.SharingContainer}>
-//       <View style={styles.findDes}>
-//         <FindDestination
-//           placeholderText={"Where is your car at?"}
-//           handleSearch={() => console.log("stay in the same page")}
-//         />
-//         <Map
-//           width={width}
-//           height={height / 1.4}
-//           request={"SHARE"}
-//           setCarDetails={setCarDetails}
-//           isParking={false}
-//         />
-//       </View>
-//       <View style={styles.SharedParkingDetails}>
-//         <Text style={{ fontSize: 12, fontWeight: "bold" }}>
-//           Expected Departure Time:
-//         </Text>
-//         <NumericInput
-//           minValue={0}
-//           totalHeight={30}
-//           onChange={setExpectedDepartureTime}
-//         />
-//         <Text
-//           style={{ fontSize: 12, fontWeight: "bold", alignItems: "center" }}
-//         >
-//           Expected Arrived Time: {diffMins ?? "0"}
-//         </Text>
-//       </View>
-//       <View style={styles.buttons}>
-//         <Pressable style={styles.cancelBtn} onPress={() => navigation.goBack()}>
-//           <Text style={styles.textBtn}>Cancel</Text>
-//         </Pressable>
-//         <Pressable style={styles.shareBtn} onPress={handleShareBtn}>
-//           <Text style={styles.textBtn}>Share</Text>
-//         </Pressable>
-//       </View>
-//     </View>
-//   );
-// };
-
-// export default ShareParkingScreen;
-
-// const styles = StyleSheet.create({
-//   SharingContainer: {
-//     flex: 1,
-//     display: "flex",
-//     justifyContent: "space-between",
-//   },
-//   SharedParkingDetails: {
-//     justifyContent: "space-evenly",
-//     flex: 0.5,
-//     alignItems: "center",
-//   },
-//   buttons: {
-//     display: "flex",
-//     flexDirection: "row",
-//     alignItems: "center",
-//     justifyContent: "center",
-//     marginBottom: 10,
-//   },
-//   cancelBtn: {
-//     borderRadius: 10,
-//     margin: 5,
-//     backgroundColor: "red",
-//   },
-//   shareBtn: {
-//     borderRadius: 10,
-//     margin: 5,
-//     backgroundColor: "green",
-//   },
-//   textBtn: {
-//     padding: 12,
-//     color: "white",
-//   },
-//   findDes: {
-//     flex: 2,
-//   },
-//   map: {
-//     flex: 2,
-//   },
-// });

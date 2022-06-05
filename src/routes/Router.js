@@ -138,6 +138,43 @@ export default Router = () => {
 
         }
       },
+      generateCode: async (data) => {
+        try {
+          hannaServer
+            .post("/generateRecoveryCode", data)
+            .then((res) => {
+              console.log(res)
+              AsyncStorage.setItem("generateRecoveryCode", JSON.stringify(res.status));
+            })
+        } catch (e) {
+          console.log("error generating recovery code", e);
+          showError("generating recovery code failed. Please try again.",e)
+        }
+      },
+      verifyCode: async (data) => {
+        try {
+          hannaServer
+          .post("/verifyRecoveryCode", data)
+          .then((res) => {
+            AsyncStorage.setItem("verifyRecoveryCode", JSON.stringify(res.status));
+          })
+        } catch (e) {
+          console.log("error verifying recovery code", e);
+          showError("verifying recovery code failed. Please try again.",e)
+        }
+        
+      },
+      changePassword: async (data) => {
+        try {
+          hannaServer
+            .post("/changePassword", data)
+            .then((res) => {
+              AsyncStorage.setItem("changePassword", JSON.stringify(res.status));
+            })
+        } catch (e) {
+          
+        }
+      }
     }),
     []
   );
