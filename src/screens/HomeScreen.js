@@ -209,7 +209,7 @@ export default function HomeScreen({ route }) {
       ) : (
         <ActivityIndicator
           size="large"
-          style={{ marginTop: 50 }}
+          style={{ marginTop: "55%" }}
           color="#48D1CC"
         />
       )}
