@@ -36,8 +36,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDistance } from "geolib";
 import IsArrivedModal from "../constants/alerts/IsArrivedModal";
 import LoadingScreen from "./LoadingScreen";
+import { changeMode, selectRoleMode } from "../features/mode/roleModeSlice";
+import { showSuccessHandShake } from "../constants/helpers/helperFunctions";
 
 export default function HomeScreen({ route }) {
+  const USER_MODE = useSelector(selectRoleMode);
+  console.log("USER_MODE: ", USER_MODE);
+
+  const initialState = {
+    myLoc: null,
+    parkingLoc: null,
+  };
+
   const { width, height } = useWindowDimensions();
   const [permissionStatus, setPermissionStatus] = useState(null);
   const [endPoint, setEndPoint] = useState("");
@@ -66,22 +76,10 @@ export default function HomeScreen({ route }) {
     setEndPoint(dest);
   };
 
-  useEffect(() => {
-    if (route.params?.userId) {
-      setUserParkingId(route.params.userId);
-    }
-  }, [route.params?.userId]);
-
+  //  Location Settings
   useEffect(() => {
     if (!permissionStatus) askForPermissions();
   }, []);
-
-  useEffect(() => {
-    if (permissionStatus) {
-      const interval = setInterval(() => getLocation(), 6 * 1000);
-      return () => clearInterval(interval);
-    }
-  }, [permissionStatus]);
 
   const askForPermissions = async () => {
     console.log("ask for permissions...");
@@ -94,11 +92,31 @@ export default function HomeScreen({ route }) {
     setPermissionStatus(status);
   };
 
+  useEffect(() => {
+    if (permissionStatus) {
+      const interval = setInterval(() => getLocation(), 6 * 1000);
+      return () => clearInterval(interval);
+    }
+  }, [permissionStatus]);
+
   const getLocation = async () => {
     console.log("get location");
     const location = await Location.getCurrentPositionAsync({});
     dispatch(changeSrcState(location));
   };
+
+  //  SEARCHER CONTROLLER
+  useEffect(() => {
+    console.log("is parking!!!", isParking);
+    if (
+      isParking &&
+      (USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER")
+    ) {
+      updateParkingStatus();
+      dispatch(changeDesState(carDetails.specificLoc));
+      setAskForLocation(true);
+    }
+  }, [isParking]);
 
   const updateParkingStatus = async () => {
     hannaServer
@@ -106,9 +124,21 @@ export default function HomeScreen({ route }) {
       .catch((e) => console.log("Error updating parking status. ", e.response));
   };
 
+  //  SHARE CONTROLL
+  const [showSearchLoading, setShowSearchLoading] = useState(true);
+
   useEffect(() => {
-    if (isParkingAvail && isAvail && userParkingId) {
-      let interval = setInterval(() => {
+    if (route.params?.userId) {
+      setUserParkingId(route.params.userId);
+    }
+  }, [route.params?.userId]);
+
+  useEffect(() => {
+    console.log("User mode.state: ", USER_MODE);
+    console.log(userParkingId);
+    let interval;
+    if (USER_MODE.state === "SHARE" && userParkingId) {
+      interval = setInterval(() => {
         console.log("check if parking is available ");
         hannaServer
           .post("/parking-status", { userParkingId })
@@ -116,25 +146,31 @@ export default function HomeScreen({ route }) {
             console.log("res.data.isAvail", res.data.isAvail);
             if (!res.data.isAvail) {
               console.log("clearing interval");
+              setIsAvail(false);
               clearInterval(interval);
             }
-            //setIsAvail(res.data.isAvail);
+            dispatch(changeOtherUserLoc(shareCurLoc));
           })
           .catch((e) =>
-            console.log(
-              "error getting parking status from server, ",
-              e.response
-            )
+            console.log("error calling navigation updater", e.data)
           );
       }, 6 * 1000);
     }
-  }, [isParkingAvail, userParkingId]);
+  }, [USER_MODE, userParkingId]);
 
   useEffect(() => {
+    if (!isAvail && USER_MODE.state === "SHARE") {
+      showSuccessHandShake("Someone is on his way to your parking lot!");
+      setShowSearchLoading(false);
+    }
+  }, [isAvail]);
+
+  useEffect(() => {
+    let interval;
     if (askForLocation) {
       console.log("asking for opponent location");
       let userTokenJson;
-      const interval = setInterval(async () => {
+      interval = setInterval(async () => {
         try {
           let userToken = await AsyncStorage.getItem("userToken");
           userTokenJson = JSON.parse(userToken);
@@ -146,35 +182,30 @@ export default function HomeScreen({ route }) {
           .post("/navigation-updater", {
             userId: carDetails.userId,
             userToken: userTokenJson.refreshToken,
-            userType: "FIND",
+            userType: USER_MODE.state || USER_MODE,
             myLoc: userLocation.src,
           })
           .then((res) => {
-            const shareCurLoc = JSON.parse(res.data.updatedObj.shareCurLoc);
-            console.log("home screen user location: ", userLocation.src);
+            const json =
+              USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER"
+                ? res.data.updatedObj.shareCurLoc
+                : res.data.updatedObj.searcherCurLoc;
+            const otherCurLoc = JSON.parse(json);
+            console.log("other cur loc:", otherCurLoc);
+            console.log("home screen user location #src: ", userLocation.src);
+            console.log("home screen user location #des: ", userLocation.des);
 
             const distance = getDistance(userLocation.src, userLocation.des);
             if (distance < 1000) {
               setIsArrivedModal(true);
-              clearInterval(interval);
+              return clearInterval(interval);
             }
-            dispatch(changeOtherUserLoc(shareCurLoc));
+            dispatch(changeOtherUserLoc(otherCurLoc));
           })
-          .catch((e) =>
-            console.log("error calling navigation updater", e.data)
-          );
+          .catch((e) => console.log("error calling navigation updater ", e));
       }, 6 * 1000);
     }
   }, [askForLocation]);
-
-  useEffect(() => {
-    console.log("is parking!!!", isParking);
-    if (isParking) {
-      updateParkingStatus();
-      dispatch(changeDesState(carDetails.specificLoc));
-      setAskForLocation(true);
-    }
-  }, [isParking]);
 
   const y = useSharedValue(0);
 
@@ -185,10 +216,24 @@ export default function HomeScreen({ route }) {
       <StatusBar barStyle="dark-content" />
       <Header />
 
-      <MyButton
-        title={"Share parking"}
-        onPress={() => navigation.navigate("Share-Parking")}
-      />
+      {(USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER") && (
+        <MyButton
+          title={"Share parking"}
+          onPress={() => {
+            dispatch(changeMode("SHARE"));
+            navigation.navigate("Share-Parking");
+          }}
+        />
+      )}
+      {USER_MODE === "SHARE" ||
+        (USER_MODE.state === "SHARE" && showSearchLoading && (
+          <View style={styles.searchMatchLoaderContainer}>
+            <Text style={styles.waitingSearchText}>
+              Waiting for parking match ...
+            </Text>
+            <ActivityIndicator color={"white"} style={{ marginRight: 10 }} />
+          </View>
+        ))}
 
       {carDetailsModal && (
         <CarDetailsModal
@@ -217,9 +262,8 @@ export default function HomeScreen({ route }) {
       <IsArrivedModal
         modalVisible={isArrivedModal}
         setModalVisible={setIsArrivedModal}
-        width={width / 2}
-        height={height / 1.5}
         setIsParking={setIsParking}
+        setAskForLocation={setAskForLocation}
       />
 
       {showBottomSheet ? (
@@ -229,6 +273,7 @@ export default function HomeScreen({ route }) {
           handleSearch={handleSearch}
         />
       ) : (
+        //TODO: cancel the navigation to the parking
         <Pressable
           style={styles.cancelBtn}
           onPress={() => setShowBottomSheet(true)}
@@ -246,11 +291,24 @@ const styles = StyleSheet.create({
   },
   cancelBtn: {
     position: "absolute",
-    bottom: 5,
-    left: 5,
+    bottom: 45,
+    left: 20,
     backgroundColor: "red",
     color: "white",
     padding: 10,
     borderRadius: 5,
+  },
+  searchMatchLoaderContainer: {
+    backgroundColor: "#48D1CC",
+    paddingVertical: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  waitingSearchText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "white",
+    lineHeight: 21,
+    marginHorizontal: 5,
   },
 });

@@ -109,7 +109,7 @@ const SpecificSharingScreen = () => {
                   latitude: carDetails.latitude,
                   longitude: carDetails.longitude,
                 },
-                generalLocation: carDetails.generalLoc,
+                genralLocation: carDetails.generalLoc,
                 timeStamp: carDetails.timeStamp,
               };
               hannaServer

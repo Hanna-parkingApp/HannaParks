@@ -6,7 +6,11 @@ import { useDispatch } from 'react-redux';
 import { changeDesState } from '../../features/location/locationSlice';
 import { changeOtherUserLoc } from '../../features/transaction/transactionSlice';
 
-export default function IsArrivedModal({ modalVisible, setModalVisible, width, height, setIsParking }) {
+export default function IsArrivedModal({
+   modalVisible, 
+   setModalVisible, 
+   setIsParking, 
+   setAskForLocation }) {
 
     const dispatch = useDispatch();
 
@@ -15,10 +19,9 @@ export default function IsArrivedModal({ modalVisible, setModalVisible, width, h
         dispatch(changeDesState({ latitude: null, longitude: null, generalLoc: ''}))
         dispatch(changeOtherUserLoc({ latitude: null, longitude: null}))
         setIsParking(false);
+        setAskForLocation(false);
         setModalVisible(false);
         showMessage("Arrive destination successfully!");
-
-
     }
 
     const handleNotArrivedBtn = () => {
