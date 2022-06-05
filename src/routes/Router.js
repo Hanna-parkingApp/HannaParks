@@ -140,6 +140,7 @@ export default Router = () => {
             .post("/generateRecoveryCode", data)
             .then((res) => {
               console.log(res)
+              AsyncStorage.setItem("generateRecoveryCode", JSON.stringify(res.status));
             })
         } catch (e) {
           console.log("error generating recovery code", e);
@@ -151,7 +152,7 @@ export default Router = () => {
           hannaServer
           .post("/verifyRecoveryCode", data)
           .then((res) => {
-            return res.status;
+            AsyncStorage.setItem("verifyRecoveryCode", JSON.stringify(res.status));
           })
         } catch (e) {
           console.log("error verifying recovery code", e);
@@ -164,7 +165,7 @@ export default Router = () => {
           hannaServer
             .post("/changePassword", data)
             .then((res) => {
-              return res;
+              AsyncStorage.setItem("changePassword", JSON.stringify(res.status));
             })
         } catch (e) {
           

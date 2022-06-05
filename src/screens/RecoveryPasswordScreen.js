@@ -5,6 +5,7 @@ import StyleSheetValidation from 'react-native/Libraries/StyleSheet/StyleSheetVa
 import FormInput from '../components/FormInput'
 import HannaText from '../components/HannaText'
 import { AuthContext } from '../routes/Router';
+import {  showError, showSuccess } from "../constants/helpers/helperFunctions";
 
 const RecoveryPassword = ({ navigation }) => {
 
@@ -19,6 +20,7 @@ const RecoveryPassword = ({ navigation }) => {
       console.log("sendCode Pressed");
       const data = { email: email };
       const res = await generateCode(data);
+      
     }
 
     const checkCode = async () => {
@@ -27,7 +29,12 @@ const RecoveryPassword = ({ navigation }) => {
         email: email
        };
       const res = await verifyCode(data);
-      // TODO: check res status
+      if (await AsyncStorage.getItem("verifyRecoveryCode") == 200) {
+        showSuccess("Code Verifyied");
+      }
+      else {
+        showError("Code Failed");
+      }
     }
 
     const updatePassword = async () => {
@@ -37,6 +44,12 @@ const RecoveryPassword = ({ navigation }) => {
           newPassword: newPassword 
         };
         const res = await changePassword(data)
+        if (await AsyncStorage.getItem("changePassword") == 200) {
+          showSuccess("Password Changed Successfully");
+        }
+        else {
+          showError("Password Change Failed");
+        }
       }
     }
     
@@ -106,7 +119,8 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       padding: 1,
-      paddingTop: 100
+      paddingTop: 100,
+      backgroundColor: 'white'
     },
     logo: {
       height: 150,
