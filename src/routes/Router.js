@@ -102,10 +102,10 @@ export default Router = () => {
           })
           .catch((err) => {
             showError("Login failed. Please try again.",err.data)
-            new Error (err)
-            if (err.match(/(^|\W)400($|\W)/)){
-              showError("Login failed. The password or user is incorrect")
-            }
+            // new Error (err)
+            // if (err.match(/(^|\W)400($|\W)/)){
+            //   showError("Login failed. The password or user is incorrect")
+            // }
             console.log("error sign in", err);
           });
       },
