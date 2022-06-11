@@ -296,7 +296,7 @@ export default function HomeScreen({ route }) {
         setAskForLocation={setAskForLocation}
       />
 
-      {showBottomSheet ? (
+      {showBottomSheet && (USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER") ?  (
         <BottomSheet
           showBottomSheet={(show) => setShowBottomSheet(show)}
           panY={y}
@@ -308,7 +308,7 @@ export default function HomeScreen({ route }) {
           style={styles.cancelBtn}
           onPress={() => setShowBottomSheet(true)}
         >
-          <Text style={{ color: "white" }}>Cancel </Text>
+          <Text style={{ color: "white", alignSelf: 'center' }}>Abort</Text>
         </Pressable>
       )}
     </View>
@@ -321,12 +321,16 @@ const styles = StyleSheet.create({
   },
   cancelBtn: {
     position: "absolute",
-    bottom: 45,
-    left: 20,
+    bottom: 40,
+    right: 10,
+    left: 10,
     backgroundColor: "red",
     color: "white",
+    height: 50,
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 50,
+    justifyContent: 'center',
+    marginHorizontal: 35,
   },
   searchMatchLoaderContainer: {
     backgroundColor: "#48D1CC",
