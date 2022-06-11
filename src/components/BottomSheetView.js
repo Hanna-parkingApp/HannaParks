@@ -43,7 +43,7 @@ export default function BottomSheet({ panY, showBottomSheet }) {
       },
       onEnd() {
         if (panY.value < -height * 0.4) {
-          panY.value = withTiming(-(height * 0.64)); //0.7
+          panY.value = withTiming(-(height * 0.64)); //0.64
         } else {
           panY.value = withTiming(0);
         }
@@ -104,7 +104,7 @@ export default function BottomSheet({ panY, showBottomSheet }) {
                 <TouchableOpacity
                   onPress={onPressLocation}
                   style={styles.inputStyle}
-                  disabled={userDetails.points > 1 ? false : true}
+                  //disabled={userDetails.points > 1 ? false : true}
                 >
                   <Text>
                     {userDetails.points > 1
