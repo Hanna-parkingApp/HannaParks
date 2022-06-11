@@ -25,6 +25,7 @@ import { Ionicons } from "@expo/vector-icons";
 export default function BottomSheet({ panY, showBottomSheet }) {
   const { height } = useWindowDimensions();
   const [dest, setDest] = useState();
+  const [slideVal, setSlideVal] = useState(0.8) 
 
   const userDetails = useSelector(selectUserDetails);
 
@@ -68,8 +69,14 @@ export default function BottomSheet({ panY, showBottomSheet }) {
 
   const onPressLocation = () => {
     // navigation.push("Find Destination");
+    setSlideVal(0.16);
     setChooseDes(true);
   };
+
+  const onCloseSearch = () => {
+    setSlideVal(0.8)
+    setChooseDes(false)
+  }
 
   const [chooseDes, setChooseDes] = useState(false);
   const [findParks, setFindParks] = useState(false);
@@ -77,7 +84,7 @@ export default function BottomSheet({ panY, showBottomSheet }) {
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
       <Animated.View
-        style={[styles.container, { top: height * 0.85 }, animatedStyle]}
+        style={[styles.container, { top: height * slideVal }, animatedStyle]}
       >
         <SafeAreaView style={styles.wrapper}>
           <View style={styles.bottomCard}>
@@ -87,7 +94,7 @@ export default function BottomSheet({ panY, showBottomSheet }) {
                   name="close-outline"
                   size={30}
                   color="#52575D"
-                  onPress={() => setChooseDes(false)}
+                  onPress={onCloseSearch}
                   style={{
                     position: "absolute",
                     padding: 20,
