@@ -203,7 +203,7 @@ const Map = (props) => {
               </Marker.Animated>
             );
           })}
-        {userLocation.des.latitude && (
+        {userLocation.des?.latitude && (
           <Marker.Animated
             coordinate={{
               latitude: userLocation.des.latitude,
@@ -212,7 +212,7 @@ const Map = (props) => {
             title="des"
           />
         )}
-        {userLocation.des.latitude && (
+        {userLocation.des?.latitude && (
           <MapViewDirections
             origin={dirOrigin}
             destination={userLocation.des}
@@ -233,7 +233,7 @@ const Map = (props) => {
             }}
           />
         )}
-        {userLocation.des.latitude && transactionDetails.otherUserLoc.latitude && (
+        {userLocation.des?.latitude && transactionDetails.otherUserLoc.latitude && (
           <>
             <Marker.Animated
               coordinate={{
