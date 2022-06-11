@@ -33,8 +33,6 @@ export default function BottomSheet({ panY, showBottomSheet }) {
     setDest("");
   };
 
-  
-
   const gestureHandler = useAnimatedGestureHandler(
     {
       onStart(_, context) {
@@ -86,7 +84,7 @@ export default function BottomSheet({ panY, showBottomSheet }) {
       <Animated.View
         style={[
           styles.container,
-          { top: height * 0.8 },
+          { top: height * calculateTop() },
           animatedStyle,
         ]}
       >
@@ -108,7 +106,11 @@ export default function BottomSheet({ panY, showBottomSheet }) {
                   style={styles.inputStyle}
                   disabled={userDetails.points > 1 ? false : true}
                 >
-                  <Text>Choose your destination</Text>
+                  <Text>
+                    {userDetails.points > 1
+                      ? "Choose your destination"
+                      : "Not enough points for searching"}
+                  </Text>
                 </TouchableOpacity>
                 <View style={styles.fakeContent} />
               </>
