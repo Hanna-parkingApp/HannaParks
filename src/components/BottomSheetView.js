@@ -20,6 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 import FindDestination from "./FindDestination";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../features/profile/userDetailsSlice";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function BottomSheet({ panY, showBottomSheet }) {
   const { height } = useWindowDimensions();
@@ -70,34 +71,37 @@ export default function BottomSheet({ panY, showBottomSheet }) {
     setChooseDes(true);
   };
 
-  const calculateTop = () => {
-    console.log("calculate top: ", chooseDes);
-    if (chooseDes) return 0.5;
-    return 0.8;
-  };
-
   const [chooseDes, setChooseDes] = useState(false);
   const [findParks, setFindParks] = useState(false);
 
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
       <Animated.View
-        style={[
-          styles.container,
-          { top: height * calculateTop() },
-          animatedStyle,
-        ]}
+        style={[styles.container, { top: height * 0.85 }, animatedStyle]}
       >
         <SafeAreaView style={styles.wrapper}>
           <View style={styles.bottomCard}>
             {chooseDes ? (
-              <FindDestination
-                placeholderText={"Enter Destination Location"}
-                handleSearch={() => {
-                  setChooseDes(false);
-                  showBottomSheet(false);
-                }}
-              />
+              <>
+                <Ionicons
+                  name="close-outline"
+                  size={30}
+                  color="#52575D"
+                  onPress={() => setChooseDes(false)}
+                  style={{
+                    position: "absolute",
+                    padding: 20,
+                    zIndex: 100,
+                  }}
+                />
+                <FindDestination
+                  placeholderText={"Enter Destination Location"}
+                  handleSearch={() => {
+                    setChooseDes(false);
+                    showBottomSheet(false);
+                  }}
+                />
+              </>
             ) : (
               <>
                 <Text>Where are you going?</Text>
@@ -143,6 +147,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     width: "100%",
     padding: 30,
+    paddingBottom: 500,
     borderTopEndRadius: 24,
     borderTopStartRadius: 24,
   },
