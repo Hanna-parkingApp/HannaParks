@@ -11,7 +11,7 @@ const AddressPickup = ({
 }) => {
   const onPressAddress = (data, details) => {
     console.log("************");
-    let city, street, streetNum;
+    let city, street, streetNum="";
     let address_components = details.address_components;
 
     city = address_components.find(
@@ -21,8 +21,8 @@ const AddressPickup = ({
       (element) => element.types[0] === "route"
     ).short_name;
     streetNum = address_components.find(
-      (element) => element.types[0] === "street_number"
-    ).short_name;
+      (element) => element?.types[0] === "street_number"
+    )?.short_name;
 
     let geometry = details.geometry;
     let lat = geometry.location.lat;
