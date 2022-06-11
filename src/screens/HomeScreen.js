@@ -154,8 +154,19 @@ export default function HomeScreen({ route }) {
     return true;
   }
 
+  const stopSearching = () => {
+    dispatch(changeDesState(null));
+    setShowBottomSheet(true);
+  }
+
   //  SHARE CONTROLL
   const [showSearchLoading, setShowSearchLoading] = useState(true);
+
+  useEffect(() => {
+    if (USER_MODE === 'SHARE' || USER_MODE.state === 'SHARE') {
+      setShowBottomSheet(false);
+    }
+  }, [USER_MODE])
 
   useEffect(() => {
     if (route.params?.userId) {
@@ -164,7 +175,7 @@ export default function HomeScreen({ route }) {
   }, [route.params?.userId]);
 
   useEffect(() => {
-    console.log("User mode.state: ", USER_MODE);
+    console.log("User mode.state: ", USER_MODE.state);
     console.log(userParkingId);
     let interval;
     if (USER_MODE.state === "SHARE" && userParkingId) {
@@ -173,12 +184,20 @@ export default function HomeScreen({ route }) {
         hannaServer
           .post("/parking-status", { userParkingId })
           .then((res) => {
-            console.log("res.data.isAvail", res.data.isAvail);
+            console.log("res.data.isAvail", res.data.isAvail, userParkingId);
+            console.log("User mode#############: ", USER_MODE);
+            
             if (!res.data.isAvail) {
               console.log("clearing interval");
               setIsAvail(false);
               clearInterval(interval);
             }
+            
+            if (USER_MODE === 'SEARCHER' || USER_MODE.state === 'SEARCHER') {
+              console.log("clearing interval");
+              clearInterval(interval);
+            }
+
             dispatch(changeOtherUserLoc(shareCurLoc));
           })
           .catch((e) =>
@@ -195,6 +214,21 @@ export default function HomeScreen({ route }) {
     }
   }, [isAvail]);
 
+  const stopSharing = async () => {
+
+    await hannaServer.put('/delete-parking', { userParkingId: userParkingId })
+    .then(res => {
+      console.log(res.data);
+      if (res.data.isDeleted) {
+        dispatch(changeMode('SEARCHER'));
+        dispatch(changeDesState(null));
+        setShowBottomSheet(true);
+      }
+    })
+    .catch(e => console.log('error delete parking, ', e))
+  }
+
+  //  For Both Modes
   useEffect(() => {
     let interval;
     if (askForLocation) {
@@ -296,19 +330,25 @@ export default function HomeScreen({ route }) {
         setAskForLocation={setAskForLocation}
       />
 
-      {showBottomSheet && (USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER") ?  (
+      {showBottomSheet && (USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER") &&  (
         <BottomSheet
           showBottomSheet={(show) => setShowBottomSheet(show)}
           panY={y}
           handleSearch={handleSearch}
         />
-      ) : (
-        //TODO: cancel the navigation to the parking
+      )} 
+      {!showBottomSheet && (
         <Pressable
           style={styles.cancelBtn}
-          onPress={() => setShowBottomSheet(true)}
+          onPress={
+            (USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER") ? 
+            stopSearching :
+            stopSharing
+          }
         >
-          <Text style={{ color: "white", alignSelf: 'center' }}>Abort</Text>
+          <Text style={{ color: "white", alignSelf: 'center' }}>
+            {(USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER") ? "Stop navigation" : "Stop sharing"} 
+          </Text>
         </Pressable>
       )}
     </View>

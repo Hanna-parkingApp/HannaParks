@@ -21,10 +21,15 @@ const locationSlice = createSlice({
         },
         changeDesState: (state, action) => {
             console.log("action payload: ", action.payload)
-            let coords = action.payload;
-            state.des.latitude = coords.latitude;
-            state.des.longitude = coords.longitude;
-            state.des.generalLoc = coords.generalLoc;
+            if (action.payload) {
+                let coords = action.payload;
+                state.des.latitude = coords.latitude;
+                state.des.longitude = coords.longitude;
+                state.des.generalLoc = coords.generalLoc;
+            
+            } else {
+                state.des = null;
+            } 
         }
     }
 });
