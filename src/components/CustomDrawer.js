@@ -67,7 +67,7 @@ const CustomDrawer = (props) => {
           }
         } else if (result.action === Share.dismissedAction) {
           // dismissed
-          showSuccess("Thanks for sharing the HannaPark app. You received x points for this action")
+          // showSuccess("Thanks for sharing the HannaPark app. You received x points for this action")
 
         }
       } catch (error) {
