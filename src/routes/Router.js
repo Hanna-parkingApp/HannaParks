@@ -236,10 +236,13 @@ export default Router = () => {
         }
       },
       generateCode: async (data) => {
+        console.log("check",data);
         try {
           hannaServer
             .post("/generateRecoveryCode", data)
             .then((res) => {
+              console.log("check",res);
+
              if(res.status == 200){
               redux_dispatch(changeVerifyCodeSectionVisibility(true));
              } else {

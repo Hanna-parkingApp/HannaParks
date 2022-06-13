@@ -12,6 +12,7 @@ const Header = () => {
     const openMenu = () => {
         // navigation.dispatch(DrawerActions.openDrawer());
         navigation.openDrawer();
+
     }
   return (
     <View style = {[styles.header, height]}>
