@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useState } from "react";
 import {
   Image,
@@ -11,7 +12,10 @@ import {
 import FormInput from "../components/FormInput";
 import { AuthContext } from "../routes/Router";
 
-const SignupScreen = ({ navigation }) => {
+const SignupScreen = () => {
+
+  const navigation = useNavigation();
+
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [fullName, setFullName] = useState();
@@ -44,12 +48,13 @@ const SignupScreen = ({ navigation }) => {
     console.log("!@#!#!@#1",data.fullName);
       const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
       if (reg.test(data.email) === true){
+        signUp(data);
       }
       else{
         Alert.alert("The email entered is invalid");
       }
 
-    signUp(data);
+
     //TODO: check if sign up success + add validations
   };
 
