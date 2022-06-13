@@ -4,7 +4,7 @@ const carDetailSlice = createSlice({
   name: "location",
   initialState: {
     id: "",
-    userId: "",
+    userId: " ",
     generalLoc: "",
     specificLoc: {
       latitude: null,

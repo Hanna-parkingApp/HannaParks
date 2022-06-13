@@ -242,7 +242,7 @@ const Map = (props) => {
               }}
             >
               <Image
-                source={imagePath.manWalking}
+                source={USER_MODE.state === 'SHARE' ? imagePath.icCurLoc : imagePath.manWalking}
                 style={{
                   height: 50,
                   width: 50,
