@@ -216,11 +216,22 @@ export default Router = () => {
             .post("/register", data)
             // .then(res => console.log("res: ", res))
             .then((res) => {
+              console.log(res.data);
               showSuccess("Register successfully.Welcome to hanna parks!")
               AsyncStorage.setItem(
                 "userToken",
                 JSON.stringify(res.data.tokens)
               );
+              AsyncStorage.setItem(
+                "userDetails",
+                JSON.stringify(res.data.newUser)
+              );
+              AsyncStorage.setItem(
+                "carDetails",
+                JSON.stringify(res.data.newCar)
+              );
+              console.log("save user details");
+              redux_dispatch(changeUserDetails(res.data.newUser))
               return res.data;
               //dispatch({ type: "SIGN_IN", token: res.data.tokens });
             })
