@@ -1,26 +1,42 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+
 import { handleLogin, Image, StyleSheet, Text, View, TouchableOpacity, Dimensions,KeyboardAvoidingView,TextInput,ScrollView } from 'react-native'
 import StyleSheetValidation from 'react-native/Libraries/StyleSheet/StyleSheetValidation'
 import FormInput from '../components/FormInput'
 import HannaText from '../components/HannaText'
 import { AuthContext } from '../routes/Router';
 import {  showError, showSuccess } from "../constants/helpers/helperFunctions";
+import { changeVerifyCodeSectionVisibility, selectVerifyCodeSectionVisiblity} from "../features/responseStatus/VerifyCodeVisiblity";
+import {changeChangePasswordSectionVisibility, selectChangePasswordSectionVisiblity} from "../features/responseStatus/ChangePasswordVisiblity";
+import {changeChangePasswordSuccess, selectChangePasswordSuccess} from "../features/responseStatus/ChangePasswordSuccess";
+
 
 const RecoveryPassword = ({ navigation }) => {
+
+    const dispatch = useDispatch()
 
     const [email, setEmail] = useState();
     const [recoveryCode, setrecoveryCode] = useState();
     const [newPassword, setNewPassword] = useState();
     const [newPasswordAgain, setNewPasswordAgain] = useState();
+    const verifyCodeSectionVisiblity = useSelector(selectVerifyCodeSectionVisiblity);
+    const changePasswordSectionVisiblity = useSelector(selectChangePasswordSectionVisiblity);
+    const changePasswordSuccess = useSelector(selectChangePasswordSuccess);
 
     const { generateCode, verifyCode, changePassword } = useContext(AuthContext);
+
+    useEffect(() => {
+      dispatch(changeVerifyCodeSectionVisibility(false));
+      dispatch(changeChangePasswordSectionVisibility(false));
+      dispatch(changeChangePasswordSuccess(false));
+    }, [])
 
     const sendCode = async () => {
       console.log("sendCode Pressed");
       const data = { email: email };
-      const res = await generateCode(data);
-      
+      const res = await generateCode(data);      
     }
 
     const checkCode = async () => {
@@ -29,7 +45,7 @@ const RecoveryPassword = ({ navigation }) => {
         email: email
        };
       const res = await verifyCode(data);
-      if (await AsyncStorage.getItem("verifyRecoveryCode") == 200) {
+      if (changePasswordSectionVisiblity.state) {
         showSuccess("Code Verifyied");
       }
       else {
@@ -44,8 +60,9 @@ const RecoveryPassword = ({ navigation }) => {
           newPassword: newPassword 
         };
         const res = await changePassword(data)
-        if (await AsyncStorage.getItem("changePassword") == 200) {
+        if (changePasswordSuccess.state) {
           showSuccess("Password Changed Successfully");
+          navigation.goBack();
         }
         else {
           showError("Password Change Failed");
@@ -70,37 +87,51 @@ const RecoveryPassword = ({ navigation }) => {
             style = {styles.buttonContainer}>
             <Text style = {styles.buttonText}>Send Code</Text>
           </TouchableOpacity>
-          <FormInput
-            labelValue={recoveryCode}
-            onChangeText={(recoveryCode) => setrecoveryCode(recoveryCode)}
-            placeholderText="Enter your recovery code"
-            iconType="user"
-            autoCapitalize="none"
-          />
-          <TouchableOpacity
-            onPress={() => checkCode()}
-            style = {styles.buttonContainer}>
-            <Text style = {styles.buttonText}>Verify Code</Text>
-          </TouchableOpacity>
-          <FormInput
-            labelValue={newPassword}
-            onChangeText={(password) => setNewPassword(password)}
-            placeholderText="Enter your new password"
-            iconType="user"
-            autoCapitalize="none"
-          />
-          <FormInput
-            labelValue={newPasswordAgain}
-            onChangeText={(newPasswordAgain) => setNewPasswordAgain(newPasswordAgain)}
-            placeholderText="Enter your password again"
-            iconType="user"
-            autoCapitalize="none"
-          />
-          <TouchableOpacity
-            onPress={() => updatePassword()}
-            style = {styles.buttonContainer}>
-            <Text style = {styles.buttonText}>Set Password</Text>
-          </TouchableOpacity>
+          
+          {verifyCodeSectionVisiblity.state && (
+            <FormInput
+              labelValue={recoveryCode}
+              onChangeText={(recoveryCode) => setrecoveryCode(recoveryCode)}
+              placeholderText="Enter your recovery code"
+              iconType="user"
+              autoCapitalize="none"
+            />
+          )}
+          { verifyCodeSectionVisiblity.state && (
+            <TouchableOpacity
+              onPress={() => checkCode()}
+              style = {styles.buttonContainer}>
+              <Text style = {styles.buttonText}>Verify Code</Text>
+            </TouchableOpacity>
+          )}
+          
+          {changePasswordSectionVisiblity.state && (
+            <FormInput
+              labelValue={newPassword}
+              onChangeText={(password) => setNewPassword(password)}
+              placeholderText="Enter your new password"
+              iconType="user"
+              autoCapitalize="none"
+            />
+
+          )}
+          {changePasswordSectionVisiblity.state && (
+            <FormInput
+              labelValue={newPasswordAgain}
+              onChangeText={(newPasswordAgain) => setNewPasswordAgain(newPasswordAgain)}
+              placeholderText="Enter your password again"
+              iconType="user"
+              autoCapitalize="none"
+            />
+          )}
+          {changePasswordSectionVisiblity.state && (
+            <TouchableOpacity
+              onPress={() => updatePassword()}
+              style = {styles.buttonContainer}>
+              <Text style = {styles.buttonText}>Set Password</Text>
+            </TouchableOpacity>
+          )}
+          
         </ScrollView>
 
     )

@@ -7,6 +7,9 @@ import LoadingScreen from "../screens/LoadingScreen";
 import hannaServer from "../api/hannaServer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {  showError, showSuccess } from "../constants/helpers/helperFunctions";
+import { changeVerifyCodeSectionVisibility, selectVerifyCodeSectionVisiblity} from "../features/responseStatus/VerifyCodeVisiblity";
+import {changeChangePasswordSectionVisibility, selectChangePasswordSectionVisiblity} from "../features/responseStatus/ChangePasswordVisiblity";
+import {changeChangePasswordSuccess, selectChangePasswordSuccess} from "../features/responseStatus/ChangePasswordSuccess";
 import { useDispatch } from "react-redux";
 import { changeUserDetails } from "../features/profile/userDetailsSlice";
 
@@ -237,8 +240,11 @@ export default Router = () => {
           hannaServer
             .post("/generateRecoveryCode", data)
             .then((res) => {
-              console.log(res)
-              AsyncStorage.setItem("generateRecoveryCode", JSON.stringify(res.status));
+             if(res.status == 200){
+              redux_dispatch(changeVerifyCodeSectionVisibility(true));
+             } else {
+              redux_dispatch(changeVerifyCodeSectionVisibility(false));
+             }
             })
         } catch (e) {
           console.log("error generating recovery code", e);
@@ -250,7 +256,11 @@ export default Router = () => {
           hannaServer
           .post("/verifyRecoveryCode", data)
           .then((res) => {
-            AsyncStorage.setItem("verifyRecoveryCode", JSON.stringify(res.status));
+            if(res.status == 200){
+              redux_dispatch(changeChangePasswordSectionVisibility(true));
+             } else {
+              redux_dispatch(changeChangePasswordSectionVisibility(false));
+             }
           })
         } catch (e) {
           console.log("error verifying recovery code", e);
@@ -263,7 +273,12 @@ export default Router = () => {
           hannaServer
             .post("/changePassword", data)
             .then((res) => {
-              AsyncStorage.setItem("changePassword", JSON.stringify(res.status));
+              // AsyncStorage.setItem("changePassword", JSON.stringify(res.status));
+              if(res.status == 200){
+                redux_dispatch(changeChangePasswordSuccess(true));
+              } else {
+                redux_dispatch(changeChangePasswordSuccess(false));
+              }
             })
         } catch (e) {
           

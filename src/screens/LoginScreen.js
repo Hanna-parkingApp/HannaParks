@@ -90,7 +90,7 @@ const LoginScreen = ({ onFinished }) => {
     }
 
     const recoveryPassword = () => {
-        navigation.navigate('RecoveryPassword')
+        navigation.push('RecoveryPassword')
         console.log("recoveryPassword Pressed")
     }
 
