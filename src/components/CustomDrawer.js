@@ -28,6 +28,7 @@ const CustomDrawer = (props) => {
 
   const getUserDetails = async () => {
     const user = await AsyncStorage.getItem("userDetails");
+    console.log("user details in drawer: ", user);
 
     if (user !== null) {
       const user_json = JSON.parse(user);
