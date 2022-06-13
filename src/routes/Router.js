@@ -7,62 +7,152 @@ import LoadingScreen from "../screens/LoadingScreen";
 import hannaServer from "../api/hannaServer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {  showError, showSuccess } from "../constants/helpers/helperFunctions";
+import { useDispatch } from "react-redux";
+import { changeUserDetails } from "../features/profile/userDetailsSlice";
 
 const Stack = createNativeStackNavigator();
 
 export const AuthContext = createContext();
 
 export default Router = () => {
+
+  const redux_dispatch = useDispatch();
+
   const [state, dispatch] = useReducer(
     (prevState, action) => {
-      console.log("actionnn-bar", action.token);
+      console.log('@@@@ action type: ', action.token)
+      console.log('@@@@ prevstate: ', prevState)
       switch (action.type) {
         case "RESTORE_TOKEN":
           return {
             ...prevState,
             userToken: action.token,
             isLoading: false,
+            isConfirmed: true
           };
         case "SIGN_IN":
           return {
             ...prevState,
             isSignout: false,
             userToken: action.token || JSON.parse(action.token),
+            isConfirmed: true
           };
         case "SIGN_OUT":
           return {
             ...prevState,
+            isLoading: false,
             isSignout: true,
             userToken: null,
+            isConfirmed: false,
+            isSignout: false,
           };
+        case "SIGN_UP":
+          return {
+            ...prevState,
+            isSignout: false,
+            isLoading: false,
+            isConfirmed: true,
+            userToken: action.token,
+            isSignedIn: true
+          }
       }
     },
     {
       isLoading: true,
       isSignout: false,
       userToken: null,
+      isConfirmed: false,
+      isSignedIn: false,
     }
   );
 
   const getToken = async () => {
     let userToken;
-
-    try {
+    let token_json;
+    let newToken;
+    console.log("get token");
+    // try {
       userToken = await AsyncStorage.getItem("userToken");
-    } catch (e) {
-      console.log("Restoring token failed. ", e);
-    }
+      console.log(userToken);
+      if (!userToken) {
+        authContext.signOut();
+        return;
+      }
+      token_json = JSON.parse(userToken);
+      console.log('token_json: ', token_json);
 
-    // After restoring token, we may need to validate it in production apps
+    // } catch (e) {
+    //   console.log("Restoring token failed. ", e);
+    // }
 
-    // This will switch to the App screen or Auth screen and this loading
-    // screen will be unmounted and thrown away.
-    dispatch({ type: "RESTORE_TOKEN", token: userToken });
+    hannaServer.get('/autoLogin', {
+      headers: {
+        'x-access-token': `${token_json.accessToken}`,
+        'x-refresh-token': `${token_json.refreshToken}`
+      }
+    })
+    .then((res) => {
+      console.log("res.data: ", res.data)
+      const data = res.data;
+      
+      console.log("^^^^^^^^^^ data: ", data);
+
+      redux_dispatch(changeUserDetails(data.user))
+      return data;
+
+    }).then(async (data) => {
+      try {
+        newToken = {
+          accessToken: data.AccessToken,
+          refreshToken: data.RefreshToken
+        }
+        await AsyncStorage.setItem('userToken', JSON.stringify(newToken))
+        console.log("$$$ token is async storage $$$");
+
+        // After restoring token, we may need to validate it in production apps
+
+        // This will switch to the App screen or Auth screen and this loading
+        // screen will be unmounted and thrown away.
+        dispatch({ type: "RESTORE_TOKEN", token: newToken });
+      
+      } catch (error) {
+        console.log("Failed to set tokens in storage")
+      }
+    })
+    .catch(error => {
+      if (error.response) {
+       
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      
+      } else if (error.request) {
+        
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log(error.request);
+      
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+      }
+      console.log(error.config);
+      authContext.signOut();
+    });
+   
   };
 
   useEffect(() => {
-    getToken();
-  }, [state.userToken]);
+    if (!state.isConfirmed)
+      getToken();
+  }, [state.isConfirmed, state.isSignout]);
+
+  useEffect(() => {
+
+  },[state.isSignedIn])
 
   const authContext = useMemo(
     () => ({
@@ -74,7 +164,7 @@ export default Router = () => {
         hannaServer
           .post("/login", data)
           .then((res) => {
-            try {
+            console.log(res)
               showSuccess("Login successfully. Welcome to hanna parks!")
               console.log("res.data.carDetail: ", res.data.carDetail)
               AsyncStorage.setItem(
@@ -90,10 +180,8 @@ export default Router = () => {
                 "userToken",
                 JSON.stringify(res.data.tokens)
               );
+              redux_dispatch(changeUserDetails(res.data.user))
               dispatch({ type: "SIGN_IN", token: res.data.tokens });
-            } catch (e) {
-              console.log("error setting token in local storage: ", e);
-            }
 
             hannaServer.interceptors.request.use((config) => {
               config.headers["x-access-token"] = res.data.tokens;
@@ -130,9 +218,15 @@ export default Router = () => {
                 "userToken",
                 JSON.stringify(res.data.tokens)
               );
-              dispatch({ type: "SIGN_IN", token: res.data.tokens });
-            });
-        } catch (e) {
+              return res.data;
+              //dispatch({ type: "SIGN_IN", token: res.data.tokens });
+            })
+            .then((data) => {
+              console.log("reg proccess successfully")
+              dispatch({ type: "SIGN_IN", token: data.tokens});
+            })
+        
+          } catch (e) {
           showError("Register failed. Please try again.")
           console.log("error register", e);
 
@@ -179,22 +273,25 @@ export default Router = () => {
     []
   );
 
-  if (state.isLoading) {
+  console.log("state: ", state);
+  if (state?.isLoading) {
     console.log("Loading app");
     // We haven't finished checking for the token yet
     return <LoadingScreen />;
   } else {
     console.log("Finished loading.Move to either AppStack or AutStack");
-    console.log(state.userToken?.length || "not ok");
+    console.log(state?.userToken)
+    console.log("state.userToken != null ? ", state?.userToken != null)
+    console.log("isConfirmed? ", state?.isConfirmed);
   }
 
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
-        {state.userToken != null && state.userToken.length > 0 ? (
+        {state?.userToken != null && state?.isConfirmed ? (
           <AppStack />
         ) : (
-          <AuthStack isSignout={state.isSignout} />
+          <AuthStack isSignout={state?.isSignout} />
         )}
       </NavigationContainer>
     </AuthContext.Provider>
