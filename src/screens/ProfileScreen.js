@@ -89,15 +89,22 @@ const ProfileScreen = ({ navigation }) => {
     setModalVisible(true);
   };
 
-  const saveUserDetails = () => {
+  const saveUserDetails = async () => {
     try {
       hannaServer
         .post("/update-profile", userDetails)
-        .then((res) => console.log(res));
+        .then((res) => console.log(res.data.message));
       showSuccess("Profile changes saved successfully.");
     } catch (e) {
       console.log("Error update profile", e);
       showError("failed to save changes. Please try again.", e);
+    }
+
+    try {
+      await AsyncStorage.setItem("userDetails", JSON.stringify(userDetails))
+      console.log('succeed set user details in local storage')
+    } catch (e) {
+      console.log("User details havn't saved in local storgae")
     }
 
     console.log("save changes");
@@ -163,7 +170,7 @@ const ProfileScreen = ({ navigation }) => {
             placeholderText="Full Name"
             detailName={"Full Name"}
             onChangeText={(t) =>
-              setUserDetails({ ...userDetails, fullName: t })
+              dispatch(changeUserDetails({ ...userDetails, fullName: t }))
             }
           />
           <FormDetail
@@ -179,7 +186,7 @@ const ProfileScreen = ({ navigation }) => {
                 placeholderText="Car Maker"
                 detailName={"Car Maker"}
                 onChangeText={(t) =>
-                  setUserDetails({ ...userDetails, carMaker: t })
+                  dispatch(changeUserDetails({ ...userDetails, carMaker: t }))
                 }
               />
               <FormDetail
@@ -187,7 +194,7 @@ const ProfileScreen = ({ navigation }) => {
                 placeholderText="Car Model"
                 detailName={"Car Model"}
                 onChangeText={(t) =>
-                  setUserDetails({ ...userDetails, carModel: t })
+                  dispatch(changeUserDetails({ ...userDetails, carModel: t }))
                 }
               />
               <FormDetail
@@ -195,7 +202,7 @@ const ProfileScreen = ({ navigation }) => {
                 placeholderText="Car Num."
                 detailName={"Car Num."}
                 onChangeText={(t) =>
-                  setUserDetails({ ...userDetails, carNumber: t })
+                  dispatch(changeUserDetails({ ...userDetails, carNumber: t }))
                 }
               />
               <FormDetail
@@ -203,7 +210,7 @@ const ProfileScreen = ({ navigation }) => {
                 placeholderText="Car Color"
                 detailName={"Car Color"}
                 onChangeText={(t) =>
-                  setUserDetails({ ...userDetails, carColor: t })
+                  dispatch(changeUserDetails({ ...userDetails, carColor: t }))
                 }
               />
             </View>
