@@ -26,6 +26,7 @@ import {
 } from "../features/transaction/transactionSlice";
 import { selectLocation } from "../features/location/locationSlice";
 import { selectRoleMode } from "../features/mode/roleModeSlice";
+import {  showError } from "../constants/helpers/helperFunctions";
 
 const SHARE_COST = 3;
 
@@ -91,6 +92,7 @@ const ShareParkingScreen = () => {
         .catch((e) => console.log("failed connect share parking", e));
     } catch (e) {
       console.log("failed connect share parking", e);
+      showError("Failed to share parking."+"\n"+"Please check that you have entered all the fields.")
     }
   };
 

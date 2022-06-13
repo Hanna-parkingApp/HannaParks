@@ -115,7 +115,7 @@ export default function BottomSheet({ panY, showBottomSheet }) {
                 <TouchableOpacity
                   onPress={onPressLocation}
                   style={styles.inputStyle}
-                  //disabled={userDetails.points > 1 ? false : true}
+                  disabled={userDetails.points > 1 ? false : true}
                 >
                   <Text>
                     {userDetails.points > 1

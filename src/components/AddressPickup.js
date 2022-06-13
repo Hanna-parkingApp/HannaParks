@@ -24,6 +24,12 @@ const AddressPickup = ({
       (element) => element?.types[0] === "street_number"
     )?.short_name;
 
+
+    if(streetNum == undefined)
+    {
+      streetNum = "";
+    }
+
     let geometry = details.geometry;
     let lat = geometry.location.lat;
     let lng = geometry.location.lng;

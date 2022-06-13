@@ -95,7 +95,7 @@ const LoginScreen = ({ onFinished }) => {
     }
 
     const signup = () => {
-        navigation.navigate('Sign Up')
+        navigation.push('Sign Up')
         console.log("signup Pressed")
     }  
 
