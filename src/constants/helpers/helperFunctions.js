@@ -3,7 +3,7 @@ export const add_minutes = (dt, minutes) => {
   return new Date(dt.getTime() + minutes * 60000);
 };
 export const diff_minutes = (dt2, dt1) => {
-  if (!d1 || !d2) return;
+  if (!dt1 || !dt2) return;
   let diff = (dt2.getTime() - dt1.getTime()) / 1000;
   diff /= 60;
   return Math.abs(Math.round(diff));
