@@ -19,7 +19,11 @@ import { useNavigation } from "@react-navigation/native";
 import imagePath from "../constants/imagePath";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../routes/Router";
-import {  showError, showSuccess } from "../constants/helpers/helperFunctions";
+import {  showError, showSuccess ,showSuccessHandShake} from "../constants/helpers/helperFunctions";
+import hannaServer from "../api/hannaServer";
+
+const SHARE_COST = 0.5;
+
 
 const CustomDrawer = (props) => {
   const navigation = useNavigation();
@@ -59,11 +63,13 @@ const CustomDrawer = (props) => {
         if (result.action === Share.sharedAction) {
           if (result.activityType) {
             // shared with activity type of result.activityType
-            showSuccess("Thanks for sharing the HannaPark app. You received x points for this action")
+            showSuccessHandShake("Thanks for sharing the HannaPark app.\n You received 1 points for this action")
+            updatePoints(SHARE_COST);
 
           } else {
             // shared
-            showSuccess("Thanks for sharing the HannaPark app. You received x points for this action")
+            showSuccessHandShake("Thanks for sharing the HannaPark app.\n You received 1 points for this action")
+            updatePoints(SHARE_COST);
 
           }
         } else if (result.action === Share.dismissedAction) {
@@ -76,7 +82,25 @@ const CustomDrawer = (props) => {
         showError("failed to share app. Please try again.",e)
 
       }
-    };    
+    };   
+    const updatePoints = async (points) => {
+      console.log("update points");
+      let token_json;
+      try{
+        const token = await AsyncStorage.getItem('userToken');
+        token_json = JSON.parse(token);
+      } catch (e) {
+        console.log('error getting user token for points');
+      }
+      hannaServer.post('/update-user-points', {
+        token: token_json.refreshToken,
+        pointsModifier: points
+      })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(e => console.log("Error points update"))
+    } 
     // useEffect(() => {
     //   onShare();
     // }, []);
