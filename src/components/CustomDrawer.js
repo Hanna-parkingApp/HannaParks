@@ -22,7 +22,7 @@ import { AuthContext } from "../routes/Router";
 import {  showError, showSuccess ,showSuccessHandShake} from "../constants/helpers/helperFunctions";
 import hannaServer from "../api/hannaServer";
 
-const SHARE_COST = 0.5;
+const SHARE_COST = 1;
 
 
 const CustomDrawer = (props) => {
@@ -63,12 +63,12 @@ const CustomDrawer = (props) => {
         if (result.action === Share.sharedAction) {
           if (result.activityType) {
             // shared with activity type of result.activityType
-            showSuccessHandShake("Thanks for sharing the HannaPark app.\n You received 1 points for this action")
+            showSuccessHandShake("Thanks for sharing the HannaPark app.\n You received 1 point for this action.")
             updatePoints(SHARE_COST);
 
           } else {
             // shared
-            showSuccessHandShake("Thanks for sharing the HannaPark app.\n You received 1 points for this action")
+            showSuccessHandShake("Thanks for sharing the HannaPark app.\n You received 1 point for this action.")
             updatePoints(SHARE_COST);
 
           }

@@ -233,7 +233,12 @@ export default function HomeScreen({ route, navigation }) {
   const navToShareScreen = () => {
     
     dispatch(changeMode("SHARE"));
-    dispatch(changeDesState(null))
+    const des = {
+      latitude: null,
+      longitude: null,
+      generalLoc: ''
+    }
+    dispatch(changeDesState(des))
     navigation.navigate("Share-Parking");
   }
 
