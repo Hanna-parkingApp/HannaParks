@@ -5,9 +5,9 @@ import HannaText from './HannaText';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerActions } from '@react-navigation/native';
 
-const Header = () => {
+const Header = ({ navigation }) => {
 
-    const navigation = useNavigation();
+    //const navigation = useNavigation();
     const { height } = useWindowDimensions();
     const openMenu = () => {
         // navigation.dispatch(DrawerActions.openDrawer());

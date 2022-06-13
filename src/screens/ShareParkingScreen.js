@@ -86,7 +86,11 @@ const ShareParkingScreen = () => {
           return userParkingId;
         })
         .then(userParkingId => {
-          navigation.navigate("Home", { userId: userParkingId });
+          navigation.navigate("Drawer", {
+            screen: 'Home',
+            params: {
+               userId: userParkingId 
+            }});
           showSuccess("Thanks for sharing");
         })
         .catch((e) => console.log("failed connect share parking", e));

@@ -43,7 +43,7 @@ import { selectUserDetails } from "../features/profile/userDetailsSlice";
 
 const SEARCH_COST = -1;
 
-export default function HomeScreen({ route }) {
+export default function HomeScreen({ route, navigation }) {
   const USER_MODE = useSelector(selectRoleMode);
   console.log("USER_MODE: ", USER_MODE);
 
@@ -56,7 +56,7 @@ export default function HomeScreen({ route }) {
   const [carDetailsModal, setCarDetailsModal] = useState(false);
 
   const dispatch = useDispatch();
-  const navigation = useNavigation();
+  //const navigation = useNavigation();
   const userLocation = useSelector(selectLocation);
   const [userParkingId, setUserParkingId] = useState();
 
@@ -211,6 +211,8 @@ export default function HomeScreen({ route }) {
     if (!isAvail && USER_MODE.state === "SHARE") {
       showSuccessHandShake("Someone is on his way to your parking lot!");
       setShowSearchLoading(false);
+      setAskForLocation(true);
+      setIsParking(true);
     }
   }, [isAvail]);
 
@@ -250,6 +252,8 @@ export default function HomeScreen({ route }) {
             myLoc: userLocation.src,
           })
           .then((res) => {
+            console.log("res from nav controller:");
+            console.log(res.data);
             const json =
               USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER"
                 ? res.data.updatedObj.shareCurLoc
@@ -278,7 +282,7 @@ export default function HomeScreen({ route }) {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <Header />
+      <Header navigation={navigation} />
 
       {(USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER") && (
         <MyButton
