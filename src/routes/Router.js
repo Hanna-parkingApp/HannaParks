@@ -226,9 +226,11 @@ export default Router = () => {
                 "userDetails",
                 JSON.stringify(res.data.newUser)
               );
+              let carsArray = [];
+              carsArray.push(res.data.newCar)
               AsyncStorage.setItem(
                 "carDetails",
-                JSON.stringify(res.data.newCar)
+                JSON.stringify(carsArray)
               );
               console.log("save user details");
               redux_dispatch(changeUserDetails(res.data.newUser))

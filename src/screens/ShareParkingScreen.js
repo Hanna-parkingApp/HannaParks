@@ -53,6 +53,7 @@ const ShareParkingScreen = () => {
       let userTokenJson = JSON.parse(userToken);
 
       let carDetail = await AsyncStorage.getItem("carDetails");
+      console.log(carDetail);
       let carDetailJson = JSON.parse(carDetail);
       let carNumber = carDetailJson[0].registrationNumber;
 

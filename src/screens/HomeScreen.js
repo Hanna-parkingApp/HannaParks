@@ -230,6 +230,13 @@ export default function HomeScreen({ route, navigation }) {
     .catch(e => console.log('error delete parking, ', e))
   }
 
+  const navToShareScreen = () => {
+    
+    dispatch(changeMode("SHARE"));
+    dispatch(changeDesState(null))
+    navigation.navigate("Share-Parking");
+  }
+
   //  For Both Modes
   useEffect(() => {
     let interval;
@@ -287,10 +294,7 @@ export default function HomeScreen({ route, navigation }) {
       {(USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER") && (
         <MyButton
           title={"Share parking"}
-          onPress={() => {
-            dispatch(changeMode("SHARE"));
-            navigation.navigate("Share-Parking");
-          }}
+          onPress={navToShareScreen}
         />
       )}
       {USER_MODE === "SHARE" ||
