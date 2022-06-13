@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-  Alert
+  Alert,
+  ScrollView
 } from "react-native";
 import FormInput from "../components/FormInput";
 import { AuthContext } from "../routes/Router";
@@ -53,12 +54,23 @@ const SignupScreen = () => {
       else{
         Alert.alert("The email entered is invalid");
       }
+    //   if ( data.email.length == 0 || data.password.length == 0 ) {
+    //     // Alert.alert('Wrong Input!', 'Username or password field cannot be empty.', [
+    //     // ]);
+    //     Alert.alert('Username or password field cannot be empty.');
+    // }
+
+      if ( data.password.length < 8 ) {
+        Alert.alert('The password must contain minimum of 8 fields');
+    }
 
 
     //TODO: check if sign up success + add validations
   };
 
   return (
+    <ScrollView contentContainerStyle={styles.container}>
+
     <View style={styles.container}>
       <Text style={styles.text}>Create an account</Text>
       <FormInput
@@ -136,6 +148,8 @@ const SignupScreen = () => {
         <Text style={styles.navButtonText}>Have an account? Sign In</Text>
       </TouchableOpacity>
     </View>
+    </ScrollView>
+
   );
 };
 
