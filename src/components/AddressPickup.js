@@ -29,10 +29,7 @@ const AddressPickup = ({
     {
       streetNum = "";
     }
-    if(street == undefined)
-    {
-      street = "";
-    }
+
 
     let geometry = details.geometry;
     let lat = geometry.location.lat;
