@@ -58,17 +58,17 @@ const CustomDrawer = (props) => {
       try {
         const result = await Share.share({
           message:
-            'Hanna Parks app - your solution to finding parking is simple.for download:"https://testflight.apple.com/join/HannaParks"',
+            'Hanna Parks app - your solution to finding parking is simple.\nfor download:"https://testflight.apple.com/join/HannaParks"',
         });
         if (result.action === Share.sharedAction) {
           if (result.activityType) {
             // shared with activity type of result.activityType
-            showSuccessHandShake("Thanks for sharing the HannaPark app.\n You received 1 point for this action.")
+            showSuccessHandShake("Thanks for sharing the HannaPark app.\nYou received 1 point for this action.")
             updatePoints(SHARE_COST);
 
           } else {
             // shared
-            showSuccessHandShake("Thanks for sharing the HannaPark app.\n You received 1 point for this action.")
+            showSuccessHandShake("Thanks for sharing the HannaPark app.\nYou received 1 point for this action.")
             updatePoints(SHARE_COST);
 
           }
