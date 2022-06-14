@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const transactionSlice = createSlice({
     name: 'transaction',
     initialState: {
-        isParkingAvail: false,
+        isParkingAvail: true,
         otherUserLoc: {
             latitude: null,
             longitude: null

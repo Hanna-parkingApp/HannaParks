@@ -198,7 +198,7 @@ export default function HomeScreen({ route, navigation }) {
               clearInterval(interval);
             }
 
-            dispatch(changeOtherUserLoc(shareCurLoc));
+            //dispatch(changeOtherUserLoc(shareCurLoc));
           })
           .catch((e) =>
             console.log("error calling navigation updater", e.data)
@@ -276,7 +276,7 @@ export default function HomeScreen({ route, navigation }) {
             console.log("home screen user location #des: ", userLocation.des);
 
             const distance = getDistance(userLocation.src, userLocation.des);
-            if (distance < 1000) {
+            if (distance < 10) {
               setIsArrivedModal(true);
               return clearInterval(interval);
             }
