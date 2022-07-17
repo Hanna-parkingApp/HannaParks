@@ -25,7 +25,7 @@ import {
   selectTransaction,
 } from "../features/transaction/transactionSlice";
 import { selectLocation } from "../features/location/locationSlice";
-import { selectRoleMode } from "../features/mode/roleModeSlice";
+import { changeMode, selectRoleMode } from "../features/mode/roleModeSlice";
 import {  showError } from "../constants/helpers/helperFunctions";
 
 const SHARE_COST = 3;
@@ -43,7 +43,7 @@ const ShareParkingScreen = () => {
   const [diffMins, setDiffMins] = useState(0);
 
   const USER_MODE = useSelector(selectRoleMode);
-  console.log("user mode share screen: ", USER_MODE.state);
+  console.log("user mode share screen: ", USER_MODE);
 
   const handleShareBtn = async () => {
     console.log("shared parking", carDetails);
@@ -87,6 +87,10 @@ const ShareParkingScreen = () => {
           return userParkingId;
         })
         .then(userParkingId => {
+          dispatch(changeMode({
+            mode: 'SHARE',
+            isActive: true
+          }))
           navigation.navigate("Drawer", {
             screen: 'Home',
             params: {
@@ -127,7 +131,14 @@ const ShareParkingScreen = () => {
       expectedDepartureTime
     );
     setDiffMins(diff_minutes(durationArrivedTime, new Date()));
+    return;
   }, [expectedDepartureTime]);
+
+  useEffect(() => {
+    if (USER_MODE.mode === 'SEARCHER') {
+      navigation.goBack();
+    }
+  },[USER_MODE.mode])
 
   return (
     <View style={styles.SharingContainer}>
@@ -177,7 +188,12 @@ const ShareParkingScreen = () => {
         <View style={styles.buttons}>
           <Pressable
             style={styles.cancelBtn}
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              dispatch(changeMode({
+                mode: 'SEARCHER',
+                isActive: false
+              }))
+            }}
           >
             <Text style={styles.textBtn}>Cancel</Text>
           </Pressable>

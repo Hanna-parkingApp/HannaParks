@@ -28,7 +28,9 @@ const locationSlice = createSlice({
                 state.des.generalLoc = coords.generalLoc;
             
             } else {
-                state.des = null;
+                state.des.latitude = null;
+                state.des.longitude = null;
+                state.des.generalLoc = '';
             } 
         }
     }

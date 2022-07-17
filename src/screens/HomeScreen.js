@@ -11,11 +11,9 @@ import {
 import { ActivityIndicator } from "react-native";
 import Map from "../components/Map";
 import { useSharedValue } from "react-native-reanimated";
-import GeoBar from "../components/GeoBar";
 import BottomSheet from "../components/BottomSheetView";
 import Header from "../components/Header";
 import * as Location from "expo-location";
-import { OpenMapDirections } from "react-native-navigation-directions";
 import { useSelector } from "react-redux";
 import {
   changeDesState,
@@ -111,7 +109,7 @@ export default function HomeScreen({ route, navigation }) {
     console.log("is parking!!!", isParking);
     if (
       isParking &&
-      (USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER")
+      USER_MODE.mode === "SEARCHER"
     ) {
       updateParkingStatus();
       updatePoints(SEARCH_COST);
@@ -156,7 +154,11 @@ export default function HomeScreen({ route, navigation }) {
 
   const stopSearching = () => {
     dispatch(changeDesState(null));
-    setShowBottomSheet(true);
+    //setShowBottomSheet(true);
+    dispatch(changeMode({
+      mode: 'SEARCHER',
+      isActive: false
+    }))
   }
 
   //  SHARE CONTROLL
@@ -222,9 +224,16 @@ export default function HomeScreen({ route, navigation }) {
     .then(res => {
       console.log(res.data);
       if (res.data.isDeleted) {
-        dispatch(changeMode('SEARCHER'));
+        dispatch(changeMode({
+          mode: 'SEARCHER',
+          isActive: false
+        }));
         dispatch(changeDesState(null));
-        setShowBottomSheet(true);
+        // setShowBottomSheet(true);
+        dispatch(changeMode({
+      mode: 'SEARCHER',
+      isActive: true
+    }))
       }
     })
     .catch(e => console.log('error delete parking, ', e))
@@ -239,6 +248,10 @@ export default function HomeScreen({ route, navigation }) {
       generalLoc: ''
     }
     dispatch(changeDesState(des))
+    dispatch(changeMode({
+      mode: "SHARE",
+      isActive: false
+    }))
     navigation.navigate("Share-Parking");
   }
 
@@ -260,14 +273,14 @@ export default function HomeScreen({ route, navigation }) {
           .post("/navigation-updater", {
             userId: carDetails.userId,
             userToken: userTokenJson.refreshToken,
-            userType: USER_MODE.state || USER_MODE,
+            userType: USER_MODE.mode,
             myLoc: userLocation.src,
           })
           .then((res) => {
             console.log("res from nav controller:");
             console.log(res.data);
             const json =
-              USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER"
+              USER_MODE.mode === "SEARCHER" 
                 ? res.data.updatedObj.shareCurLoc
                 : res.data.updatedObj.searcherCurLoc;
             const otherCurLoc = JSON.parse(json);
@@ -296,14 +309,14 @@ export default function HomeScreen({ route, navigation }) {
       <StatusBar barStyle="dark-content" />
       <Header navigation={navigation} />
 
-      {(USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER") && (
+      {USER_MODE.mode === "SEARCHER" && !USER_MODE.isActive && (
         <MyButton
           title={"Share parking"}
           onPress={navToShareScreen}
         />
       )}
-      {USER_MODE === "SHARE" ||
-        (USER_MODE.state === "SHARE" && showSearchLoading && (
+      {
+        (USER_MODE.mode === "SHARE" && USER_MODE.isActive && (
           <View style={styles.searchMatchLoaderContainer}>
             <Text style={styles.waitingSearchText}>
               Waiting for parking match ...
@@ -343,24 +356,23 @@ export default function HomeScreen({ route, navigation }) {
         setAskForLocation={setAskForLocation}
       />
 
-      {showBottomSheet && (USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER") &&  (
+      {!USER_MODE.isActive && USER_MODE.mode === "SEARCHER" &&  (
         <BottomSheet
-          showBottomSheet={(show) => setShowBottomSheet(show)}
           panY={y}
           handleSearch={handleSearch}
         />
       )} 
-      {!showBottomSheet && (
+      {USER_MODE.isActive && (
         <Pressable
           style={styles.cancelBtn}
           onPress={
-            (USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER") ? 
+            USER_MODE.mode === "SEARCHER" ? 
             stopSearching :
             stopSharing
           }
         >
           <Text style={{ color: "white", alignSelf: 'center' }}>
-            {(USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER") ? "Stop navigation" : "Stop sharing"} 
+            {USER_MODE.mode === "SEARCHER" ? "Stop navigation" : "Stop sharing"} 
           </Text>
         </Pressable>
       )}

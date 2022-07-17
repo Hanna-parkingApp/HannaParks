@@ -11,7 +11,7 @@ import { selectLocation } from "../features/location/locationSlice";
 import { add_minutes } from "../constants/helpers/helperFunctions";
 import { changeCarDetailState } from "../features/car-detail/carDetailSlice";
 import { selectTransaction } from "../features/transaction/transactionSlice";
-import { selectRoleMode } from "../features/mode/roleModeSlice";
+import { changeMode, selectRoleMode } from "../features/mode/roleModeSlice";
 
 const Map = (props) => {
   const dispatch = useDispatch();
@@ -54,7 +54,7 @@ const Map = (props) => {
 
   const fetchNearParking = async (result) => {
     console.log("here hrer ehere");
-    if (!showParking) {
+    if (!USER_MODE.isActive) {
       console.log(`Distance: ${result.distance} km`);
       console.log(`Duration: ${result.duration} min`);
       console.log("fit to coords: ", result.coordinates[0]);
@@ -137,15 +137,22 @@ const Map = (props) => {
     if (!userLocation.des?.latitude) {
       console.log("user location des latitude is null");
       setNearbyParking([]);
-      setShowParking(false);
+      //setShowParking(false);
+      dispatch(changeMode({
+        mode: USER_MODE.mode,
+        isActive: false
+      }))
     } else {
       console.log("user location des is not null");
     }
   }, [userLocation.des?.latitude]);
 
   useEffect(() => {
-    if (nearbyParking.length > 0 && !showParking) {
-      setShowParking(true);
+    if (nearbyParking.length > 0 && !USER_MODE.isActive) {
+      dispatch(changeMode({
+        mode: USER_MODE.mode,
+        isActive: true
+      }))
     }
   }, [nearbyParking.length]);
 
@@ -168,7 +175,7 @@ const Map = (props) => {
         >
           <Image
             source={
-              USER_MODE.state === "SHARE"
+              USER_MODE.mode === "SHARE"
                 ? imagePath.manWalking
                 : imagePath.icCurLoc
             }
@@ -176,8 +183,8 @@ const Map = (props) => {
           />
         </Marker.Animated>
 
-        {(USER_MODE === "SEARCHER" || USER_MODE.state === "SEARCHER") &&
-          showParking &&
+        {USER_MODE.mode === "SEARCHER" &&
+          USER_MODE.isActive &&
           nearbyParking.length > 0 &&
           nearbyParking.map((parking, index) => {
             const { latitude, longitude } = JSON.parse(
@@ -219,7 +226,7 @@ const Map = (props) => {
             apikey={GOOGLE_API_KEY}
             strokeWidth={3}
             strokeColor={props.isParking ? "green" : "hotpink"}
-            mode={USER_MODE.state === "SHARE" ? "WALKING" : "DRIVING"}
+            mode={USER_MODE.mode === "SHARE" ? "WALKING" : "DRIVING"}
             onReady={(result) => {
               fetchNearParking(result);
               mapRef.current.fitToCoordinates(result.coordinates, {
@@ -242,7 +249,7 @@ const Map = (props) => {
               }}
             >
               <Image
-                source={USER_MODE.state === 'SHARE' ? imagePath.icCurLoc : imagePath.manWalking}
+                source={USER_MODE.mode === 'SHARE' ? imagePath.icCurLoc : imagePath.manWalking}
                 style={{
                   height: 50,
                   width: 50,
@@ -255,7 +262,7 @@ const Map = (props) => {
               apikey={GOOGLE_API_KEY}
               strokeWidth={3}
               strokeColor={props.isParking ? "yellow" : "hotpink"}
-              mode={USER_MODE.state === "SEARCHER" ? "DRIVING" : "WALKING"}
+              mode={USER_MODE.mode === "SEARCHER" ? "DRIVING" : "WALKING"}
             />
           </>
         )}
