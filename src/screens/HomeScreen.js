@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
+  import React, { useState, useEffect, useRef } from "react";
+  import {
   StatusBar,
   StyleSheet,
   useWindowDimensions,
@@ -7,43 +7,44 @@ import {
   Text,
   Pressable,
   Alert,
-} from "react-native";
-import { ActivityIndicator } from "react-native";
-import Map from "../components/Map";
-import { useSharedValue } from "react-native-reanimated";
-import BottomSheet from "../components/BottomSheetView";
-import Header from "../components/Header";
-import * as Location from "expo-location";
-import { useSelector } from "react-redux";
-import {
+  } from "react-native";
+  import { ActivityIndicator } from "react-native";
+  import Map from "../components/Map";
+  import { useSharedValue } from "react-native-reanimated";
+  import BottomSheet from "../components/BottomSheetView";
+  import Header from "../components/Header";
+  import * as Location from "expo-location";
+  import { useSelector } from "react-redux";
+  import {
   changeDesState,
   selectLocation,
-} from "../features/location/locationSlice";
-import { useDispatch } from "react-redux";
-import { changeSrcState } from "../features/location/locationSlice";
-import MyButton from "../components/MyButton";
-import CarDetailsModal from "../components/CarDetailsModal";
-import { showMessage } from "react-native-flash-message";
-import {
+  } from "../features/location/locationSlice";
+  import { useDispatch } from "react-redux";
+  import { changeSrcState } from "../features/location/locationSlice";
+  import MyButton from "../components/MyButton";
+  import CarDetailsModal from "../components/CarDetailsModal";
+  import { showMessage } from "react-native-flash-message";
+  import {
   changeOtherUserLoc,
   selectTransaction,
-} from "../features/transaction/transactionSlice";
-import hannaServer from "../api/hannaServer";
-import { useNavigation } from "@react-navigation/native";
-import { selectCarDetail } from "../features/car-detail/carDetailSlice";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getDistance } from "geolib";
-import IsArrivedModal from "../constants/alerts/IsArrivedModal";
-import LoadingScreen from "./LoadingScreen";
-import { changeMode, selectRoleMode } from "../features/mode/roleModeSlice";
-import { showSuccessHandShake } from "../constants/helpers/helperFunctions";
-import { selectUserDetails } from "../features/profile/userDetailsSlice";
+  } from "../features/transaction/transactionSlice";
+  import hannaServer from "../api/hannaServer";
+  import { useNavigation } from "@react-navigation/native";
+  import { selectCarDetail } from "../features/car-detail/carDetailSlice";
+  import AsyncStorage from "@react-native-async-storage/async-storage";
+  import { getDistance } from "geolib";
+  import IsArrivedModal from "../constants/alerts/IsArrivedModal";
+  import LoadingScreen from "./LoadingScreen";
+  import { changeMode, selectRoleMode } from "../features/mode/roleModeSlice";
+  import { showSuccessHandShake } from "../constants/helpers/helperFunctions";
+  import { selectUserDetails } from "../features/profile/userDetailsSlice";
 
-const SEARCH_COST = -1;
+  const SEARCH_COST = -1;
 
-export default function HomeScreen({ route, navigation }) {
+  export default function HomeScreen({ route, navigation }) {
   const USER_MODE = useSelector(selectRoleMode);
   console.log("USER_MODE: ", USER_MODE);
+  console.log("isAvail: ", isAvail)
 
   const { width, height } = useWindowDimensions();
   const [permissionStatus, setPermissionStatus] = useState(null);
@@ -62,7 +63,7 @@ export default function HomeScreen({ route, navigation }) {
   const carDetails = useSelector(selectCarDetail);
   const transactionDetails = useSelector(selectTransaction);
 
-  const [isAvail, setIsAvail] = useState(isParkingAvail);
+  const [isAvail, setIsAvail] = useState(true);
 
   const [askForLocation, setAskForLocation] = useState(false);
 
@@ -159,16 +160,23 @@ export default function HomeScreen({ route, navigation }) {
       mode: 'SEARCHER',
       isActive: false
     }))
+    dispatch(changeOtherUserLoc({
+      latitude: null,
+      longitude: null
+    }))
   }
 
   //  SHARE CONTROLL
   const [showSearchLoading, setShowSearchLoading] = useState(true);
 
-  useEffect(() => {
-    if (USER_MODE === 'SHARE' || USER_MODE.state === 'SHARE') {
-      setShowBottomSheet(false);
-    }
-  }, [USER_MODE])
+  // useEffect(() => {
+  //   if (USER_MODE.mode === 'SHARE') {
+  //     dispatch(changeMode({
+  //       mode: 'SHARE',
+  //     }))
+  //     setShowBottomSheet(false);
+  //   }
+  // }, [USER_MODE.mode])
 
   useEffect(() => {
     if (route.params?.userId) {
@@ -177,10 +185,10 @@ export default function HomeScreen({ route, navigation }) {
   }, [route.params?.userId]);
 
   useEffect(() => {
-    console.log("User mode.state: ", USER_MODE.state);
+    console.log("User mode.state: ", USER_MODE.mode);
     console.log(userParkingId);
     let interval;
-    if (USER_MODE.state === "SHARE" && userParkingId) {
+    if (USER_MODE.mode === "SHARE" && userParkingId) {
       interval = setInterval(() => {
         console.log("check if parking is available ");
         hannaServer
@@ -195,7 +203,7 @@ export default function HomeScreen({ route, navigation }) {
               clearInterval(interval);
             }
             
-            if (USER_MODE === 'SEARCHER' || USER_MODE.state === 'SEARCHER') {
+            if (USER_MODE.mode === 'SEARCHER') {
               console.log("clearing interval");
               clearInterval(interval);
             }
@@ -210,7 +218,7 @@ export default function HomeScreen({ route, navigation }) {
   }, [USER_MODE, userParkingId]);
 
   useEffect(() => {
-    if (!isAvail && USER_MODE.state === "SHARE") {
+    if (!isAvail && USER_MODE.mode === "SHARE") {
       showSuccessHandShake("Someone is on his way to your parking lot!");
       setShowSearchLoading(false);
       setAskForLocation(true);
@@ -231,9 +239,13 @@ export default function HomeScreen({ route, navigation }) {
         dispatch(changeDesState(null));
         // setShowBottomSheet(true);
         dispatch(changeMode({
-      mode: 'SEARCHER',
-      isActive: true
-    }))
+          mode: 'SEARCHER',
+          isActive: true
+        }));
+        dispatch(changeOtherUserLoc({
+          latitude: null,
+          longitude: null
+        }))
       }
     })
     .catch(e => console.log('error delete parking, ', e))
@@ -316,7 +328,7 @@ export default function HomeScreen({ route, navigation }) {
         />
       )}
       {
-        (USER_MODE.mode === "SHARE" && USER_MODE.isActive && (
+        (USER_MODE.mode === "SHARE" && USER_MODE.isActive && isAvail && (
           <View style={styles.searchMatchLoaderContainer}>
             <Text style={styles.waitingSearchText}>
               Waiting for parking match ...
@@ -378,9 +390,9 @@ export default function HomeScreen({ route, navigation }) {
       )}
     </View>
   );
-}
+  }
 
-const styles = StyleSheet.create({
+  const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -410,4 +422,4 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     marginHorizontal: 5,
   },
-});
+  });

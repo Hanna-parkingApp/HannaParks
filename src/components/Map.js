@@ -34,6 +34,9 @@ const Map = (props) => {
   const markerRef = useRef();
   const mapRef = useRef();
 
+  console.log("##############");
+  console.log(transactionDetails)
+
   const coordinates = [
     {
       latitude: userLocation.src.latitude,
@@ -251,8 +254,8 @@ const Map = (props) => {
               <Image
                 source={USER_MODE.mode === 'SHARE' ? imagePath.icCurLoc : imagePath.manWalking}
                 style={{
-                  height: 50,
-                  width: 50,
+                  height: 40,
+                  width: 40,
                 }}
               />
             </Marker.Animated>
