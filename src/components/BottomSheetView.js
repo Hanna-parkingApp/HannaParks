@@ -18,14 +18,19 @@ import Animated, {
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import FindDestination from "./FindDestination";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUserDetails } from "../features/profile/userDetailsSlice";
 import { Ionicons } from "@expo/vector-icons";
+import { changeMode } from "../features/mode/roleModeSlice";
 
-export default function BottomSheet({ panY, showBottomSheet }) {
+export default function BottomSheet({ panY }) {
+
+  const dispatch = useDispatch();
+
   const { height } = useWindowDimensions();
   const [dest, setDest] = useState();
   const [slideVal, setSlideVal] = useState(0.8) 
+  
 
   const userDetails = useSelector(selectUserDetails);
 
@@ -105,7 +110,12 @@ export default function BottomSheet({ panY, showBottomSheet }) {
                   placeholderText={"Enter Destination Location"}
                   handleSearch={() => {
                     setChooseDes(false);
-                    showBottomSheet(false);
+                    dispatch(changeMode({
+                      mode: 'SEARCHER',
+                      isActive: true
+                    }))
+                    //showBottomSheet(false);
+                    
                   }}
                 />
               </>
